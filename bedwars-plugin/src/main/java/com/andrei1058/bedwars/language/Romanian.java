@@ -54,20 +54,40 @@ public class Romanian extends Language {
 
         yml.addDefault(Messages.FORMATTING_SB_TAB_LOBBY_HEADER, List.of("", "&a{serverIp}", ""));
         yml.addDefault(Messages.FORMATTING_SB_TAB_LOBBY_FOOTER, List.of("", "&fJoci alaturi de {on} jucatori", "Powered by BedWars1058,&a{serverIp}", ""));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_LOBBY_PREFIX, List.of("{vPrefix}"));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_LOBBY_SUFFIX, List.of(" {level}"));
+
         yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_HEADER, List.of("", "&a{serverIp}", ""));
         yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_FOOTER, List.of("", "Se asteapta jucatori,Se asteapta jucatori.,Se asteapta jucatori.., Se asteapta Jucatori...", "&f{on}&a/&f{max}", "", "&a{serverIp}", "&fPowered by BedWars1058", ""));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_PREFIX, List.of("{vPrefix}"));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_SUFFIX, List.of(" {level}"));
 
         yml.addDefault(Messages.FORMATTING_SB_TAB_STARTING_HEADER, List.of("", "&a{serverIp}", "&7{date}","&7Harta: &f{map} &7Mod: &f{group}" ,""));
         yml.addDefault(Messages.FORMATTING_SB_TAB_STARTING_FOOTER, List.of("", "&fJocul incepe in &a{time} &fsecunde,&fJocul incepe in &a{time} &fsecunde.,&fJocul incepe in &a{time} &fsecunde..,&fJocul incepe in &a{time} &fsecunde..", "&f{on}&a/&f{max}", "", "&a{serverIp}", "&fPowered by BedWars1058", ""));
-        // todo implement me
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING, List.of("", "&a{serverIp}", "&7{date}","&7Harta: &f{map} &7Mod: &f{group}", "", "{nextEvent} in {time}" ,""));
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING, List.of("", "&fJoci in echipa {PlayerTeamColor}{PlayerTeamName}", "&a{serverIp}", "&fPowered by BedWars1058", ""));
-// todo implement me
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING, List.of("", "&a{serverIp}", "&7{date}","&7Harta: &f{map} &7Mod: &f{group}" ,""));
-        yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING, List.of("", "&fAi fost in echipa {PlayerTeamColor}{PlayerTeamName}", "&fMultumim ca ai jucat la noi {player}!", "&a{serverIp}", "&fPowered by BedWars1058", ""));
-// todo implement me
+        yml.addDefault(Messages.FORMATTING_SB_TAB_STARTING_PREFIX, List.of("{vPrefix} "));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_STARTING_SUFFIX, List.of(" {level}"));
+
+        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_HEADER, List.of("", "&a{serverIp}", "&7{date}","&7Harta: &f{map} &7Mod: &f{group}", "", "{nextEvent} in {time}" ,""));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_FOOTER, List.of("", "&fJoci in echipa {PlayerTeamColor}{PlayerTeamName}", "&a{serverIp}", "&fPowered by BedWars1058", ""));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_PREFIX, Arrays.asList("{team} ","{team} ","{team} ","{team} ","{team} ", "{team} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}"));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_SUFFIX, List.of(" {level}"));
+
+        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_HEADER, List.of("", "&a{serverIp}", "&7{date}","&7Harta: &f{map} &7Mod: &f{group}" ,""));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_FOOTER, List.of("", "&fAi fost in echipa {PlayerTeamColor}{PlayerTeamName}", "&fMultumim ca ai jucat la noi {player}!", "&a{serverIp}", "&fPowered by BedWars1058", ""));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_PREFIX, Arrays.asList("{team} ","{team} ","{team} ","{team} ","{team} ", "{team} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}"));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_SUFFIX, List.of(" {level}"));
+
+        // todo implement me\
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR, "&9{serverIp}");
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR, "&9{serverIp}");
+
+
+
+
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR, "&7");
+        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_SPECTATOR, "");
+
+
 
         yml.options().copyDefaults(true);
         yml.addDefault(Messages.COMMAND_MAIN, Arrays.asList("", "&2▪ &7/" + mainCmd + " stats", "&2▪ &7/" + mainCmd + " join &o<arena/group>", "&2▪ &7/" + mainCmd + " leave", "&2▪ &7/" + mainCmd + " lang", "&2▪ &7/" + mainCmd + " gui", "&2▪ &7/" + mainCmd + " start &3(vip)"));
@@ -195,18 +215,7 @@ public class Romanian extends Language {
         yml.addDefault(Messages.FORMATTING_CHAT_SPECTATOR, "{level}{vPrefix}&7[SPECTATOR] {player}{vSuffix}: {message}");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_HEALTH, Arrays.asList("&c❤", "&aViață"));
         yml.addDefault(Messages.FORMATTING_SPECTATOR_TEAM, "SPECT");
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR, "&7");
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_SPECTATOR, "");
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, Arrays.asList("{teamColor}&l{teamLetter} &r{teamColor}", "{team} ", "{vPrefix} {teamColor}"));
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING, Arrays.asList("{teamColor}&l{teamLetter} &r{teamColor}", "{team} ", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}"));
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, List.of("{vPrefix} "));
-        yml.addDefault(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING, new ArrayList<>());
-        yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_PREFIX, List.of("{vPrefix}"));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_SUFFIX, List.of(" {level}"));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_LOBBY_PREFIX, List.of("{vPrefix}"));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_LOBBY_SUFFIX, List.of(" {level}"));
+
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_DATE, "dd/MM/yy");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC, "{TeamColor}{TeamLetter}&f {TeamName}: {TeamStatus}");
         yml.addDefault(Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED, "&c&l✘");

@@ -478,8 +478,8 @@ public class BwSidebar implements ISidebar {
                     suffix = getTabText(Messages.FORMATTING_SB_TAB_WAITING_SUFFIX, player, null);
                     break;
                 case starting:
-                    prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING, player, null);
-                    suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING, player, null);
+                    prefix = getTabText(Messages.FORMATTING_SB_TAB_STARTING_PREFIX, player, null);
+                    suffix = getTabText(Messages.FORMATTING_SB_TAB_STARTING_SUFFIX, player, null);
                     break;
                 case restarting:
                     ITeam team = arena.getTeam(player);
@@ -495,8 +495,8 @@ public class BwSidebar implements ISidebar {
                     replacements.put("{teamColor}", null == team ? "" : team.getColor().chat().toString());
 
 
-                    prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING, player, replacements);
-                    suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING, player, replacements);
+                    prefix = getTabText(Messages.FORMATTING_SB_TAB_RESTARTING_PREFIX, player, replacements);
+                    suffix = getTabText(Messages.FORMATTING_SB_TAB_RESTARTING_SUFFIX, player, replacements);
                     break;
                 default:
                     throw new IllegalStateException("Unhandled game status!");
@@ -548,8 +548,8 @@ public class BwSidebar implements ISidebar {
             replacements.put("{teamLetter}", team.getColor().chat() + (displayName.substring(0, 1)));
             replacements.put("{teamColor}", team.getColor().chat().toString());
 
-            prefix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING, player, replacements);
-            suffix = getTabText(Messages.FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING, player, replacements);
+            prefix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_PREFIX, player, replacements);
+            suffix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_SUFFIX, player, replacements);
 
             teamTab = handle.playerTabCreate(tabName, null, prefix, suffix, PlayerTab.PushingRule.PUSH_OTHER_TEAMS);
             tabList.put(tabName, teamTab);
@@ -598,16 +598,16 @@ public class BwSidebar implements ISidebar {
                     footerPath = Messages.FORMATTING_SB_TAB_WAITING_FOOTER;
                     break;
                 case starting:
-                    headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_STARTING;
-                    footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_STARTING;
+                    headerPath = Messages.FORMATTING_SB_TAB_STARTING_HEADER;
+                    footerPath = Messages.FORMATTING_SB_TAB_STARTING_FOOTER;
                     break;
                 case playing:
-                    headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_PLAYING;
-                    footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING;
+                    headerPath = Messages.FORMATTING_SB_TAB_PLAYING_HEADER;
+                    footerPath = Messages.FORMATTING_SB_TAB_PLAYING_FOOTER;
                     break;
                 case restarting:
-                    headerPath = Messages.FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING;
-                    footerPath = Messages.FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING;
+                    headerPath = Messages.FORMATTING_SB_TAB_RESTARTING_PREFIX;
+                    footerPath = Messages.FORMATTING_SB_TAB_RESTARTING_SUFFIX;
                     break;
                 default:
                     throw new IllegalStateException("Unhandled arena status");
