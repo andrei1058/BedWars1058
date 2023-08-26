@@ -39,6 +39,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public interface ITeam {
 
     /**
+     * Runtime identifier.
+     */
+    UUID getIdentity();
+
+    /**
      * Get team color.
      */
     TeamColor getColor();

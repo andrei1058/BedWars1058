@@ -97,6 +97,7 @@ public class BedWarsTeam implements ITeam {
     // Invulnerability at re-spawn
     // Fall invulnerability when teammates respawn
     public static HashMap<UUID, Long> reSpawnInvulnerability = new HashMap<>();
+    private UUID identity;
 
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         if (arena == null) return;
@@ -114,6 +115,7 @@ public class BedWarsTeam implements ITeam {
         if (drops != null) {
             setKillDropsLocation(drops);
         }
+        this.identity = UUID.randomUUID();
     }
 
     public int getSize() {
@@ -478,6 +480,11 @@ public class BedWarsTeam implements ITeam {
         if (p.getInventory().getLeggings() == null)
             p.getInventory().setLeggings(createArmor(Material.LEATHER_LEGGINGS));
         if (p.getInventory().getBoots() == null) p.getInventory().setBoots(createArmor(Material.LEATHER_BOOTS));
+    }
+
+    @Override
+    public UUID getIdentity() {
+        return identity;
     }
 
     /**

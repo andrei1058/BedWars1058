@@ -213,11 +213,24 @@ public class Messages {
     public static String FORMATTING_SB_TAB_PLAYING_PREFIX = FORMATTING_SB_TAB_BASE+".playing.player.prefix";
     public static String FORMATTING_SB_TAB_PLAYING_SUFFIX = FORMATTING_SB_TAB_BASE+".playing.player.suffix";
 
-    // TAB PLAYING
+    // TAB PLAYING-ELIMINATED
+    public static String FORMATTING_SB_TAB_PLAYING_ELIMINATED_HEADER = FORMATTING_SB_TAB_BASE+".playing.player-eliminated.header";
+    public static String FORMATTING_SB_TAB_PLAYING_ELIMINATED_FOOTER = FORMATTING_SB_TAB_BASE+".playing.player-eliminated.footer";
+    public static String FORMATTING_SB_TAB_PLAYING_ELIMINATED_PREFIX = FORMATTING_SB_TAB_BASE+".playing.player-eliminated.prefix";
+    public static String FORMATTING_SB_TAB_PLAYING_ELIMINATED_SUFFIX = FORMATTING_SB_TAB_BASE+".playing.player-eliminated.suffix";
+
+    // TAB PLAYING FOR SPECTATORS
+    public static String FORMATTING_SB_TAB_PLAYING_SPECTATOR_HEADER = FORMATTING_SB_TAB_BASE+".playing.spectator.header";
+    public static String FORMATTING_SB_TAB_PLAYING_SPECTATOR_FOOTER = FORMATTING_SB_TAB_BASE+".playing.spectator.footer";
+    public static String FORMATTING_SB_TAB_PLAYING_SPECTATOR_PREFIX = FORMATTING_SB_TAB_BASE+".playing.spectator.prefix";
+    public static String FORMATTING_SB_TAB_PLAYING_SPECTATOR_SUFFIX = FORMATTING_SB_TAB_BASE+".playing.spectator.suffix";
+
+    // TAB RESTARTING
     public static String FORMATTING_SB_TAB_RESTARTING_HEADER = FORMATTING_SB_TAB_BASE+".restarting.player.header";
     public static String FORMATTING_SB_TAB_RESTARTING_FOOTER = FORMATTING_SB_TAB_BASE+".restarting.player.footer";
     public static String FORMATTING_SB_TAB_RESTARTING_PREFIX = FORMATTING_SB_TAB_BASE+".restarting.player.prefix";
     public static String FORMATTING_SB_TAB_RESTARTING_SUFFIX = FORMATTING_SB_TAB_BASE+".restarting.player.suffix";
+
 
 
     // todo

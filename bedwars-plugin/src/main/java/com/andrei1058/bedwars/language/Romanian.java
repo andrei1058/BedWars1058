@@ -70,12 +70,17 @@ public class Romanian extends Language {
         yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_HEADER, List.of("", "&a{serverIp}", "&7{date}","&7Harta: &f{map} &7Mod: &f{group}", "", "{nextEvent} in {time}" ,""));
         yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_FOOTER, List.of("", "&fJoci in echipa {PlayerTeamColor}{PlayerTeamName}", "&a{serverIp}", "&fPowered by BedWars1058", ""));
         yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_PREFIX, Arrays.asList("{team} ","{team} ","{team} ","{team} ","{team} ", "{team} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}"));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_SUFFIX, List.of(" {level}"));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_SUFFIX, List.of(""));
+
+        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_ELIMINATED_HEADER, List.of("", "&a{serverIp}", "&7{date}","&7Harta: &f{map} &7Mod: &f{group}", "", "{nextEvent} in {time}" ,""));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_ELIMINATED_FOOTER, List.of("", "&o&7Ai fost eliminat,&o&8Ai fost eliminat,&", "&fAi jucat in echipa {PlayerTeamColor}{PlayerTeamName}", "&a{serverIp}", "&fPowered by BedWars1058", ""));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_ELIMINATED_PREFIX, List.of("{team} "));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_ELIMINATED_SUFFIX, List.of(" &o&cEliminat"));
 
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_HEADER, List.of("", "&a{serverIp}", "&7{date}","&7Harta: &f{map} &7Mod: &f{group}" ,""));
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_FOOTER, List.of("", "&fAi fost in echipa {PlayerTeamColor}{PlayerTeamName}", "&fMultumim ca ai jucat la noi {player}!", "&a{serverIp}", "&fPowered by BedWars1058", ""));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_PREFIX, Arrays.asList("{team} ","{team} ","{team} ","{team} ","{team} ", "{team} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}", "{vPrefix} {teamColor}&l{teamLetter} &r{teamColor}"));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_SUFFIX, List.of(" {level}"));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_PREFIX, List.of("{team} "));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_SUFFIX, List.of(""));
 
         // todo implement me\
         yml.addDefault(Messages.FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR, "&9{serverIp}");
