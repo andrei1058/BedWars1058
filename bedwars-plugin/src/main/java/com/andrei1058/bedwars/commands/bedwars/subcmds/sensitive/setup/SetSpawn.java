@@ -27,7 +27,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.configuration.Permissions;
-import com.andrei1058.bedwars.support.paper.PaperSupport;
+import com.andrei1058.bedwars.support.paper.TeleportManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -94,7 +94,7 @@ public class SetSpawn extends SubCommand {
                         for (int z = -radius; z < radius; z++) {
                             Block b = l.clone().add(x, y, z).getBlock();
                             if (BedWars.nms.isBed(b.getType())) {
-                                PaperSupport.teleport(p, b.getLocation());
+                                TeleportManager.teleport(p, b.getLocation());
                                 Bukkit.dispatchCommand(p, getParent().getName() + " setBed " + args[0]);
                                 return true;
                             }

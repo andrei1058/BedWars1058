@@ -501,6 +501,7 @@ public interface IArena {
      * Check if breaking map is allowed, otherwise only placed blocks are allowed.
      * Some blocks like have a special protections, like blocks under shopkeepers, bed, ecc.
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean isAllowMapBreak();
 
     /**
@@ -517,4 +518,10 @@ public interface IArena {
      * Get owner team of a bed based on location.
      */
     @Nullable ITeam getBedsTeam(Location location);
+
+    /**
+     * Provides the winner team.
+     * This is populated on restarting phase.
+     */
+    @Nullable ITeam getWinner();
 }

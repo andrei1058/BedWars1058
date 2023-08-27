@@ -208,29 +208,47 @@ public class Messages {
     public static String FORMATTING_SB_TAB_STARTING_SUFFIX = FORMATTING_SB_TAB_BASE+".starting.player.suffix";
 
     // TAB PLAYING
-    public static String FORMATTING_SB_TAB_PLAYING_HEADER = FORMATTING_SB_TAB_BASE+".playing.player.header";
-    public static String FORMATTING_SB_TAB_PLAYING_FOOTER = FORMATTING_SB_TAB_BASE+".playing.player.footer";
-    public static String FORMATTING_SB_TAB_PLAYING_PREFIX = FORMATTING_SB_TAB_BASE+".playing.player.prefix";
-    public static String FORMATTING_SB_TAB_PLAYING_SUFFIX = FORMATTING_SB_TAB_BASE+".playing.player.suffix";
+    public static String FORMATTING_SB_TAB_PLAYING_HEADER = FORMATTING_SB_TAB_BASE+".playing.alive.header";
+    public static String FORMATTING_SB_TAB_PLAYING_FOOTER = FORMATTING_SB_TAB_BASE+".playing.alive.footer";
+    public static String FORMATTING_SB_TAB_PLAYING_PREFIX = FORMATTING_SB_TAB_BASE+".playing.alive.prefix";
+    public static String FORMATTING_SB_TAB_PLAYING_SUFFIX = FORMATTING_SB_TAB_BASE+".playing.alive.suffix";
 
     // TAB PLAYING-ELIMINATED
-    public static String FORMATTING_SB_TAB_PLAYING_ELIMINATED_HEADER = FORMATTING_SB_TAB_BASE+".playing.player-eliminated.header";
-    public static String FORMATTING_SB_TAB_PLAYING_ELIMINATED_FOOTER = FORMATTING_SB_TAB_BASE+".playing.player-eliminated.footer";
-    public static String FORMATTING_SB_TAB_PLAYING_ELIMINATED_PREFIX = FORMATTING_SB_TAB_BASE+".playing.player-eliminated.prefix";
-    public static String FORMATTING_SB_TAB_PLAYING_ELIMINATED_SUFFIX = FORMATTING_SB_TAB_BASE+".playing.player-eliminated.suffix";
+    public static String FORMATTING_SB_TAB_PLAYING_ELM_HEADER = FORMATTING_SB_TAB_BASE+".playing.eliminated.header";
+    public static String FORMATTING_SB_TAB_PLAYING_ELM_FOOTER = FORMATTING_SB_TAB_BASE+".playing.eliminated.footer";
+    public static String FORMATTING_SB_TAB_PLAYING_ELM_PREFIX = FORMATTING_SB_TAB_BASE+".playing.eliminated.prefix";
+    public static String FORMATTING_SB_TAB_PLAYING_ELM_SUFFIX = FORMATTING_SB_TAB_BASE+".playing.eliminated.suffix";
 
     // TAB PLAYING FOR SPECTATORS
-    public static String FORMATTING_SB_TAB_PLAYING_SPECTATOR_HEADER = FORMATTING_SB_TAB_BASE+".playing.spectator.header";
-    public static String FORMATTING_SB_TAB_PLAYING_SPECTATOR_FOOTER = FORMATTING_SB_TAB_BASE+".playing.spectator.footer";
-    public static String FORMATTING_SB_TAB_PLAYING_SPECTATOR_PREFIX = FORMATTING_SB_TAB_BASE+".playing.spectator.prefix";
-    public static String FORMATTING_SB_TAB_PLAYING_SPECTATOR_SUFFIX = FORMATTING_SB_TAB_BASE+".playing.spectator.suffix";
+    public static String FORMATTING_SB_TAB_PLAYING_SPEC_HEADER = FORMATTING_SB_TAB_BASE+".playing.spectator.header";
+    public static String FORMATTING_SB_TAB_PLAYING_SPEC_FOOTER = FORMATTING_SB_TAB_BASE+".playing.spectator.footer";
+    public static String FORMATTING_SB_TAB_PLAYING_SPEC_PREFIX = FORMATTING_SB_TAB_BASE+".playing.spectator.prefix";
+    public static String FORMATTING_SB_TAB_PLAYING_SPEC_SUFFIX = FORMATTING_SB_TAB_BASE+".playing.spectator.suffix";
 
-    // TAB RESTARTING
-    public static String FORMATTING_SB_TAB_RESTARTING_HEADER = FORMATTING_SB_TAB_BASE+".restarting.player.header";
-    public static String FORMATTING_SB_TAB_RESTARTING_FOOTER = FORMATTING_SB_TAB_BASE+".restarting.player.footer";
-    public static String FORMATTING_SB_TAB_RESTARTING_PREFIX = FORMATTING_SB_TAB_BASE+".restarting.player.prefix";
-    public static String FORMATTING_SB_TAB_RESTARTING_SUFFIX = FORMATTING_SB_TAB_BASE+".restarting.player.suffix";
+    // TAB RESTARTING FOR WINNERS ALIVE
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN1_HEADER = FORMATTING_SB_TAB_BASE+".restarting.winner-alive.header";
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN1_FOOTER = FORMATTING_SB_TAB_BASE+".restarting.winner-alive.footer";
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN1_PREFIX = FORMATTING_SB_TAB_BASE+".restarting.winner-alive.prefix";
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN1_SUFFIX = FORMATTING_SB_TAB_BASE+".restarting.winner-alive.suffix";
 
+    // TAB RESTARTING FOR WINNERS DEAD
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN2_HEADER = FORMATTING_SB_TAB_BASE+".restarting.winner-dead.header";
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN2_FOOTER = FORMATTING_SB_TAB_BASE+".restarting.winner-dead.footer";
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN2_PREFIX = FORMATTING_SB_TAB_BASE+".restarting.winner-dead.prefix";
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN2_SUFFIX = FORMATTING_SB_TAB_BASE+".restarting.winner-dead.suffix";
+
+
+    // TAB RESTARTING FOR LOSERS
+    public static String FORMATTING_SB_TAB_RESTARTING_ELM_HEADER = FORMATTING_SB_TAB_BASE+".restarting.loser.header";
+    public static String FORMATTING_SB_TAB_RESTARTING_ELM_FOOTER = FORMATTING_SB_TAB_BASE+".restarting.loser.footer";
+    public static String FORMATTING_SB_TAB_RESTARTING_ELM_PREFIX = FORMATTING_SB_TAB_BASE+".restarting.loser.prefix";
+    public static String FORMATTING_SB_TAB_RESTARTING_ELM_SUFFIX = FORMATTING_SB_TAB_BASE+".restarting.loser.suffix";
+
+    // TAB RESTARTING FOR SPECTATORS
+    public static String FORMATTING_SB_TAB_RESTARTING_SPEC_HEADER = FORMATTING_SB_TAB_BASE+".restarting.spectator.header";
+    public static String FORMATTING_SB_TAB_RESTARTING_SPEC_FOOTER = FORMATTING_SB_TAB_BASE+".restarting.spectator.footer";
+    public static String FORMATTING_SB_TAB_RESTARTING_SPEC_PREFIX = FORMATTING_SB_TAB_BASE+".restarting.spectator.prefix";
+    public static String FORMATTING_SB_TAB_RESTARTING_SPEC_SUFFIX = FORMATTING_SB_TAB_BASE+".restarting.spectator.suffix";
 
 
     // todo
@@ -253,9 +271,9 @@ public class Messages {
     @Deprecated(forRemoval = true)
     public static String FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING = FORMATTING_SB_TAB_PLAYING_FOOTER;
     @Deprecated(forRemoval = true)
-    public static String FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING = "format-sb-tab-footer.restarting";
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING = FORMATTING_SB_TAB_PLAYING_SPEC_HEADER;
     @Deprecated(forRemoval = true)
-    public static String FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR = "format-sb-tab-footer.spectator";
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR = FORMATTING_SB_TAB_PLAYING_SPEC_FOOTER;
 
     @Deprecated(forRemoval = true)
     public static String FORMATTING_SCOREBOARD_TAB_PREFIX_PRESTARTING = "format-sb-tab-prefix.restarting";

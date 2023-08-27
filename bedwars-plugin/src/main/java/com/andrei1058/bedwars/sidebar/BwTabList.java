@@ -224,9 +224,20 @@ public class BwTabList {
             // when player leaves but decides to join to spectate later
             if (null != exTeam) {
 
-                // todo handle game stats on messages
-                prefix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_ELIMINATED_PREFIX, player, null);
-                suffix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_ELIMINATED_SUFFIX, player, null);
+                HashMap<String, String> replacements = getTeamReplacements(exTeam);
+
+                if (arena.getStatus() == GameState.restarting && null != arena.getWinner()) {
+                    if (arena.getWinner().equals(exTeam)) {
+                        prefix = getTabText(Messages.FORMATTING_SB_TAB_RESTARTING_WIN2_PREFIX, player, replacements);
+                        suffix = getTabText(Messages.FORMATTING_SB_TAB_RESTARTING_WIN2_SUFFIX, player, replacements);
+                    } else {
+                        prefix = getTabText(Messages.FORMATTING_SB_TAB_RESTARTING_ELM_PREFIX, player, replacements);
+                        suffix = getTabText(Messages.FORMATTING_SB_TAB_RESTARTING_ELM_SUFFIX, player, replacements);
+                    }
+                } else {
+                    prefix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_ELM_PREFIX, player, replacements);
+                    suffix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_ELM_SUFFIX, player, replacements);
+                }
 
                 PlayerTab tab = handle.playerTabCreate(
                         getPlayerTabIdentifierEliminatedInTeam(exTeam, playerTabId),
@@ -237,9 +248,14 @@ public class BwTabList {
                 return;
             }
 
-            // todo handle game status on messages
-            prefix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_SPECTATOR_PREFIX, player, null);
-            suffix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_SPECTATOR_SUFFIX, player, null);
+            if (arena.getStatus() == GameState.restarting) {
+                prefix = getTabText(Messages.FORMATTING_SB_TAB_RESTARTING_SPEC_PREFIX, player, null);
+                suffix = getTabText(Messages.FORMATTING_SB_TAB_RESTARTING_SPEC_SUFFIX, player, null);
+            } else {
+                prefix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_SPEC_PREFIX, player, null);
+                suffix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_SPEC_SUFFIX, player, null);
+            }
+
             PlayerTab tab = handle.playerTabCreate(
                     getPlayerTabIdentifierSpectator(null, playerTabId),
                     null, prefix, suffix, PlayerTab.PushingRule.NEVER,
@@ -249,6 +265,7 @@ public class BwTabList {
             return;
         }
 
+        // this is reached only by alive players
         GameState status = arena.getStatus();
         if (status != GameState.playing) {
 
@@ -265,27 +282,12 @@ public class BwTabList {
                     break;
                 case restarting:
                     ITeam team = arena.getTeam(player);
-                    if (null == team) {
-                        team = arena.getExTeam(player.getUniqueId());
-                        if (null != team) {
-                            currentTabId = getPlayerTabIdentifierEliminatedInTeam(team, playerTabId);
-                        }
-                    } else {
-                        currentTabId = getPlayerTabIdentifierAliveInTeam(team, playerTabId);
-                    }
+                    currentTabId = getPlayerTabIdentifierAliveInTeam(team, playerTabId);
 
-                    // todo format here eliminated players
+                    HashMap<String, String> replacements = getTeamReplacements(team);
 
-                    String displayName = null == team ? "" : team.getDisplayName(Language.getPlayerLanguage(sidebar.getPlayer()));
-
-                    HashMap<String, String> replacements = new HashMap<>();
-                    replacements.put("{team}", null == team ? "" : team.getColor().chat() + displayName);
-                    replacements.put("{teamLetter}", null == team ? "" : team.getColor().chat() + (displayName.substring(0, 1)));
-                    replacements.put("{teamColor}", null == team ? "" : team.getColor().chat().toString());
-
-
-                    prefix = getTabText(Messages.FORMATTING_SB_TAB_RESTARTING_PREFIX, player, replacements);
-                    suffix = getTabText(Messages.FORMATTING_SB_TAB_RESTARTING_SUFFIX, player, replacements);
+                    prefix = getTabText(Messages.FORMATTING_SB_TAB_RESTARTING_WIN1_PREFIX, player, replacements);
+                    suffix = getTabText(Messages.FORMATTING_SB_TAB_RESTARTING_WIN1_SUFFIX, player, replacements);
                     break;
                 default:
                     throw new IllegalStateException("Unhandled game status!");
@@ -297,39 +299,18 @@ public class BwTabList {
             return;
         }
 
+        // if status is playing and player is alive
+
         ITeam team = arena.getTeam(player);
-        String currentTabId;
-        String prefixPath;
-        String suffixPath;
-
-        if (null == team) {
-            team = arena.getExTeam(player.getUniqueId());
-            if (null == team) {
-                throw new RuntimeException("How did you get here?!");
-            }
-
-            prefixPath = Messages.FORMATTING_SB_TAB_PLAYING_ELIMINATED_PREFIX;
-            suffixPath = Messages.FORMATTING_SB_TAB_PLAYING_ELIMINATED_SUFFIX;
-            currentTabId = getPlayerTabIdentifierEliminatedInTeam(team, playerTabId);
-        } else {
-            currentTabId = getPlayerTabIdentifierAliveInTeam(team, playerTabId);
-            prefixPath = Messages.FORMATTING_SB_TAB_PLAYING_PREFIX;
-            suffixPath = Messages.FORMATTING_SB_TAB_PLAYING_SUFFIX;
-        }
-
         // tab list of playing state
-        String displayName = team.getDisplayName(Language.getPlayerLanguage(sidebar.getPlayer()));
+        HashMap<String, String> replacements = getTeamReplacements(team);
 
-        HashMap<String, String> replacements = new HashMap<>();
-        replacements.put("{team}", team.getColor().chat() + displayName);
-        replacements.put("{teamLetter}", team.getColor().chat() + (displayName.substring(0, 1)));
-        replacements.put("{teamColor}", team.getColor().chat().toString());
-
-        prefix = getTabText(prefixPath, player, replacements);
-        suffix = getTabText(suffixPath, player, replacements);
+        prefix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_PREFIX, player, replacements);
+        suffix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_SUFFIX, player, replacements);
 
         PlayerTab teamTab = handle.playerTabCreate(
-                currentTabId, player, prefix, suffix, PlayerTab.PushingRule.PUSH_OTHER_TEAMS,
+                getPlayerTabIdentifierAliveInTeam(team, playerTabId),
+                player, prefix, suffix, PlayerTab.PushingRule.PUSH_OTHER_TEAMS,
                 this.sidebar.getPlaceholders(player)
         );
         deployedPerPlayerTabList.put(player.getUniqueId(), teamTab);
@@ -453,7 +434,7 @@ public class BwTabList {
     }
 
     private @NotNull String getPlayerTabIdentifierEliminatedInTeam(ITeam team, String playerId) {
-        return getCreateTeamTabOrderPrefix(team) + ELIMINATED_FROM_TEAM_PREFIX + playerId;
+        return ELIMINATED_FROM_TEAM_PREFIX + getCreateTeamTabOrderPrefix(team) + playerId;
     }
 
     @SuppressWarnings("unused")
@@ -466,6 +447,16 @@ public class BwTabList {
             return SPECTATOR_PREFIX + playerId;
         }
         return getPlayerTabIdentifierEliminatedInTeam(team, playerId);
+    }
+
+    @NotNull HashMap<String, String> getTeamReplacements(@Nullable ITeam team) {
+        HashMap<String, String> replacements = new HashMap<>();
+        String displayName = null == team ? "" : team.getDisplayName(Language.getPlayerLanguage(sidebar.getPlayer()));
+        replacements.put("{teamName}", displayName);
+        replacements.put("{teamLetter}", null == team ? "" : team.getColor().chat() + (displayName.substring(0, 1)));
+        replacements.put("{teamColor}", null == team ? "" : team.getColor().chat().toString());
+
+        return replacements;
     }
 
     /**

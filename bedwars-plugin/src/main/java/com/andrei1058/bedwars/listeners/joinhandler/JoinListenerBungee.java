@@ -30,7 +30,7 @@ import com.andrei1058.bedwars.arena.ReJoin;
 import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.lobbysocket.LoadedUser;
-import com.andrei1058.bedwars.support.paper.PaperSupport;
+import com.andrei1058.bedwars.support.paper.TeleportManager;
 import com.andrei1058.bedwars.support.preloadedparty.PreLoadedParty;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -131,7 +131,7 @@ public class JoinListenerBungee implements Listener {
                 Bukkit.dispatchCommand(p, "bw");
                 World mainWorld = Bukkit.getWorlds().get(0);
                 if (mainWorld != null) {
-                    PaperSupport.teleportC(p, mainWorld.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    TeleportManager.teleportC(p, mainWorld.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }
                 // hide admin to in game users
                 for (Player inGame : Bukkit.getOnlinePlayers()){

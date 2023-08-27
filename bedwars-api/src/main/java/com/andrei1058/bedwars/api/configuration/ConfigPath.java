@@ -23,6 +23,9 @@ package com.andrei1058.bedwars.api.configuration;
 @SuppressWarnings("WeakerAccess")
 public class ConfigPath {
 
+    public static final String GENERAL_GAME_END_SHOW_ELIMINATED = "game-end.show-eliminated";
+    public static final String GENERAL_GAME_END_TELEPORT_ELIMINATED = "game-end.teleport-eliminated";
+
     public static final String GENERATOR_STACK_ITEMS = "stack-items";
 
     public static final String GENERATOR_IRON_DELAY = "iron.delay";
