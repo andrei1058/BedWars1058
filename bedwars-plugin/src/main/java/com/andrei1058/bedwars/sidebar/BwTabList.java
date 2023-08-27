@@ -144,7 +144,7 @@ public class BwTabList {
                         !config.getLobbyWorldName().trim().isEmpty()) {
 
                     World lobby = Bukkit.getWorld(config.getLobbyWorldName());
-                    return null != lobby;
+                    return null == lobby || !sidebar.getPlayer().getWorld().getName().equals(lobby.getName());
                 }
             }
 
@@ -153,18 +153,18 @@ public class BwTabList {
         GameState status = sidebar.getArena().getStatus();
 
         // if tab formatting is disabled in game
-        if (status == GameState.playing && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING)) {
-            return false;
+        if (status == GameState.playing) {
+            return !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING);
         }
 
         // if tab formatting is disabled in starting
-        if (status == GameState.starting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING)) {
-            return false;
+        if (status == GameState.starting) {
+            return !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_STARTING);
         }
 
         // if tab formatting is disabled in waiting
-        if (status == GameState.waiting && config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING)) {
-            return false;
+        if (status == GameState.waiting) {
+            return !config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_FORMAT_WAITING);
         }
 
         // if tab formatting is disabled in restarting
@@ -328,8 +328,6 @@ public class BwTabList {
         if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
             teamTab.setNameTagVisibility(PlayerTab.NameTagVisibility.NEVER);
         }
-
-        Bukkit.broadcastMessage(playerTabIdentifier.toString());
     }
 
     @NotNull
@@ -432,6 +430,7 @@ public class BwTabList {
         return false;
     }
 
+    @SuppressWarnings("unused")
     private @NotNull String getPlayerTabIdentifierAliveInTeam(ITeam team, Player player) {
         return getPlayerTabIdentifierAliveInTeam(team, getCreatePlayerTabIdentifier(player));
     }
@@ -440,6 +439,7 @@ public class BwTabList {
         return getCreateTeamTabOrderPrefix(team) + playerId;
     }
 
+    @SuppressWarnings("unused")
     private @NotNull String getPlayerTabIdentifierEliminatedInTeam(ITeam team, Player player) {
         return getPlayerTabIdentifierEliminatedInTeam(team, getCreatePlayerTabIdentifier(player));
     }
@@ -448,6 +448,7 @@ public class BwTabList {
         return getCreateTeamTabOrderPrefix(team) + ELIMINATED_FROM_TEAM_PREFIX + playerId;
     }
 
+    @SuppressWarnings("unused")
     private @NotNull String getPlayerTabIdentifierSpectator(@Nullable ITeam team, Player player) {
         return getPlayerTabIdentifierSpectator(team, getCreatePlayerTabIdentifier(player));
     }

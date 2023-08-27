@@ -205,6 +205,26 @@ public class SidebarService implements ISidebarService {
         });
     }
 
+    public void handleJoin(IArena arena, Player player) {
+        this.sidebars.forEach((k,v) -> {
+            if (null != v.getArena() && v.getArena().equals(arena)) {
+                if (!v.getPlayer().equals(player)) {
+                    v.giveUpdateTabFormat(player, false);
+                }
+            }
+        });
+    }
+
+    public void applyLobbyTab(Player player) {
+        this.sidebars.forEach((k,v) -> {
+            if (null == v.getArena()) {
+                if (!v.getPlayer().equals(player)) {
+                    v.giveUpdateTabFormat(player, false);
+                }
+            }
+        });
+    }
+
     public void handleInvisibility(ITeam team, Player player, boolean toggle) {
         this.sidebars.forEach((k,v) -> {
             if (null != v.getArena() && v.getArena().equals(team.getArena())) {

@@ -33,6 +33,7 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
+import com.andrei1058.bedwars.arena.team.LegacyTeamAssigner;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import org.bukkit.Bukkit;
@@ -102,14 +103,11 @@ public class GameStartingTask implements Runnable, StartingTask {
                 }
             }
 
-
-
-            // todo enable me back in production
-//            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER)) {
-//                getArena().getTeamAssigner().assignTeams(getArena());
-//            } else {
-//                LegacyTeamAssigner.assignTeams(getArena());
-//            }
+            if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER)) {
+                getArena().getTeamAssigner().assignTeams(getArena());
+            } else {
+                LegacyTeamAssigner.assignTeams(getArena());
+            }
 
 
             //Color bed block if possible
