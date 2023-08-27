@@ -237,7 +237,7 @@ public class BwTabList {
                 return;
             }
 
-            // todo handle game stats on messages
+            // todo handle game status on messages
             prefix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_SPECTATOR_PREFIX, player, null);
             suffix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_SPECTATOR_SUFFIX, player, null);
             PlayerTab tab = handle.playerTabCreate(
@@ -298,18 +298,26 @@ public class BwTabList {
         }
 
         ITeam team = arena.getTeam(player);
+        String currentTabId;
+        String prefixPath;
+        String suffixPath;
+
         if (null == team) {
             team = arena.getExTeam(player.getUniqueId());
-        }
-        if (null == team) {
-            throw new RuntimeException("Wtf dude");
-        }
+            if (null == team) {
+                throw new RuntimeException("How did you get here?!");
+            }
 
-
-        // todo format tab for eliminated players
+            prefixPath = Messages.FORMATTING_SB_TAB_PLAYING_ELIMINATED_PREFIX;
+            suffixPath = Messages.FORMATTING_SB_TAB_PLAYING_ELIMINATED_SUFFIX;
+            currentTabId = getPlayerTabIdentifierEliminatedInTeam(team, playerTabId);
+        } else {
+            currentTabId = getPlayerTabIdentifierAliveInTeam(team, playerTabId);
+            prefixPath = Messages.FORMATTING_SB_TAB_PLAYING_PREFIX;
+            suffixPath = Messages.FORMATTING_SB_TAB_PLAYING_SUFFIX;
+        }
 
         // tab list of playing state
-        String teamIdPrefix = getCreateTeamTabOrderPrefix(team);
         String displayName = team.getDisplayName(Language.getPlayerLanguage(sidebar.getPlayer()));
 
         HashMap<String, String> replacements = new HashMap<>();
@@ -317,11 +325,11 @@ public class BwTabList {
         replacements.put("{teamLetter}", team.getColor().chat() + (displayName.substring(0, 1)));
         replacements.put("{teamColor}", team.getColor().chat().toString());
 
-        prefix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_PREFIX, player, replacements);
-        suffix = getTabText(Messages.FORMATTING_SB_TAB_PLAYING_SUFFIX, player, replacements);
+        prefix = getTabText(prefixPath, player, replacements);
+        suffix = getTabText(suffixPath, player, replacements);
 
         PlayerTab teamTab = handle.playerTabCreate(
-                teamIdPrefix + playerTabId, player, prefix, suffix, PlayerTab.PushingRule.PUSH_OTHER_TEAMS,
+                currentTabId, player, prefix, suffix, PlayerTab.PushingRule.PUSH_OTHER_TEAMS,
                 this.sidebar.getPlaceholders(player)
         );
         deployedPerPlayerTabList.put(player.getUniqueId(), teamTab);
