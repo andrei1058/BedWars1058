@@ -93,22 +93,11 @@ public class GameStartingTask implements Runnable, StartingTask {
     public void run() {
         if (countdown == 0) {
 
-            ITeam addHere = getArena().getTeams().get(0);
-            for (Player player : arena.getPlayers()) {
-                if (addHere.getSize() >= 2) {
-                    ITeam addHere2 = getArena().getTeams().get(1);
-                    addHere2.addPlayers(player);
-                } else {
-                    addHere.addPlayers(player);
-                }
-            }
-
             if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER)) {
                 getArena().getTeamAssigner().assignTeams(getArena());
             } else {
                 LegacyTeamAssigner.assignTeams(getArena());
             }
-
 
             //Color bed block if possible
             //Destroy bed if team is empty
