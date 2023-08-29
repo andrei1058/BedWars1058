@@ -29,6 +29,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -46,17 +47,6 @@ public class Language extends ConfigManager {
         super(plugin, "messages_" + iso, plugin.getDataFolder().getPath() + "/Languages");
         this.iso = iso;
         languages.add(this);
-
-        // conversion to new paths
-        relocate("format-sb-tab-header.lobby", Messages.FORMATTING_SB_TAB_LOBBY_HEADER);
-        relocate("format-sb-tab-footer.lobby", Messages.FORMATTING_SB_TAB_LOBBY_FOOTER);
-        relocate("format-sb-tab-prefix.lobby", Messages.FORMATTING_SB_TAB_LOBBY_PREFIX);
-        relocate("format-sb-tab-suffix.lobby", Messages.FORMATTING_SB_TAB_LOBBY_SUFFIX);
-
-        relocate("format-sb-tab-header.waiting", Messages.FORMATTING_SB_TAB_WAITING_HEADER);
-        relocate("format-sb-tab-footer.waiting", Messages.FORMATTING_SB_TAB_WAITING_FOOTER);
-        relocate("format-sb-tab-prefix.waiting", Messages.FORMATTING_SB_TAB_WAITING_PREFIX);
-        relocate("format-sb-tab-suffix.waiting", Messages.FORMATTING_SB_TAB_WAITING_SUFFIX);
     }
 
     /**
@@ -73,8 +63,8 @@ public class Language extends ConfigManager {
     /**
      * Get scoreboard strings.
      */
-    public static List<String> getScoreboard(Player p, String path, String alternative) {
-        Language language = getPlayerLanguage(p);
+    public static List<String> getScoreboard(Player player, String path, String alternative) {
+        Language language = getPlayerLanguage(player);
         if (language.exists(path)) {
             return language.l(path);
         } else {
@@ -103,16 +93,19 @@ public class Language extends ConfigManager {
     /**
      * Get message in player's language.
      */
-    public static String getMsg(Player p, String path) {
-        if (p == null) return getDefaultLanguage().m(path);
-        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic));
+    public static String getMsg(Player player, String path) {
+        if (player == null) {
+            return getDefaultLanguage().m(path);
+        }
+        return langByPlayer.getOrDefault(player.getUniqueId(), getDefaultLanguage())
+                .m(path).replace("{prefix}", (prefixStatic == null ? "" : prefixStatic));
     }
 
     /**
      * Retrieve a player language.
      */
-    public static Language getPlayerLanguage(Player p) {
-        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage());
+    public static Language getPlayerLanguage(@NotNull Player player) {
+        return langByPlayer.getOrDefault(player.getUniqueId(), getDefaultLanguage());
     }
 
     public static Language getPlayerLanguage(UUID p) {
@@ -129,10 +122,11 @@ public class Language extends ConfigManager {
     /**
      * Get a string list in player's language.
      */
-    public static List<String> getList(Player p, String path) {
-        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).l(path);
+    public static List<String> getList(@NotNull Player player, String path) {
+        return langByPlayer.getOrDefault(player.getUniqueId(), getDefaultLanguage()).l(path);
     }
 
+    @SuppressWarnings("unused")
     public void relocate(String from, String to) {
         Object fromData = getYml().get(from);
         if (null != fromData) {
@@ -172,8 +166,6 @@ public class Language extends ConfigManager {
         return ChatColor.translateAlternateColorCodes('&', message
                 .replace("{prefix}", (prefix == null ? "" : prefix))
                 .replace("{serverIp}", serverIp == null ? "" : serverIp)
-                // deprecated
-                .replace("{server_ip}", serverIp == null ? "" : serverIp)
         );
     }
 
@@ -212,7 +204,7 @@ public class Language extends ConfigManager {
     /**
      * Get language with given info.
      *
-     * @return null if could not find.
+     * @return null if you could not find.
      */
     public static Language getLang(String iso) {
         for (Language l : languages) {
@@ -260,7 +252,7 @@ public class Language extends ConfigManager {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void addDefaultStatsMsg(YamlConfiguration yml, String path, String name, String... lore) {
+    public void addDefaultStatsMsg(@NotNull YamlConfiguration yml, String path, String name, String... lore) {
         if (yml.getDefaults() == null || !yml.getDefaults().contains(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-name"))
             yml.addDefault(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-name", name);
         if (yml.getDefaults() == null || !yml.getDefaults().contains(Messages.PLAYER_STATS_GUI_PATH + "-" + path + "-lore"))
@@ -347,7 +339,7 @@ public class Language extends ConfigManager {
     /**
      * Add required messages for a shop category to the given yml
      */
-    public static void addCategoryMessages(YamlConfiguration yml, String categoryName, String invName, String itemName, List<String> itemLore) {
+    public static void addCategoryMessages(@NotNull YamlConfiguration yml, String categoryName, String invName, String itemName, List<String> itemLore) {
         if (yml.getDefaults() == null || !yml.getDefaults().contains(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", categoryName)))
             yml.addDefault(Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", categoryName), invName);
         if (yml.getDefaults() == null || !yml.getDefaults().contains(Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", categoryName)))
@@ -359,7 +351,7 @@ public class Language extends ConfigManager {
     /**
      * Add required messages for a shop category to the given yml
      */
-    public static void addContentMessages(YamlConfiguration yml, String contentName, String categoryName, String itemName, List<String> itemLore) {
+    public static void addContentMessages(@NotNull YamlConfiguration yml, String contentName, String categoryName, String itemName, List<String> itemLore) {
         final String path1 = Messages.SHOP_CONTENT_TIER_ITEM_NAME.replace("%category%", categoryName).replace("%content%", contentName),
                 path2 = Messages.SHOP_CONTENT_TIER_ITEM_LORE.replace("%category%", categoryName).replace("%content%", contentName);
         if (yml.getDefaults() == null || !yml.getDefaults().contains(path1)) yml.addDefault(path1, itemName);
@@ -410,7 +402,7 @@ public class Language extends ConfigManager {
         return true;
     }
 
-    public static String[] getCountDownTitle(Language playerLang, int second) {
+    public static String @NotNull [] getCountDownTitle(@NotNull Language playerLang, int second) {
         String[] result = new String[2];
         result[0] = ChatColor.translateAlternateColorCodes('&', playerLang.getYml().get(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE + "-" + second, playerLang.getString(Messages.ARENA_STATUS_START_COUNTDOWN_TITLE)).toString().replace("{second}", String.valueOf(second)));
         if (result[0].isEmpty()) {

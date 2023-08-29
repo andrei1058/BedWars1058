@@ -182,11 +182,9 @@ public class BwSidebar implements ISidebar {
             // General static placeholders
             line = line
                     .replace("{serverIp}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP))
+                    .replace("{poweredBy}", BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_POWERED_BY))
                     .replace("{version}", plugin.getDescription().getVersion())
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID))
-//                    .replace("{playername}", player.getName())
-//                    .replace("{player}", player.getDisplayName())
-//                    .replace("{money}", String.valueOf(getEconomy().getMoney(player)))
             ;
 
             // Add the line to the sidebar
@@ -217,6 +215,7 @@ public class BwSidebar implements ISidebar {
         tabList.giveUpdateTabFormat(player, skipStateCheck);
     }
 
+    @SuppressWarnings("removal")
     @Override
     public boolean isTabFormattingDisabled() {
         return tabList.isTabFormattingDisabled();
@@ -237,7 +236,8 @@ public class BwSidebar implements ISidebar {
         providers.add(new PlaceholderProvider("{playerName}", player::getCustomName));
         providers.add(new PlaceholderProvider("{money}", () -> String.valueOf(getEconomy().getMoney(player))));
         providers.add(new PlaceholderProvider("{date}", () -> dateFormat.format(new Date(System.currentTimeMillis()))));
-        providers.add(new PlaceholderProvider("{serverIp}", () -> BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP)));
+        // fixme 29/08/2023: disabled for now because this is not a dynamic placeholder. Let's see what's the impact.
+//        providers.add(new PlaceholderProvider("{serverIp}", () -> BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP)));
         providers.add(new PlaceholderProvider("{version}", () -> plugin.getDescription().getVersion()));
         providers.add(new PlaceholderProvider("{server}", () -> config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID)));
         PlayerLevel level = PlayerLevel.getLevelByPlayer(player.getUniqueId());
@@ -437,12 +437,25 @@ public class BwSidebar implements ISidebar {
 
                 ITeam exTeam = arena.getExTeam(player.getUniqueId());
                 if (null == exTeam) {
-                    if (arena.getStatus() == GameState.restarting) {
-                        headerPath = Messages.FORMATTING_SB_TAB_RESTARTING_SPEC_HEADER;
-                        footerPath = Messages.FORMATTING_SB_TAB_RESTARTING_SPEC_FOOTER;
-                    } else {
-                        headerPath = Messages.FORMATTING_SB_TAB_PLAYING_SPEC_HEADER;
-                        footerPath = Messages.FORMATTING_SB_TAB_PLAYING_SPEC_FOOTER;
+                    switch (arena.getStatus()) {
+                        case waiting:
+                            headerPath = Messages.FORMATTING_SB_TAB_WAITING_HEADER_SPEC;
+                            footerPath = Messages.FORMATTING_SB_TAB_WAITING_FOOTER_SPEC;
+                            break;
+                        case starting:
+                            headerPath = Messages.FORMATTING_SB_TAB_STARTING_HEADER_SPEC;
+                            footerPath = Messages.FORMATTING_SB_TAB_STARTING_FOOTER_SPEC;
+                            break;
+                        case playing:
+                            headerPath = Messages.FORMATTING_SB_TAB_PLAYING_SPEC_HEADER;
+                            footerPath = Messages.FORMATTING_SB_TAB_PLAYING_SPEC_FOOTER;
+                            break;
+                        case restarting:
+                            headerPath = Messages.FORMATTING_SB_TAB_RESTARTING_SPEC_HEADER;
+                            footerPath = Messages.FORMATTING_SB_TAB_RESTARTING_SPEC_FOOTER;
+                            break;
+                        default:
+                            throw new IllegalStateException("Unhandled arena status");
                     }
                 } else {
                     // eliminated player
