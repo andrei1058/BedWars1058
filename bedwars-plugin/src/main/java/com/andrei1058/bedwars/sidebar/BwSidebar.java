@@ -539,6 +539,7 @@ public class BwSidebar implements ISidebar {
         return headerFooter;
     }
 
+    @SuppressWarnings("unused")
     public void setHeaderFooter(@Nullable TabHeaderFooter headerFooter) {
         this.headerFooter = headerFooter;
     }
