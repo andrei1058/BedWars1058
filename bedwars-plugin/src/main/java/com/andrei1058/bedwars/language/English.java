@@ -445,7 +445,7 @@ public class English extends Language {
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_FOOTER, List.of(
                 "",
-                "&fYou're playing in {teamColor}{teamName} Team",
+                "&fYou are playing on the {teamColor}{teamName} Team",
                 "&a{serverIp}",
                 "&fPowered by {poweredBy}",
                 ""
@@ -465,7 +465,7 @@ public class English extends Language {
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_ELM_FOOTER, List.of(
                 "",
-                "&fYou have played in {teamColor}{teamName} Team",
+                "&fYou have played in the {teamColor}{teamName} Team",
                 "&a{serverIp}",
                 "&fPowered by {poweredBy}",
                 ""
@@ -499,7 +499,7 @@ public class English extends Language {
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN1_FOOTER, List.of(
                 "",
-                "&6&lYou won in {teamColor}&l{teamName} Team&6&l!,&6&lYou won in {teamColor}&l{teamName} Team&6&l!,&f&lYou won in {teamColor}&l{teamName} Team&f&l!",
+                "&6&lYou won in the {teamColor}&l{teamName} Team&6&l!,&6&lYou won in the {teamColor}&l{teamName} Team&6&l!,&f&lYou won in the {teamColor}&l{teamName} Team&f&l!",
                 "&7Statistics from this match",
                 "&eKills: &f{kills} &8| &eFinal Kills: &f{finalKills} &8| &eBeds Destroyed: &f{beds} &8| &eDeaths: &f{deaths},&eKills: &7{kills} &8| &eFinal Kills: &7{finalKills} &8| &eBeds Destroyed: &7{beds} &8| &eDeaths: &7{deaths}",
                 "",
@@ -521,7 +521,7 @@ public class English extends Language {
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN2_FOOTER, List.of(
                 "",
-                "&6&lYou won in {teamColor}&l{teamName} Team&6&l!,&6&lYou won in {teamColor}&l{teamName} Team&6&l!,&f&lYou won in {teamColor}&l{teamName} Team&f&l!",
+                "&6&lYou won in the {teamColor}&l{teamName} Team&6&l!,&6&lYou won in the {teamColor}&l{teamName} Team&6&l!,&f&lYou won in the {teamColor}&l{teamName} Team&f&l!",
                 "&7Statistics from this match",
                 "&eKills: &f{kills} &8| &eFinal Kills: &f{finalKills} &8| &eBeds Destroyed: &f{beds} &8| &eDeaths: &f{deaths},&eKills: &7{kills} &8| &eFinal Kills: &7{finalKills} &8| &eBeds Destroyed: &7{beds} &8| &eDeaths: &7{deaths}",
 
@@ -543,7 +543,7 @@ public class English extends Language {
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_ELM_FOOTER, List.of(
                 "",
-                "&fYou lost in {teamColor}{teamName} Team",
+                "&fYou have lost in the {teamColor}{teamName} Team",
                 "&7Statistics from this match",
                 "&eKills: &f{kills} &8| &eFinal Kills: &f{finalKills} &8| &eBeds Destroyed: &f{beds} &8| &eDeaths: &f{deaths},&eKills: &7{kills} &8| &eFinal Kills: &7{finalKills} &8| &eBeds Destroyed: &7{beds} &8| &eDeaths: &7{deaths}",
                 "&fThanks for playing {player}!",
