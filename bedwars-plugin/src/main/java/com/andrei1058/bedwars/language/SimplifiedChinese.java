@@ -368,8 +368,8 @@ public class SimplifiedChinese extends Language {
 
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8快速购买");
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8添加到快速购买...");
-        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&c你没有足够的{currency}！ 还需要 {amount} 个{currency}！");
-        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&a购买&6{item}");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&c你没有足够的{currency}！还需要 {amount} 个{currency}！");
+        yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&a你购买了&6{item}&a。");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&c你已经购买过了！");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}蠹虫");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}秒 &8[ {TeamColor}{health}&8]");
@@ -459,8 +459,8 @@ public class SimplifiedChinese extends Language {
                 "&7喝下后 60 秒内不会触发陷阱", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}海绵", Arrays.asList("&7花费：{cost} {currency}", "",
                 "&7用来吸水不错", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "Compact Pop-up Tower", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}袖珍弹出塔", Arrays.asList("&花费: {cost} {currency}", "",
-                "&7放置一个袖珍弹出塔", "&7塔防！", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "tower", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}速建防御塔", Arrays.asList("&花费: {cost} {currency}", "",
+                "&7放置一个速建防御塔", "", "{quick_buy}", "{buy_status}"));
 
         yml.addDefault(Messages.MEANING_NO_TRAP, "无陷阱！");
         yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7花费：{currencyColor}{cost} {currency}");
