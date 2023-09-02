@@ -2661,7 +2661,7 @@ public class Arena implements IArena {
                 TeleportManager.teleportC(player, Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");
             } else {
-                player.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                TeleportManager.teleportC(player, loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         } else if (BedWars.getServerType() == ServerType.MULTIARENA) {
             if (BedWars.getLobbyWorld().isEmpty()) {
