@@ -150,7 +150,7 @@ public class BwTabList {
                     sidebar.getArena().getSpectators().forEach(player -> sidebar.getHandle().setPlayerHealth(player, (int) Math.ceil(player.getHealth())));
                 }
             }
-        }, 20L);
+        }, 10L);
     }
 
     /**
