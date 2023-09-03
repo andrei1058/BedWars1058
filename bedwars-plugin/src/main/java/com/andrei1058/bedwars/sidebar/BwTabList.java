@@ -139,8 +139,8 @@ public class BwTabList {
             };
         }
 
-        if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_IN_TAB)) {
-            sidebar.getHandle().showPlayersHealth(line, true);
+        if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_ENABLE)) {
+            sidebar.getHandle().showPlayersHealth(line, config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_IN_TAB));
         }
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
