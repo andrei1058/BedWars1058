@@ -309,6 +309,7 @@ public class Messages {
     public static String SCOREBOARD_DEFAULT_WAITING = "scoreboard.Default.waiting";
     public static String SCOREBOARD_DEFAULT_STARTING = "scoreboard.Default.starting";
     public static String SCOREBOARD_DEFAULT_PLAYING = "scoreboard.Default.playing";
+    public static String SCOREBOARD_DEFAULT_RESTARTING = "scoreboard.Default.restarting";
     public static String SCOREBOARD_LOBBY = "scoreboard.lobby";
 
     /**

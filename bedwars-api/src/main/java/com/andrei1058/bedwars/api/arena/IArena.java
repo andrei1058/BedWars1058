@@ -21,6 +21,7 @@
 package com.andrei1058.bedwars.api.arena;
 
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
+import com.andrei1058.bedwars.api.arena.stats.GameStatsHolder;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.ITeamAssigner;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
@@ -37,10 +38,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public interface IArena {
@@ -266,6 +264,12 @@ public interface IArena {
      * @param finalKills True if you want to get the Final Kills. False for regular kills.
      */
     int getPlayerKills(Player p, boolean finalKills);
+
+    /**
+     * Session stats.
+     * @return stats container for this game.
+     */
+    GameStatsHolder getStatsHolder();
 
     /**
      * Get the player beds destroyed count

@@ -83,8 +83,10 @@ public class SidebarService implements ISidebarService {
                 lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING);
             } else if (arena.getStatus() == GameState.starting) {
                 lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING);
-            } else if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
+            } else if (arena.getStatus() == GameState.playing) {
                 lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
+            } else if (arena.getStatus() == GameState.restarting) {
+                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting", Messages.SCOREBOARD_DEFAULT_RESTARTING);
             }
         }
 

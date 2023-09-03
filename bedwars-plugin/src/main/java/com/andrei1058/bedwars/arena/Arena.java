@@ -27,6 +27,7 @@ import com.andrei1058.bedwars.api.arena.NextEvent;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
+import com.andrei1058.bedwars.api.arena.stats.*;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.ITeamAssigner;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
@@ -49,6 +50,8 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.api.tasks.RestartingTask;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
+import com.andrei1058.bedwars.arena.stats.GameStatsManager;
+import com.andrei1058.bedwars.arena.stats.TopStringParser;
 import com.andrei1058.bedwars.arena.tasks.GamePlayingTask;
 import com.andrei1058.bedwars.arena.tasks.GameRestartingTask;
 import com.andrei1058.bedwars.arena.tasks.GameStartingTask;
@@ -154,11 +157,16 @@ public class Arena implements IArena {
      * temp stats. some of them use player name as key to keep names of players who left. at checkWinners for example.
      * Those maps are not used for db stats but is for internal use only.
      */
-    private HashMap<String, Integer> playerKills = new HashMap<>();
+    @Deprecated(forRemoval = true)
     private HashMap<Player, Integer> playerBedsDestroyed = new HashMap<>();
+    @Deprecated(forRemoval = true)
     private HashMap<Player, Integer> playerFinalKills = new HashMap<>();
+    @Deprecated(forRemoval = true)
     private HashMap<Player, Integer> playerDeaths = new HashMap<>();
+    @Deprecated(forRemoval = true)
     private HashMap<Player, Integer> playerFinalKillDeaths = new HashMap<>();
+
+    private final GameStatsManager gameStats = new GameStatsManager(this);
 
 
     /* ARENA TASKS */
@@ -1383,12 +1391,21 @@ public class Arena implements IArena {
     /**
      * Get a player kills count.
      *
-     * @param p          Target player
+     * @param player          Target player
      * @param finalKills True if you want to get the Final Kills. False for regular kills.
      */
-    public int getPlayerKills(Player p, boolean finalKills) {
-        if (finalKills) return playerFinalKills.getOrDefault(p, 0);
-        return playerKills.getOrDefault(p.getName(), 0);
+    @Deprecated(forRemoval = true)
+    public int getPlayerKills(Player player, boolean finalKills) {
+        PlayerGameStats playerStats = gameStats.get(player);
+        if (null == playerStats) {
+            return 0;
+        }
+
+        GameStatistic<?> kills = playerStats.getStatistic(
+                finalKills ? DefaultStatistics.KILLS_FINAL : DefaultStatistics.KILLS
+        );
+
+        return null == kills ? 0 : (kills.getValue() instanceof Integer ? (Integer) kills.getValue() : 0);
     }
 
     /**
@@ -1396,6 +1413,7 @@ public class Arena implements IArena {
      *
      * @param p Target player
      */
+    @Deprecated(forRemoval = true)
     public int getPlayerBedsDestroyed(Player p) {
         if (playerBedsDestroyed.containsKey(p)) return playerBedsDestroyed.get(p);
         return 0;
@@ -1484,6 +1502,9 @@ public class Arena implements IArena {
                 Arena.afkCheck.remove(p.getUniqueId());
                 BedWars.getAPI().getAFKUtil().setPlayerAFK(p, false);
             }
+
+            // Initialize game stats
+            getPlayers().forEach(gameStats::init);
         }
 
         //Stop active tasks to prevent issues
@@ -1633,32 +1654,62 @@ public class Arena implements IArena {
     /**
      * Add a kill point to the game stats.
      */
-    public void addPlayerKill(Player p, boolean finalKill, Player victim) {
-        if (p == null) return;
-        if (playerKills.containsKey(p.getName())) {
-            playerKills.replace(p.getName(), playerKills.get(p.getName()) + 1);
-        } else {
-            playerKills.put(p.getName(), 1);
+    @Deprecated(forRemoval = true)
+    public void addPlayerKill(Player player, boolean finalKill, Player victim) {
+        if (player == null || victim == null) {
+            return;
         }
-        if (finalKill) {
-            if (playerFinalKills.containsKey(p)) {
-                playerFinalKills.replace(p, playerFinalKills.get(p) + 1);
-            } else {
-                playerFinalKills.put(p, 1);
+
+        PlayerGameStats killerStats = gameStats.get(player);
+        if (null != killerStats) {
+            GameStatistic<?> kills = killerStats.getStatistic(DefaultStatistics.KILLS);
+            if (kills instanceof Incrementable) {
+                ((Incrementable) kills).increment();
             }
-            playerFinalKillDeaths.put(victim, 1);
+
+            if (finalKill) {
+                GameStatistic<?> finalKills = killerStats.getStatistic(DefaultStatistics.KILLS_FINAL);
+                if (finalKills instanceof Incrementable) {
+                    ((Incrementable) finalKills).increment();
+                }
+            }
+        }
+
+
+        PlayerGameStats victimStats = gameStats.get(victim);
+        if (null == victimStats) {
+            return;
+        }
+
+        GameStatistic<?> deaths = victimStats.getStatistic(DefaultStatistics.DEATHS);
+        if (deaths instanceof Incrementable) {
+            ((Incrementable) deaths).increment();
+        }
+
+        if (finalKill) {
+            GameStatistic<?> finalDeaths = victimStats.getStatistic(DefaultStatistics.DEATHS_FINAL);
+            if (finalDeaths instanceof Incrementable) {
+                ((Incrementable) finalDeaths).increment();
+            }
         }
     }
 
     /**
      * Add a destroyed bed point to the player temp stats.
      */
-    public void addPlayerBedDestroyed(Player p) {
-        if (playerBedsDestroyed.containsKey(p)) {
-            playerBedsDestroyed.replace(p, playerBedsDestroyed.get(p) + 1);
+    @Deprecated(forRemoval = true)
+    public void addPlayerBedDestroyed(Player player) {
+
+        PlayerGameStats stats = gameStats.get(player);
+        if (null == stats) {
             return;
         }
-        playerBedsDestroyed.put(p, 1);
+
+        GameStatistic<?> beds = stats.getStatistic(DefaultStatistics.BEDS_DESTROYED);
+
+        if (beds instanceof Incrementable) {
+            ((Incrementable) beds).increment();
+        }
     }
 
     /**
@@ -1878,58 +1929,85 @@ public class Arena implements IArena {
                         winners = new StringBuilder(winners.substring(0, winners.length() - 1));
                     }
                     int first = 0, second = 0, third = 0;
-                    if (!playerKills.isEmpty()) {
 
 
-                        LinkedHashMap<String, Integer> reverseSortedMap = new LinkedHashMap<>();
 
-                        //Use Comparator.reverseOrder() for reverse ordering
-                        playerKills.entrySet()
-                                .stream()
-                                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                                .forEachOrdered(x -> reverseSortedMap.put(x.getKey(), x.getValue()));
+//                    if (!playerKills.isEmpty()) {
+//
+//
+//                        LinkedHashMap<String, Integer> reverseSortedMap = new LinkedHashMap<>();
+//
+//                        //Use Comparator.reverseOrder() for reverse ordering
+//                        playerKills.entrySet()
+//                                .stream()
+//                                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+//                                .forEachOrdered(x -> reverseSortedMap.put(x.getKey(), x.getValue()));
+//
+//                        int entry = 0;
+//                        for (Map.Entry<String, Integer> e : reverseSortedMap.entrySet()) {
+//                            if (entry == 0) {
+//                                firstName = e.getKey();
+//                                Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
+//                                if (onlinePlayer != null) {
+//                                    firstName = onlinePlayer.getDisplayName();
+//                                }
+//                                first = e.getValue();
+//                            } else if (entry == 1) {
+//                                secondName = e.getKey();
+//                                Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
+//                                if (onlinePlayer != null) {
+//                                    secondName = onlinePlayer.getDisplayName();
+//                                }
+//                                second = e.getValue();
+//                            } else if (entry == 2) {
+//                                thirdName = e.getKey();
+//                                Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
+//                                if (onlinePlayer != null) {
+//                                    thirdName = onlinePlayer.getDisplayName();
+//                                }
+//                                third = e.getValue();
+//                                break;
+//                            }
+//                            entry++;
+//                        }
+//                    }
 
-                        int entry = 0;
-                        for (Map.Entry<String, Integer> e : reverseSortedMap.entrySet()) {
-                            if (entry == 0) {
-                                firstName = e.getKey();
-                                Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
-                                if (onlinePlayer != null) {
-                                    firstName = onlinePlayer.getDisplayName();
-                                }
-                                first = e.getValue();
-                            } else if (entry == 1) {
-                                secondName = e.getKey();
-                                Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
-                                if (onlinePlayer != null) {
-                                    secondName = onlinePlayer.getDisplayName();
-                                }
-                                second = e.getValue();
-                            } else if (entry == 2) {
-                                thirdName = e.getKey();
-                                Player onlinePlayer = Bukkit.getPlayerExact(e.getKey());
-                                if (onlinePlayer != null) {
-                                    thirdName = onlinePlayer.getDisplayName();
-                                }
-                                third = e.getValue();
-                                break;
-                            }
-                            entry++;
-                        }
-                    }
+
+                    TopStringParser top = new TopStringParser(this, DefaultStatistics.KILLS.toString());
+
                     for (Player p : world.getPlayers()) {
-                        p.sendMessage(getMsg(p, Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", winner.getColor().chat().toString())
-                                .replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p))));
+
+                        Language playerLang = Language.getPlayerLanguage(p);
+
+                        p.sendMessage(playerLang.m(Messages.GAME_END_TEAM_WON_CHAT).replace("{TeamColor}", winner.getColor().chat().toString())
+                                .replace("{TeamName}", winner.getDisplayName(playerLang)));
                         if (!winner.getMembers().contains(p)) {
-                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 20);
+                            nms.sendTitle(p, playerLang.m(Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 20);
                         }
+
+                        top.resetIndex();
                         for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
-                            String message = s.replace("{firstName}", firstName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : firstName).replace("{firstKills}", String.valueOf(first))
-                                    .replace("{secondName}", secondName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : secondName).replace("{secondKills}", String.valueOf(second))
-                                    .replace("{thirdName}", thirdName.isEmpty() ? getMsg(p, Messages.MEANING_NOBODY) : thirdName).replace("{thirdKills}", String.valueOf(third))
-                                    .replace("{winnerFormat}", getMaxInTeam() > 1 ? getMsg(p, Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : getMsg(p, Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
-                                    .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(Language.getPlayerLanguage(p)));
-                            p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, message));
+
+                            // todo convert old placeholders
+                            // {firstName} {firstKills}
+                            // {secondName} {secondKills}
+                            // {thirdName} {thirdKills}
+
+                            s = s.replace("{firstName}", "{topPlayerName}");
+                            s = s.replace("{firstKills}", "{topValue-kills}");
+
+                            s = s.replace("{secondName}", "{topPlayerName}");
+                            s = s.replace("{secondKills}", "{topValue-kills}");
+
+                            s = s.replace("{thirdName}", "{topPlayerName}");
+                            s = s.replace("{thirdKills}", "{topValue-kills}");
+
+                            String msg = top.parseString(s, playerLang, playerLang.m(Messages.MEANING_NOBODY));
+
+                            msg = msg.replace("{winnerFormat}", getMaxInTeam() > 1 ? playerLang.m(Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : playerLang.m(Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
+                                    .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(playerLang));
+
+                            p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, msg));
                         }
                     }
                 }
@@ -1967,6 +2045,7 @@ public class Arena implements IArena {
     /**
      * Add a kill to the player temp stats.
      */
+    @Deprecated(forRemoval = true)
     public void addPlayerDeath(Player p) {
         if (playerDeaths.containsKey(p)) {
             playerDeaths.replace(p, playerDeaths.get(p) + 1);
@@ -2421,7 +2500,7 @@ public class Arena implements IArena {
         regionsList = null;
         respawnSessions = null;
         showTime = null;
-        playerKills = null;
+//        playerKills = null;
         playerBedsDestroyed = null;
         playerFinalKills = null;
         playerDeaths = null;
@@ -2707,5 +2786,10 @@ public class Arena implements IArena {
     @Override
     public boolean isTeamBed(Location location) {
         return null != getBedsTeam(location);
+    }
+
+    @Override
+    public GameStatsHolder getStatsHolder() {
+        return gameStats;
     }
 }

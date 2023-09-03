@@ -327,6 +327,11 @@ public class English extends Language {
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fPlayers: &a{on}/{max}", "", "&fWaiting...", "", "§fMode: &a{group}", "&fVersion: &7{version}", "", "&e{serverIp}"));
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMap: &a{map}", "", "&fPlayers: &a{on}/{max}", "", "&fStarting in &a{time}s", "", "§fMode: &a{group}", "&fVersion: &7{version}", "", "&e{serverIp}"));
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_RESTARTING, Arrays.asList(
+                "&e&lBED WARS",
+                "&7{date}",
+                "",
+                "&6Winner: {winnerTeamColor}{winnerTeamName} &6⭐", "&7Top Kills:", "&f{firstColor}{firstName}: {firstKills}", "&f{secondColor}{secondName}: {secondKills}", "&f{thirdColor}{thirdName}: {thirdKills}", "&e{serverIp}"));
 
         yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "",
                 "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
