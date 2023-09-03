@@ -3,7 +3,10 @@ package com.andrei1058.bedwars.arena.stats;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.stats.PlayerGameStats;
 import com.andrei1058.bedwars.api.arena.stats.GameStatistic;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,6 +17,7 @@ public class TopStringParser {
     private int index = 0;
     private final List<PlayerGameStats> ordered;
     private final IArena arena;
+    private BoundsPolicy boundsPolicy = BoundsPolicy.EMPTY;
 
     public TopStringParser(@NotNull IArena arena, String orderBy) {
         this.arena = arena;
@@ -28,19 +32,37 @@ public class TopStringParser {
      * @param string string to be placeholder replaced.
      * @param emptyReplacement replace empty top position with this string.
      */
-    public String parseString(String string, @Nullable Language lang, String emptyReplacement) {
+    public @Nullable String parseString(String string, @Nullable Language lang, String emptyReplacement) {
         if (index >= ordered.size()) {
-            return string.replace("{topPlayerName}", emptyReplacement).replace("{topValue-kills}", "");
+            if (boundsPolicy == BoundsPolicy.SKIP) {
+                return null;
+            }
+
+            string = string
+                    .replace("{topPlayerName}", emptyReplacement)
+                    .replace("{topPlayerDisplayName}", emptyReplacement)
+                    .replace("{topTeamColor}", emptyReplacement)
+                    .replace("{topTeamName}", emptyReplacement);
+
+            for (String registered : arena.getStatsHolder().getRegistered()) {
+                string = string.replace("{topValue-"+registered+"}", "");
+            }
+
+            return string;
         }
 
         PlayerGameStats stats = ordered.get(index);
 
         boolean increment = string.contains("{topPlayerName}") || string.contains("{topPlayerDisplayName}");
 
-        string = string.replace("{topPlayerName}", stats.getUsername())
-                .replace("{topPlayerDisplayName}", stats.getDisplayPlayer());
+        Player online = Bukkit.getPlayer(stats.getPlayer());
+        ITeam team = null == online ? arena.getExTeam(stats.getPlayer()) : arena.getTeam(online);
 
-        // todo foreach registered in that game
+        string = string.replace("{topPlayerName}", stats.getUsername())
+                .replace("{topPlayerDisplayName}", stats.getDisplayPlayer())
+                .replace("{topTeamColor}", null == team ? "" : team.getColor().chat().toString())
+                .replace("{topTeamName}", null == team ? "" : team.getDisplayName(lang));
+
         for (String registered : arena.getStatsHolder().getRegistered()) {
             GameStatistic<?> statistic = stats.getStatistic(registered);
 
@@ -48,7 +70,6 @@ public class TopStringParser {
                 increment = true;
             }
 
-            // todo replace with n.a. n.d. when null if there is a message already in messages
             string = string.replace("{topValue-"+registered+"}", null == statistic ? "" : statistic.getDisplayValue(lang));
         }
 
@@ -60,5 +81,25 @@ public class TopStringParser {
 
     public void resetIndex() {
         index = 0;
+    }
+
+    public void setBoundsPolicy(BoundsPolicy boundsPolicy) {
+        this.boundsPolicy = boundsPolicy;
+    }
+
+    /**
+     * What to do when iterating stats line and there are no more players to show.
+     * This is used when there are more placeholders used than the actual player count.
+     */
+
+    public enum BoundsPolicy {
+        /**
+         * Skip line. Do not send it to receivers.
+         */
+        SKIP,
+        /**
+         * Send empty line to receivers.
+         */
+        EMPTY
     }
 }

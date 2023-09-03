@@ -23,8 +23,11 @@ package com.andrei1058.bedwars.api.configuration;
 @SuppressWarnings("WeakerAccess")
 public class ConfigPath {
 
-    public static final String GENERAL_GAME_END_SHOW_ELIMINATED = "game-end.show-eliminated";
-    public static final String GENERAL_GAME_END_TELEPORT_ELIMINATED = "game-end.teleport-eliminated";
+    public static final String GAME_END_PATH = "game-end";
+    public static final String GENERAL_GAME_END_SHOW_ELIMINATED = GAME_END_PATH+".show-eliminated";
+    public static final String GENERAL_GAME_END_TELEPORT_ELIMINATED = GAME_END_PATH+".teleport-eliminated";
+    public static final String GENERAL_GAME_END_CHAT_TOP_STATISTIC = GAME_END_PATH+".chat-top.order-by";
+    public static final String GENERAL_GAME_END_CHAT_TOP_HIDE_MISSING = GAME_END_PATH+".chat-top.hide-missing";
 
     public static final String GENERATOR_STACK_ITEMS = "stack-items";
 
