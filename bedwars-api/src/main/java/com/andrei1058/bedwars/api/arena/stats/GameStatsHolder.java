@@ -85,4 +85,9 @@ public interface GameStatsHolder {
      * @return unmodifiable list of registered game statistics.
      */
     List<String> getRegistered();
+
+    /**
+     * Get statistic provider.
+     */
+    @Nullable GameStatisticProvider<?> getProvider(String registered);
 }

@@ -114,4 +114,9 @@ public class GameStatsManager implements GameStatsHolder {
     public List<String> getRegistered() {
         return registeredStats.keySet().stream().collect(Collectors.toUnmodifiableList());
     }
+
+    @Override
+    public @Nullable GameStatisticProvider<?> getProvider(String statistic) {
+        return registeredStats.getOrDefault(statistic, null);
+    }
 }

@@ -255,9 +255,9 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}{TeamName} &atelah memenangkan permainan!");
         yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lPerang Kasur", "", "{winnerFormat}", "", "",
-                "&e                          &lPembunuh Pertama &7- {firstName} - {firstKills}",
-                "&6                          &lPembunuh Kedua &7- {secondName} - {secondKills}",
-                "&c                          &lPembunuh Ketiga &7- {thirdName} - {thirdKills}", "",
+                "&6                      &6⭐ &lPembunuh Pertama &7- {topTeamColor}{topPlayerDisplayName} &7- &l{topValue}",
+                "&e                        &lPembunuh Kedua &7- {topTeamColor}{topPlayerDisplayName} &7- &l{topValue}",
+                "&c                        &lPembunuh Ketiga &7- {topTeamColor}{topPlayerDisplayName} &7- &l{topValue}", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.BED_HOLOGRAM_DEFEND, "&c&lPertahankan Kasur Anda!");
         yml.addDefault(Messages.BED_HOLOGRAM_DESTROYED, "&c&lKasur anda telah dihancurkan!");

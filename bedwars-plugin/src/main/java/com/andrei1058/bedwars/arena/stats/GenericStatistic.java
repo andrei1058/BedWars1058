@@ -7,12 +7,18 @@ import com.andrei1058.bedwars.api.arena.stats.GameStatisticProvider;
 import com.andrei1058.bedwars.api.language.Language;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class GenericStatistic implements GameStatisticProvider<GenericStatistic.Value> {
 
     @Override
     public GenericStatistic.Value getDefault() {
         return new Value();
+    }
+
+    @Override
+    public String getVoidReplacement(@Nullable Language language) {
+        return "0";
     }
 
     @Override

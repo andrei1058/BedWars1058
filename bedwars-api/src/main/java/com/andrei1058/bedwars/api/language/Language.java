@@ -50,8 +50,8 @@ public class Language extends ConfigManager {
         // replace old placeholders
         List<String> oldMsg = getYml().getStringList(Messages.GAME_END_TOP_PLAYER_CHAT);
         if (!oldMsg.isEmpty()) {
-            String[] oldTop1 = new String[]{"{firstName}", "{secondName}", "thirdName}"};
-            String[] oldTop2 = new String[]{"{firstKills}", "{secondKills}", "thirdKills}"};
+            String[] oldTop1 = new String[]{"{firstName}", "{secondName}", "{thirdName}"};
+            String[] oldTop2 = new String[]{"{firstKills}", "{secondKills}", "{thirdKills}"};
 
             List<String> newMsg = new ArrayList<>();
             for (String oldString : oldMsg) {
@@ -59,7 +59,7 @@ public class Language extends ConfigManager {
                     oldString = oldString.replace(oldPlaceholder, "{topPlayerName}");
                 }
                 for (String oldPlaceholder : oldTop2) {
-                    oldString = oldString.replace(oldPlaceholder, "{topValue-kills}");
+                    oldString = oldString.replace(oldPlaceholder, "{topValue}");
                 }
                 newMsg.add(oldString);
             }

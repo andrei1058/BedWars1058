@@ -1,6 +1,7 @@
 package com.andrei1058.bedwars.arena.stats;
 
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.stats.GameStatisticProvider;
 import com.andrei1058.bedwars.api.arena.stats.PlayerGameStats;
 import com.andrei1058.bedwars.api.arena.stats.GameStatistic;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
@@ -18,6 +19,7 @@ public class TopStringParser {
     private final List<PlayerGameStats> ordered;
     private final IArena arena;
     private BoundsPolicy boundsPolicy = BoundsPolicy.EMPTY;
+    private final String orderBy;
 
     public TopStringParser(@NotNull IArena arena, String orderBy) {
         this.arena = arena;
@@ -25,6 +27,7 @@ public class TopStringParser {
             throw new RuntimeException("Invalid order by. Provided: " + orderBy);
         }
         ordered = arena.getStatsHolder().getOrderedBy(orderBy);
+        this.orderBy = orderBy;
     }
 
     /**
@@ -41,7 +44,7 @@ public class TopStringParser {
                 boolean hasPlaceholders = false;
 
                 for (String placeholder : new String[]{
-                        "{topPlayerName}", "{topPlayerDisplayName}", "{topTeamColor}", "{topTeamName}"
+                        "{topPlayerName}", "{topPlayerDisplayName}", "{topTeamColor}", "{topTeamName}", "{topValue}"
                 }) {
                     if (string.contains(placeholder)) {
                         hasPlaceholders = true;
@@ -63,11 +66,17 @@ public class TopStringParser {
             string = string
                     .replace("{topPlayerName}", emptyReplacement)
                     .replace("{topPlayerDisplayName}", emptyReplacement)
-                    .replace("{topTeamColor}", emptyReplacement)
-                    .replace("{topTeamName}", emptyReplacement);
+                    .replace("{topTeamColor}", "")
+                    .replace("{topTeamName}", "")
+                    .replace("{topValue}", "{topValue-"+this.orderBy+"}");
 
             for (String registered : arena.getStatsHolder().getRegistered()) {
-                string = string.replace("{topValue-" + registered + "}", "");
+                String displayValue = "null";
+                    GameStatisticProvider<?> provider = arena.getStatsHolder().getProvider(registered);
+                    if (null != provider) {
+                        displayValue = provider.getVoidReplacement(lang);
+                    }
+                string = string.replace("{topValue-" + registered + "}", displayValue);
             }
 
             return string;
@@ -79,11 +88,16 @@ public class TopStringParser {
 
         Player online = Bukkit.getPlayer(stats.getPlayer());
         ITeam team = null == online ? arena.getExTeam(stats.getPlayer()) : arena.getTeam(online);
+        if (null == team) {
+            // if player online but eliminated
+            team = arena.getExTeam(stats.getPlayer());
+        }
 
         string = string.replace("{topPlayerName}", stats.getUsername())
                 .replace("{topPlayerDisplayName}", stats.getDisplayPlayer())
                 .replace("{topTeamColor}", null == team ? "" : team.getColor().chat().toString())
-                .replace("{topTeamName}", null == team ? "" : team.getDisplayName(lang));
+                .replace("{topTeamName}", null == team ? "" : team.getDisplayName(lang))
+                .replace("{topValue}", "{topValue-"+this.orderBy+"}");
 
         for (String registered : arena.getStatsHolder().getRegistered()) {
             GameStatistic<?> statistic = stats.getStatistic(registered);
@@ -92,7 +106,17 @@ public class TopStringParser {
                 increment = true;
             }
 
-            string = string.replace("{topValue-" + registered + "}", null == statistic ? "" : statistic.getDisplayValue(lang));
+            String displayValue = null == statistic ? null : statistic.getDisplayValue(lang);
+            if (null == displayValue) {
+                GameStatisticProvider<?> provider = arena.getStatsHolder().getProvider(registered);
+                if (null == provider) {
+                    displayValue = "null";
+                } else {
+                    displayValue = provider.getVoidReplacement(lang);
+                }
+            }
+
+            string = string.replace("{topValue-" + registered + "}", displayValue);
         }
 
         if (increment) {

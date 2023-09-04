@@ -253,9 +253,9 @@ public class Polish extends Language{
         yml.addDefault(Messages.GAME_END_VICTORY_PLAYER_TITLE, "&6&lWYGRANA!");
         yml.addDefault(Messages.GAME_END_TOP_PLAYER_CHAT, Arrays.asList("&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬",
                 "&f                                   &lBedWars", "", "{winnerFormat}", "", "",
-                "&e                       &lTOP 1 Zabojca &7- {firstName} - {firstKills}",
-                "&6                       &lTOP 2 Zabojca &7- {secondName} - {secondKills}",
-                "&c                       &lTOP 3 Zabojca &7- {thirdName} - {thirdKills}", "",
+                "&6                   &6⭐ &lTOP 1 Zabojca &7- {topTeamColor}{topPlayerDisplayName} &7- &l{topValue}",
+                "&e                     &lTOP 2 Zabojca &7- {topTeamColor}{topPlayerDisplayName} &7- &l{topValue}",
+                "&c                     &lTOP 3 Zabojca &7- {topTeamColor}{topPlayerDisplayName} &7- &l{topValue}", "",
                 "&a▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"));
         yml.addDefault(Messages.GAME_END_TEAM_WON_CHAT, "{prefix}{TeamColor}{TeamName} &awygral gre!");
         yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&dZniszczenie lozek&f:");

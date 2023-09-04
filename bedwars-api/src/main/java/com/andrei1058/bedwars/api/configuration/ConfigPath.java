@@ -24,9 +24,13 @@ package com.andrei1058.bedwars.api.configuration;
 public class ConfigPath {
 
     public static final String GAME_END_PATH = "game-end";
+    @GameMainOverridable
     public static final String GENERAL_GAME_END_SHOW_ELIMINATED = GAME_END_PATH+".show-eliminated";
+    @GameMainOverridable
     public static final String GENERAL_GAME_END_TELEPORT_ELIMINATED = GAME_END_PATH+".teleport-eliminated";
+    @GameMainOverridable
     public static final String GENERAL_GAME_END_CHAT_TOP_STATISTIC = GAME_END_PATH+".chat-top.order-by";
+    @GameMainOverridable
     public static final String GENERAL_GAME_END_CHAT_TOP_HIDE_MISSING = GAME_END_PATH+".chat-top.hide-missing";
 
     public static final String GENERATOR_STACK_ITEMS = "stack-items";

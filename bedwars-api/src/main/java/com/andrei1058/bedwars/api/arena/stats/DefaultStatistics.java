@@ -2,6 +2,7 @@ package com.andrei1058.bedwars.api.arena.stats;
 
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("SpellCheckingInspection")
 public enum DefaultStatistics {
 
     KILLS("kills", true),

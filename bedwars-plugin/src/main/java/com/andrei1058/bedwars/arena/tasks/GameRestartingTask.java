@@ -57,7 +57,7 @@ public class GameRestartingTask implements Runnable, RestartingTask {
         Sounds.playSound("game-end", arena.getSpectators());
 
         // teleport to alive players
-        if (BedWars.config.getBoolean(ConfigPath.GENERAL_GAME_END_TELEPORT_ELIMINATED)) {
+        if (arena.getConfig().getGameOverridableBoolean(ConfigPath.GENERAL_GAME_END_TELEPORT_ELIMINATED)) {
             if (!arena.getPlayers().isEmpty()) {
                 Random r = new Random();
                 for (Player spectator : arena.getSpectators()) {
@@ -72,7 +72,7 @@ public class GameRestartingTask implements Runnable, RestartingTask {
         }
 
         // show eliminated players
-        if (BedWars.config.getBoolean(ConfigPath.GENERAL_GAME_END_SHOW_ELIMINATED)) {
+        if (arena.getConfig().getGameOverridableBoolean(ConfigPath.GENERAL_GAME_END_SHOW_ELIMINATED)) {
             for (Player spectator : arena.getSpectators()) {
                 ITeam exTeam = arena.getExTeam(spectator.getUniqueId());
                 if (null == exTeam) {
