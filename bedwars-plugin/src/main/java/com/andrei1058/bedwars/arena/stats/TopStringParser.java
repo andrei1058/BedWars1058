@@ -28,14 +28,36 @@ public class TopStringParser {
     }
 
     /**
-     *
-     * @param string string to be placeholder replaced.
+     * @param string           string to be placeholder replaced.
      * @param emptyReplacement replace empty top position with this string.
      */
     public @Nullable String parseString(String string, @Nullable Language lang, String emptyReplacement) {
         if (index >= ordered.size()) {
             if (boundsPolicy == BoundsPolicy.SKIP) {
-                return null;
+                if (string.isBlank()){
+                    return string;
+                }
+
+                boolean hasPlaceholders = false;
+
+                for (String placeholder : new String[]{
+                        "{topPlayerName}", "{topPlayerDisplayName}", "{topTeamColor}", "{topTeamName}"
+                }) {
+                    if (string.contains(placeholder)) {
+                        hasPlaceholders = true;
+                        break;
+                    }
+                }
+
+                if (!hasPlaceholders) {
+                    for (String registered : arena.getStatsHolder().getRegistered()) {
+                        if (string.contains("{topValue-" + registered + "}")) {
+                            hasPlaceholders = true;
+                            break;
+                        }
+                    }
+                }
+                return hasPlaceholders ? null : string;
             }
 
             string = string
@@ -45,7 +67,7 @@ public class TopStringParser {
                     .replace("{topTeamName}", emptyReplacement);
 
             for (String registered : arena.getStatsHolder().getRegistered()) {
-                string = string.replace("{topValue-"+registered+"}", "");
+                string = string.replace("{topValue-" + registered + "}", "");
             }
 
             return string;
@@ -66,11 +88,11 @@ public class TopStringParser {
         for (String registered : arena.getStatsHolder().getRegistered()) {
             GameStatistic<?> statistic = stats.getStatistic(registered);
 
-            if (!increment && string.contains("{topValue-"+registered+"}")){
+            if (!increment && string.contains("{topValue-" + registered + "}")) {
                 increment = true;
             }
 
-            string = string.replace("{topValue-"+registered+"}", null == statistic ? "" : statistic.getDisplayValue(lang));
+            string = string.replace("{topValue-" + registered + "}", null == statistic ? "" : statistic.getDisplayValue(lang));
         }
 
         if (increment) {
