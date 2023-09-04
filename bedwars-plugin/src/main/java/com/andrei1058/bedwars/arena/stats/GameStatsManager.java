@@ -97,10 +97,12 @@ public class GameStatsManager implements GameStatsHolder {
     @Override
     public List<PlayerGameStats> getOrderedBy(@NotNull String statistic) {
         //noinspection DataFlowIssue
-        return playerSessionStats.values().stream()
+        List<PlayerGameStats> list = playerSessionStats.values().stream()
                 .filter(data -> null != data.getStatistic(statistic))
                 .sorted(Comparator.comparing(a -> a.getStatistic(statistic)))
-                .collect(Collectors.toUnmodifiableList());
+                .collect(Collectors.toList());
+        Collections.reverse(list);
+        return Collections.unmodifiableList(list);
     }
 
     @Override

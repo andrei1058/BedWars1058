@@ -46,6 +46,27 @@ public class Language extends ConfigManager {
     public Language(Plugin plugin, String iso) {
         super(plugin, "messages_" + iso, plugin.getDataFolder().getPath() + "/Languages");
         this.iso = iso;
+
+        // replace old placeholders
+        List<String> oldMsg = getYml().getStringList(Messages.GAME_END_TOP_PLAYER_CHAT);
+        if (!oldMsg.isEmpty()) {
+            String[] oldTop1 = new String[]{"{firstName}", "{secondName}", "thirdName}"};
+            String[] oldTop2 = new String[]{"{firstKills}", "{secondKills}", "thirdKills}"};
+
+            List<String> newMsg = new ArrayList<>();
+            for (String oldString : oldMsg) {
+                for (String oldPlaceholder : oldTop1) {
+                    oldString = oldString.replace(oldPlaceholder, "{topPlayerName}");
+                }
+                for (String oldPlaceholder : oldTop2) {
+                    oldString = oldString.replace(oldPlaceholder, "{topValue-kills}");
+                }
+                newMsg.add(oldString);
+            }
+
+            getYml().set(Messages.GAME_END_TOP_PLAYER_CHAT, newMsg);
+        }
+
         languages.add(this);
     }
 

@@ -1940,16 +1940,6 @@ public class Arena implements IArena {
                         top.resetIndex();
                         for (String s : getList(p, Messages.GAME_END_TOP_PLAYER_CHAT)) {
 
-                            // todo do this when loading messages
-                            s = s.replace("{firstName}", "{topPlayerName}");
-                            s = s.replace("{firstKills}", "{topValue-kills}");
-
-                            s = s.replace("{secondName}", "{topPlayerName}");
-                            s = s.replace("{secondKills}", "{topValue-kills}");
-
-                            s = s.replace("{thirdName}", "{topPlayerName}");
-                            s = s.replace("{thirdKills}", "{topValue-kills}");
-
                             String msg = top.parseString(s, playerLang, playerLang.m(Messages.MEANING_NOBODY));
                             if (null == msg) {
                                 continue;
