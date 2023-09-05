@@ -10,6 +10,7 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.sidebar.ISidebar;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.stats.StatisticsOrdered;
 import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import com.andrei1058.bedwars.stats.PlayerStats;
 import com.andrei1058.spigot.sidebar.*;
@@ -46,6 +47,7 @@ public class BwSidebar implements ISidebar {
 
     private final BwTabList tabList;
 
+    public @Nullable StatisticsOrdered topStatistics;
 
     protected BwSidebar(Player player) {
         this.player = player;
@@ -67,6 +69,11 @@ public class BwSidebar implements ISidebar {
         this.arena = arena;
         SidebarLine title = this.normalizeTitle(titleArray);
         List<SidebarLine> lines = this.normalizeLines(lineArray);
+
+        if (null == arena) {
+            // clean up
+            setTopStatistics(null);
+        }
 
         List<PlaceholderProvider> placeholders = this.getPlaceholders(this.getPlayer());
         placeholders.addAll(this.persistentProviders);
@@ -176,6 +183,14 @@ public class BwSidebar implements ISidebar {
                                     "{winnerTeamColor}",
                                     arena.getWinner().getColor().chat().toString()
                             );
+                }
+
+                if (null != this.topStatistics) {
+                    StatisticsOrdered.StringParser statParser = topStatistics.newParser();
+                    line = statParser.parseString(line, language, language.m(Messages.MEANING_NOBODY));
+                    if (null == line) {
+                        continue;
+                    }
                 }
             }
 
@@ -542,5 +557,9 @@ public class BwSidebar implements ISidebar {
     @SuppressWarnings("unused")
     public void setHeaderFooter(@Nullable TabHeaderFooter headerFooter) {
         this.headerFooter = headerFooter;
+    }
+
+    public void setTopStatistics(@Nullable StatisticsOrdered topStatistics) {
+        this.topStatistics = topStatistics;
     }
 }

@@ -32,6 +32,10 @@ public class ConfigPath {
     public static final String GENERAL_GAME_END_CHAT_TOP_STATISTIC = GAME_END_PATH+".chat-top.order-by";
     @GameMainOverridable
     public static final String GENERAL_GAME_END_CHAT_TOP_HIDE_MISSING = GAME_END_PATH+".chat-top.hide-missing";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_SB_TOP_STATISTIC = GAME_END_PATH+".sb-top.order-by";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_SB_TOP_HIDE_MISSING = GAME_END_PATH+".sb-top.hide-missing";
 
     public static final String GENERATOR_STACK_ITEMS = "stack-items";
 

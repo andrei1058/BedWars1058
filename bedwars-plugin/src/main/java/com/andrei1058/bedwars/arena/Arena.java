@@ -47,11 +47,12 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.sidebar.ISidebar;
 import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.api.tasks.RestartingTask;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.arena.stats.GameStatsManager;
-import com.andrei1058.bedwars.arena.stats.TopStringParser;
+import com.andrei1058.bedwars.arena.stats.StatisticsOrdered;
 import com.andrei1058.bedwars.arena.tasks.GamePlayingTask;
 import com.andrei1058.bedwars.arena.tasks.GameRestartingTask;
 import com.andrei1058.bedwars.arena.tasks.GameStartingTask;
@@ -66,11 +67,13 @@ import com.andrei1058.bedwars.listeners.blockstatus.BlockStatusListener;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import com.andrei1058.bedwars.money.internal.MoneyPerMinuteTask;
 import com.andrei1058.bedwars.shop.ShopCache;
+import com.andrei1058.bedwars.sidebar.BwSidebar;
 import com.andrei1058.bedwars.sidebar.SidebarService;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.paper.TeleportManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.vault.WithEconomy;
+import com.andrei1058.spigot.sidebar.SidebarManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -1915,47 +1918,59 @@ public class Arena implements IArena {
                         winners = new StringBuilder(winners.substring(0, winners.length() - 1));
                     }
 
-                    TopStringParser top = new TopStringParser(
+                    StatisticsOrdered topInChat = new StatisticsOrdered(
                             this, getConfig().getGameOverridableString(ConfigPath.GENERAL_GAME_END_CHAT_TOP_STATISTIC)
                     );
 
                     // hide stats row completely when placeholders cannot be replaced
                     if (getConfig().getGameOverridableBoolean(ConfigPath.GENERAL_GAME_END_CHAT_TOP_HIDE_MISSING)) {
-                        top.setBoundsPolicy(TopStringParser.BoundsPolicy.SKIP);
+                        topInChat.setBoundsPolicy(StatisticsOrdered.BoundsPolicy.SKIP);
+                    }
+
+                    // this is assigned to scoreboards
+                    StatisticsOrdered topInSidebar = new StatisticsOrdered(
+                            this, getConfig().getGameOverridableString(ConfigPath.GENERAL_GAME_END_SB_TOP_STATISTIC)
+                    );
+
+                    // hide stats row completely when placeholders cannot be replaced
+                    if (getConfig().getGameOverridableBoolean(ConfigPath.GENERAL_GAME_END_SB_TOP_HIDE_MISSING)) {
+                        topInSidebar.setBoundsPolicy(StatisticsOrdered.BoundsPolicy.SKIP);
                     }
 
                     List<Player> receivers = new ArrayList<>(getPlayers().size()+getSpectators().size());
                     receivers.addAll(getPlayers());
                     receivers.addAll(getSpectators());
 
-                    for (Player p : receivers) {
+                    StatisticsOrdered.StringParser statParser = topInChat.newParser();
 
-                        Language playerLang = Language.getPlayerLanguage(p);
+                    for (Player receiver : receivers) {
+
+                        Language playerLang = Language.getPlayerLanguage(receiver);
 
                         String winnerTeamChat = playerLang.m(Messages.GAME_END_TEAM_WON_CHAT);
                         // check if message disabled
                         if (null != winnerTeamChat && !winnerTeamChat.isBlank()) {
-                            p.sendMessage(winnerTeamChat.replace("{TeamColor}", winner.getColor().chat().toString())
+                            receiver.sendMessage(winnerTeamChat.replace("{TeamColor}", winner.getColor().chat().toString())
                                     .replace("{TeamName}", winner.getDisplayName(playerLang)));
                         }
 
-                        if (winner.getMembers().contains(p) || winner.wasMember(p.getUniqueId())) {
-                            nms.sendTitle(p, getMsg(p, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 70, 20);
+                        if (winner.getMembers().contains(receiver) || winner.wasMember(receiver.getUniqueId())) {
+                            nms.sendTitle(receiver, getMsg(receiver, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 70, 20);
                         } else {
-                            nms.sendTitle(p, playerLang.m(Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 20);
+                            nms.sendTitle(receiver, playerLang.m(Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 20);
                         }
 
-                        top.resetIndex();
+                        statParser.resetIndex();
 
                         // check if message is disabled
-                        List<String> topChat = getList(p, Messages.GAME_END_TOP_PLAYER_CHAT);
+                        List<String> topChat = getList(receiver, Messages.GAME_END_TOP_PLAYER_CHAT);
                         if (topChat.isEmpty() || topChat.size() == 1 && topChat.get(0).isEmpty()){
                             continue;
                         }
 
                         for (String s : topChat) {
 
-                            String msg = top.parseString(s, playerLang, playerLang.m(Messages.MEANING_NOBODY));
+                            String msg = statParser.parseString(s, playerLang, playerLang.m(Messages.MEANING_NOBODY));
                             if (null == msg) {
                                 continue;
                             }
@@ -1963,7 +1978,12 @@ public class Arena implements IArena {
                             msg = msg.replace("{winnerFormat}", getMaxInTeam() > 1 ? playerLang.m(Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : playerLang.m(Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
                                     .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(playerLang));
 
-                            p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, msg));
+                            receiver.sendMessage(SupportPAPI.getSupportPAPI().replace(receiver, msg));
+                        }
+
+                        ISidebar sidebar = SidebarService.getInstance().getSidebar(receiver);
+                        if (sidebar instanceof BwSidebar) {
+                            ((BwSidebar) sidebar).setTopStatistics(topInSidebar);
                         }
                     }
                 }

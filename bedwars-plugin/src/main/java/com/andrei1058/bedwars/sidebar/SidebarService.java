@@ -86,7 +86,21 @@ public class SidebarService implements ISidebarService {
             } else if (arena.getStatus() == GameState.playing) {
                 lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
             } else if (arena.getStatus() == GameState.restarting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting", Messages.SCOREBOARD_DEFAULT_RESTARTING);
+
+                ITeam holderTeam = arena.getTeam(player);
+                ITeam holderExTeam = null == holderTeam ? arena.getExTeam(player.getUniqueId()) : null;
+
+                if (null == holderTeam && null == holderExTeam) {
+                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting", Messages.SCOREBOARD_DEFAULT_RESTARTING_SPEC);
+                } else {
+                    if (null == holderTeam && holderExTeam.equals(arena.getWinner())) {
+                        lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting", Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN2);
+                    } else if (null == holderExTeam && holderTeam.equals(arena.getWinner())) {
+                        lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting", Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN1);
+                    } else {
+                        lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting", Messages.SCOREBOARD_DEFAULT_RESTARTING_LOSER);
+                    }
+                }
             }
         }
 
