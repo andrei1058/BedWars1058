@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.support.version.v1_20_R1;
+package com.andrei1058.bedwars.support.version.v1_20_R2;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
@@ -10,9 +10,9 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.bedwars.support.version.common.VersionCommon;
-import com.andrei1058.bedwars.support.version.v1_20_R1.despawnable.DespawnableAttributes;
-import com.andrei1058.bedwars.support.version.v1_20_R1.despawnable.DespawnableFactory;
-import com.andrei1058.bedwars.support.version.v1_20_R1.despawnable.DespawnableType;
+import com.andrei1058.bedwars.support.version.v1_20_R2.despawnable.DespawnableAttributes;
+import com.andrei1058.bedwars.support.version.v1_20_R2.despawnable.DespawnableFactory;
+import com.andrei1058.bedwars.support.version.v1_20_R2.despawnable.DespawnableType;
 import com.mojang.datafixers.util.Pair;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -41,16 +41,16 @@ import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Ladder;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.command.Command;
-import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R1.entity.*;
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R2.entity.*;
+import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,11 +61,11 @@ import java.util.*;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
-public class v1_20_R1 extends VersionSupport {
+public class v1_20_R2 extends VersionSupport {
 
     private final DespawnableFactory despawnableFactory;
 
-    public v1_20_R1(Plugin plugin, String name) {
+    public v1_20_R2(Plugin plugin, String name) {
         super(plugin, name);
         loadDefaultEffects();
         this.despawnableFactory = new DespawnableFactory(this);
@@ -280,8 +280,9 @@ public class v1_20_R1 extends VersionSupport {
 
     @Override
     public void voidKill(Player p) {
-        EntityPlayer player = getPlayer(p);
-        player.a(player.dJ().l(), 1000);
+        EntityDamageEvent event = new EntityDamageEvent(p, EntityDamageEvent.DamageCause.VOID, 1000.0);
+        p.setLastDamageCause(event);
+        p.setHealth(0);
     }
 
     @Override
@@ -548,7 +549,7 @@ public class v1_20_R1 extends VersionSupport {
         if (arena.getRespawnSessions().containsKey(respawned)) return;
 
         EntityPlayer entityPlayer = getPlayer(respawned);
-        PacketPlayOutNamedEntitySpawn show = new PacketPlayOutNamedEntitySpawn(entityPlayer);
+        PacketPlayOutSpawnEntity show = new PacketPlayOutSpawnEntity(entityPlayer);
         PacketPlayOutEntityVelocity playerVelocity = new PacketPlayOutEntityVelocity(entityPlayer);
         // we send head rotation packet because sometimes on respawn others see him with bad rotation
         PacketPlayOutEntityHeadRotation head = new PacketPlayOutEntityHeadRotation(entityPlayer, getCompressedAngle(entityPlayer.getBukkitYaw()));
@@ -580,7 +581,7 @@ public class v1_20_R1 extends VersionSupport {
                         hideArmor(p, respawned);
                     } else {
 
-                        PacketPlayOutNamedEntitySpawn show2 = new PacketPlayOutNamedEntitySpawn(boundTo);
+                        PacketPlayOutSpawnEntity show2 = new PacketPlayOutSpawnEntity(boundTo);
                         PacketPlayOutEntityVelocity playerVelocity2 = new PacketPlayOutEntityVelocity(boundTo);
                         PacketPlayOutEntityHeadRotation head2 = new PacketPlayOutEntityHeadRotation(boundTo, getCompressedAngle(boundTo.getBukkitYaw()));
                         this.sendPackets(respawned, show2, playerVelocity2, head2);

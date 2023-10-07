@@ -9,7 +9,7 @@
         <version>23.7-SNAPSHOT</version>
     </parent>
 
-    <artifactId>versionsupport_v1_20_R1</artifactId>
+    <artifactId>versionsupport_v1_20_R2</artifactId>
 
     <properties>
         <maven.compiler.source>1.19</maven.compiler.source>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.20-R0.1-SNAPSHOT</version>
+            <version>1.20.2-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
