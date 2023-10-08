@@ -306,6 +306,7 @@ public class Messages {
     /**
      * Scoreboard related
      */
+    public static String SCOREBOARD_LOBBY = "scoreboard.lobby";
     public static String SCOREBOARD_DEFAULT_WAITING = "scoreboard.Default.waiting";
     public static String SCOREBOARD_DEFAULT_STARTING = "scoreboard.Default.starting";
     public static String SCOREBOARD_DEFAULT_PLAYING = "scoreboard.Default.playing";
@@ -313,7 +314,6 @@ public class Messages {
     public static String SCOREBOARD_DEFAULT_RESTARTING_WIN1 = "scoreboard.Default.restarting.winner-alive";
     public static String SCOREBOARD_DEFAULT_RESTARTING_WIN2 = "scoreboard.Default.restarting.winner-eliminated";
     public static String SCOREBOARD_DEFAULT_RESTARTING_LOSER = "scoreboard.Default.restarting.loser";
-    public static String SCOREBOARD_LOBBY = "scoreboard.lobby";
 
     /**
      * Player interact related

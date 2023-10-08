@@ -67,6 +67,8 @@ public class Language extends ConfigManager {
             getYml().set(Messages.GAME_END_TOP_PLAYER_CHAT, newMsg);
         }
 
+        // todo convert old scoreboard lines default and custom to new paths
+
         languages.add(this);
     }
 

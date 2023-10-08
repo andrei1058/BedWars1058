@@ -324,21 +324,205 @@ public class SimplifiedChinese extends Language {
         addDefaultStatsMsg(yml, "games-played", "&6总游玩场数", "&f{gamesPlayed}");
 
         // Start of Sidebar
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&l起床战争", "&7{date} &8{server}", "", "&f地图：&a{map}", "", "&f玩家数：&a{on}/{max}", "", "&f等待中...", "", "&f模式：&a{group}", "&f版本：&7{version}", "", "&e{serverIp}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&l起床战争", "&7{date} &8{server}", "", "&f地图：&a{map}", "", "&f玩家数：&a{on}/{max}", "", "&f &a{time} &f秒后开始", "", "&f模式：&a{group}", "&f模式：&7{version}", "", "&e{serverIp}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&l起床战争", "&7{date}", "", "&f{nextEvent} - &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList(
+                "&6&l起床战争,&4&l起&6&l床战争,&6&l起&4&l床&6&l战争,&6&l起床&4&l战&6&l争,&6&l起床战&4&l争,&6&l起床战争",
+                "&f等级：{level}",
+                "",
+                "&f进度：&a{currentXp}&7/&b{requiredXp}",
+                "{progress}",
+                "",
+                "&7{player}",
+                "",
+                "&f金币：&a{money}",
+                "",
+                "&f总胜场：&a{wins}",
+                "&f总击杀：&a{kills}",
+                "", "&e{serverIp}")
+        );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList(
+                "&f&l起床战争",
+                "&7{date} &8{server}",
+                "",
+                "&f地图：&a{map}",
+                "",
+                "&f玩家数：&a{on}/{max}",
+                "",
+                "&f等待中,&f等待中.,&f等待中..,&f等待中...",
+                "",
+                "&f模式：&a{group}",
+                "&f版本：&7{version}",
+                "",
+                "&e{serverIp}")
+        );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList(
+                "&f&l起床战争",
+                "&7{date} &8{server}",
+                "",
+                "&f地图：&a{map}",
+                "",
+                "&f玩家数：&a{on}/{max}",
+                "",
+                "&f &a{time} &f秒后开始",
+                "",
+                "&f模式：&a{group}",
+                "&f模式：&7{version}",
+                "",
+                "&e{serverIp}")
+        );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList(
+                "&e&l起床战争",
+                "&7{date}",
+                "",
+                "&f{nextEvent} - &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&e{serverIp}")
+        );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_RESTARTING_SPEC, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "",
+                "&6Winner: {winnerTeamColor}{winnerTeamName} &6⭐",
+                "",
+                "&7&lTop Kills:",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "",
+                "&e{serverIp}")
+        );
 
-        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&l起床战争", "&7{date}", "", "&f{nextEvent} - &a{time}", "",
-                "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN1, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "",
+                "&6Winner: {winnerTeamColor}{winnerTeamName} &6⭐",
+                "",
+                "&7&lTop Kills:",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "",
+                "&e{serverIp}")
+        );
 
-        yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&l起床战争", "&7{date}", "", "&f{nextEvent} - &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
-                "", "&f击杀：&a{kills}", "&f最终击杀：&a{finalKills}", "&f破坏床：&a{beds}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN2, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "",
+                "&6Winner: {winnerTeamColor}{winnerTeamName} &6⭐",
+                "",
+                "&7&lTop Kills:",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "",
+                "&e{serverIp}")
+        );
 
-        yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&l起床战争", "&7{date}", "", "&f{nextEvent} - &a{time}", "", "{team}", "{team}", "{team}", "{team}",
-                "", "&f击杀：&a{kills}", "&f最终击杀：&a{finalKills}", "&f破坏床：&a{beds}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_RESTARTING_LOSER, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "",
+                "&6Winner: {winnerTeamColor}{winnerTeamName} &6⭐",
+                "",
+                "&7&lTop Kills:",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "",
+                "&e{serverIp}")
+        );
 
-        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&l起床战争,&4&l起&6&l床战争,&6&l起&4&l床&6&l战争,&6&l起床&4&l战&6&l争,&6&l起床战&4&l争,&6&l起床战争",
-                "&f等级：{level}", "", "&f进度：&a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&f金币：&a{money}", "", "&f总胜场：&a{wins}", "&f总击杀：&a{kills}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "Doubles"), Arrays.asList(
+                "&e&l起床战争",
+                "&7{date}",
+                "",
+                "&f{nextEvent} - &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&e{serverIp}")
+        );
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "3v3v3v3"), Arrays.asList(
+                "&e&l起床战争",
+                "&7{date}",
+                "",
+                "&f{nextEvent} - &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&f击杀：&a{kills}",
+                "&f最终击杀：&a{finalKills}",
+                "&f破坏床：&a{beds}",
+                "",
+                "&e{serverIp}")
+        );
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "4v4v4v4"), Arrays.asList(
+                "&e&l起床战争",
+                "&7{date}",
+                "",
+                "&f{nextEvent} - &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&f击杀：&a{kills}",
+                "&f最终击杀：&a{finalKills}",
+                "&f破坏床：&a{beds}",
+                "",
+                "&e{serverIp}")
+        );
+
+
         // End of Sidebar
 
         // start of TAB
@@ -488,7 +672,6 @@ public class SimplifiedChinese extends Language {
         // winner alive - restarting state
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN1_HEADER, List.of(
                 "                                                                                                        ",
-                "&a{serverIp}",
                 "&6⭐ {winnerTeamColor}&lYour team won the game! &6⭐",
                 "&7{date}", "&7Map: &f{map} &7Mode: &f{group}",
                 ""
@@ -509,7 +692,6 @@ public class SimplifiedChinese extends Language {
         // winner dead - restarting state
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN2_HEADER, List.of(
                 "                                                                                                        ",
-                "&a{serverIp}",
                 "&6⭐ {winnerTeamColor}&l{winnerTeamName} Team won the game! &6⭐",
                 "&7{date}",
                 "&7Map: &f{map} &7Mode: &f{group}",
@@ -531,7 +713,6 @@ public class SimplifiedChinese extends Language {
         // loser - restarting state
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_ELM_HEADER, List.of(
                 "                                                                                                        ",
-                "&a{serverIp}",
                 "&6⭐ {winnerTeamColor}&l{winnerTeamName} Team won the game! &6⭐",
                 "&7{date}",
                 "&7Map: &f{map} &7Mode: &f{group}",

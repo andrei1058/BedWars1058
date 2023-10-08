@@ -313,17 +313,188 @@ public class Italian extends Language {
         addDefaultStatsMsg(yml, "games-played", "&6Partite giocate", "&f{gamesPlayed}");
 
         // Start of Sidebar
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMappa: &a{map}", "", "&fGiocatori: &a{on}/{max}", "", "&fIn attesa...", "", "§fMode: &a{group}", "&fVersione: &7{version}", "", "&e{serverIp}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList("&f&lBED WARS", "&7{date} &8{server}", "", "&fMappa: &a{map}", "", "&fGiocatori: &a{on}/{max}", "", "&fInizio in &a{time}s", "", "§fMode: &a{group}", "&fVersione: &7{version}", "", "&e{serverIp}"));
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date} &8{server}",
+                "",
+                "&fMappa: &a{map}",
+                "",
+                "&fGiocatori: &a{on}/{max}",
+                "",
+                "&fIn attesa&fIn attesa.,&fIn attesa..,&fIn attesa...",
+                "",
+                "&fMode: &a{group}",
+                "&fVersione: &7{version}",
+                "",
+                "&e{serverIp}")
+        );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date} &8{server}",
+                "",
+                "&fMappa: &a{map}",
+                "",
+                "&fGiocatori: &a{on}/{max}",
+                "",
+                "&fInizio in &a{time}s",
+                "",
+                "&fMode: &a{group}",
+                "&fVersione: &7{version}",
+                "",
+                "&e{serverIp}")
+        );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "",
+                "&f{nextEvent} in &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&e{serverIp}")
+        );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_RESTARTING_SPEC, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "",
+                "&6Winner: {winnerTeamColor}{winnerTeamName} &6⭐",
+                "",
+                "&7&lTop Kills:",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "",
+                "&e{serverIp}")
+        );
 
-        yml.addDefault("scoreboard.Doubles.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN1, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "",
+                "&6Winner: {winnerTeamColor}{winnerTeamName} &6⭐",
+                "",
+                "&7&lTop Kills:",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "",
+                "&e{serverIp}")
+        );
 
-        yml.addDefault("scoreboard.3v3v3v3.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
-                "", "&fUccisioni: &a{kills}", "&fUccisioni Finali: &a{finalKills}", "&fLetti Distrutti: &a{beds}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN2, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "",
+                "&6Winner: {winnerTeamColor}{winnerTeamName} &6⭐",
+                "",
+                "&7&lTop Kills:",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "",
+                "&e{serverIp}")
+        );
 
-        yml.addDefault("scoreboard.4v4v4v4.playing", Arrays.asList("&e&lBED WARS", "&7{date}", "", "&f{nextEvent} in &a{time}", "", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}", "{team}",
-                "", "&fUccisioni: &a{kills}", "&fUccisioni Finali: &a{finalKills}", "&fLetti Distrutti: &a{beds}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_RESTARTING_LOSER, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "",
+                "&6Winner: {winnerTeamColor}{winnerTeamName} &6⭐",
+                "",
+                "&7&lTop Kills:",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
+                "",
+                "&e{serverIp}")
+        );
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "Doubles"), Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "",
+                "&f{nextEvent} in &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&e{serverIp}")
+        );
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "3v3v3v3"), Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "",
+                "&f{nextEvent} in &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&fUccisioni: &a{kills}",
+                "&fUccisioni Finali: &a{finalKills}",
+                "&fLetti Distrutti: &a{beds}",
+                "",
+                "&e{serverIp}")
+        );
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "4v4v4v4"), Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "",
+                "&f{nextEvent} in &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&fUccisioni: &a{kills}",
+                "&fUccisioni Finali: &a{finalKills}",
+                "&fLetti Distrutti: &a{beds}",
+                "",
+                "&e{serverIp}")
+        );
         // End of Sidebar
 
         // start of TAB
@@ -473,7 +644,6 @@ public class Italian extends Language {
         // winner alive - restarting state
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN1_HEADER, List.of(
                 "                                                                                                        ",
-                "&a{serverIp}",
                 "&6⭐ {winnerTeamColor}&lYour team won the game! &6⭐",
                 "&7{date}", "&7Map: &f{map} &7Mode: &f{group}",
                 ""
@@ -494,7 +664,6 @@ public class Italian extends Language {
         // winner dead - restarting state
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN2_HEADER, List.of(
                 "                                                                                                        ",
-                "&a{serverIp}",
                 "&6⭐ {winnerTeamColor}&l{winnerTeamName} Team won the game! &6⭐",
                 "&7{date}",
                 "&7Map: &f{map} &7Mode: &f{group}",
@@ -516,7 +685,6 @@ public class Italian extends Language {
         // loser - restarting state
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_ELM_HEADER, List.of(
                 "                                                                                                        ",
-                "&a{serverIp}",
                 "&6⭐ {winnerTeamColor}&l{winnerTeamName} Team won the game! &6⭐",
                 "&7{date}",
                 "&7Map: &f{map} &7Mode: &f{group}",
@@ -554,8 +722,21 @@ public class Italian extends Language {
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_SPEC_SUFFIX, List.of(" {vPrefix}", " {level}"));
         // end of tab
 
-        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList("&6&lBedWars", "&fLivello: {level}", "", "&fProgresso: &a{currentXp}&7/&b{requiredXp}", "{progress}", "", "&7{player}", "", "&fSoldi: &a{money}"
-                , "", "&fVittorie: &a{wins}", "&fUccisioni: &a{kills}", "", "&e{serverIp}"));
+        yml.addDefault(Messages.SCOREBOARD_LOBBY, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&fLivello: {level}",
+                "",
+                "&fProgresso: &a{currentXp}&7/&b{requiredXp}",
+                "{progress}",
+                "",
+                "&7{player}",
+                "",
+                "&fSoldi: &a{money}",
+                "",
+                "&fVittorie: &a{wins}",
+                "&fUccisioni: &a{kills}",
+                "", "&e{serverIp}")
+        );
         yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&lTEAM ELIMINATO > Il team {TeamColor}{TeamName} &cè stato eliminato\n");
         yml.addDefault(Messages.XP_REWARD_PER_MINUTE, "{prefix}&6+{xp} Esperienza BedWars ricevuta (Tempo di Gioco).");
         yml.addDefault(Messages.XP_REWARD_WIN, "{prefix}&6+{xp} Esperienza BedWars ricevuta (Vittoria).");

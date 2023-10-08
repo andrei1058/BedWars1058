@@ -91,14 +91,14 @@ public class SidebarService implements ISidebarService {
                 ITeam holderExTeam = null == holderTeam ? arena.getExTeam(player.getUniqueId()) : null;
 
                 if (null == holderTeam && null == holderExTeam) {
-                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting", Messages.SCOREBOARD_DEFAULT_RESTARTING_SPEC);
+                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting.spectator", Messages.SCOREBOARD_DEFAULT_RESTARTING_SPEC);
                 } else {
                     if (null == holderTeam && holderExTeam.equals(arena.getWinner())) {
-                        lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting", Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN2);
+                        lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting.winner-eliminated", Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN2);
                     } else if (null == holderExTeam && holderTeam.equals(arena.getWinner())) {
-                        lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting", Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN1);
+                        lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting.winner-alive", Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN1);
                     } else {
-                        lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting", Messages.SCOREBOARD_DEFAULT_RESTARTING_LOSER);
+                        lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting.loser", Messages.SCOREBOARD_DEFAULT_RESTARTING_LOSER);
                     }
                 }
             }

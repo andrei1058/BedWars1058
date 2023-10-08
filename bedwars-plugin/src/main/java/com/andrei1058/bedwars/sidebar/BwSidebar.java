@@ -55,6 +55,14 @@ public class BwSidebar implements ISidebar {
         nextEventDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         dateFormat = new SimpleDateFormat(getMsg(player, Messages.FORMATTING_SCOREBOARD_DATE));
         this.tabList = new BwTabList(this);
+
+        // Persistent placeholders
+        String poweredBy = BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_POWERED_BY);
+        this.registerPersistentPlaceholder(new PlaceholderProvider("{poweredBy}", () -> poweredBy));
+        String serverId = config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID);
+        this.registerPersistentPlaceholder(new PlaceholderProvider("{server}", () -> serverId));
+        String serverIp = BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP);
+        this.registerPersistentPlaceholder(new PlaceholderProvider("{serverIp}", () -> serverIp));
     }
 
     public void remove() {
@@ -121,6 +129,8 @@ public class BwSidebar implements ISidebar {
         Language language = Language.getPlayerLanguage(player);
         String genericTeamFormat = language.m(Messages.FORMATTING_SCOREBOARD_TEAM_GENERIC);
 
+        StatisticsOrdered.StringParser statParser = null == topStatistics ? null : topStatistics.newParser();
+
         for (String line : lineArray) {
             // convert old placeholders
             line = line.replace("{server_ip}", "{serverIp}");
@@ -186,7 +196,6 @@ public class BwSidebar implements ISidebar {
                 }
 
                 if (null != this.topStatistics) {
-                    StatisticsOrdered.StringParser statParser = topStatistics.newParser();
                     line = statParser.parseString(line, language, language.m(Messages.MEANING_NOBODY));
                     if (null == line) {
                         continue;
@@ -245,7 +254,6 @@ public class BwSidebar implements ISidebar {
     @Contract(pure = true)
     @NotNull LinkedList<PlaceholderProvider> getPlaceholders(@NotNull Player player) {
         LinkedList<PlaceholderProvider> providers = new LinkedList<>();
-
         providers.add(new PlaceholderProvider("{player}", player::getDisplayName));
         providers.add(new PlaceholderProvider("{money}", () -> String.valueOf(getEconomy().getMoney(player))));
         providers.add(new PlaceholderProvider("{playerName}", player::getCustomName));
@@ -254,7 +262,6 @@ public class BwSidebar implements ISidebar {
         // fixme 29/08/2023: disabled for now because this is not a dynamic placeholder. Let's see what's the impact.
 //        providers.add(new PlaceholderProvider("{serverIp}", () -> BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP)));
         providers.add(new PlaceholderProvider("{version}", () -> plugin.getDescription().getVersion()));
-        providers.add(new PlaceholderProvider("{server}", () -> config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID)));
         PlayerLevel level = PlayerLevel.getLevelByPlayer(player.getUniqueId());
         if (null != level) {
             providers.add(new PlaceholderProvider("{progress}", level::getProgress));
