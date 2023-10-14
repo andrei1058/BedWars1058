@@ -604,7 +604,8 @@ public class English extends Language {
                 "&a{serverIp}",
                 "&7{date}",
                 "&7Map: &f{map} &7Mode: &f{group}",
-                ""
+                "",
+                "&7&oYou are spectating"
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_STARTING_FOOTER_SPEC, List.of(
                 "",
@@ -664,7 +665,8 @@ public class English extends Language {
                 "&7Map: &f{map} &7Mode: &f{group}",
                 "",
                 "{nextEvent} in {time}",
-                ""
+                "",
+                "&7&oYou are spectating"
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_SPEC_FOOTER, List.of(
                 "",

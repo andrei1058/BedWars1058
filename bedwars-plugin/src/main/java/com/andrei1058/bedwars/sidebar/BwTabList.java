@@ -97,6 +97,8 @@ public class BwTabList {
                 }
                 lobby.getPlayers().forEach(inLobby -> giveUpdateTabFormat(inLobby, true, null));
             }
+            // sometimes due to timing issues player is not listed yet in lobby players
+            giveUpdateTabFormat(sidebar.getPlayer(), true, null);
             return;
         }
 
@@ -291,7 +293,7 @@ public class BwTabList {
 
             PlayerTab tab = handle.playerTabCreate(
                     getPlayerTabIdentifierSpectator(null, playerTabId),
-                    null, prefix, suffix, PlayerTab.PushingRule.NEVER,
+                    player, prefix, suffix, PlayerTab.PushingRule.NEVER,
                     this.sidebar.getPlaceholders(player)
             );
             deployedPerPlayerTabList.put(player.getUniqueId(), tab);
