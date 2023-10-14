@@ -605,7 +605,7 @@ public class BedWars extends JavaPlugin {
         try {
             int major = Integer.parseInt(versionString[0]);
             int minor = Integer.parseInt(versionString[1]);
-            int release = versionString.length > 3 ? Integer.parseInt(versionString[3]) : 0;
+            int release = versionString.length > 2 ? Integer.parseInt(versionString[2]) : 0;
 
             String adapterPath;
             if (major == 2 && minor == 2 && release == 1) {
