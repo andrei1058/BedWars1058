@@ -222,11 +222,11 @@ public class SidebarService implements ISidebarService {
         });
     }
 
-    public void handleJoin(IArena arena, Player player) {
+    public void handleJoin(IArena arena, Player player, @Nullable Boolean spectator) {
         this.sidebars.forEach((k, v) -> {
             if (null != v.getArena() && v.getArena().equals(arena)) {
                 if (!v.getPlayer().equals(player)) {
-                    v.giveUpdateTabFormat(player, false);
+                    v.giveUpdateTabFormat(player, false, spectator);
                 }
             }
         });

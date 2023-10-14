@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -43,7 +44,7 @@ public class BwSidebar implements ISidebar {
     private final SimpleDateFormat dateFormat;
     private final SimpleDateFormat nextEventDateFormat;
 
-    private final List<PlaceholderProvider> persistentProviders = new ArrayList<>();
+    private final ConcurrentLinkedQueue<PlaceholderProvider> persistentProviders = new ConcurrentLinkedQueue<>();
 
     private final BwTabList tabList;
 
@@ -83,7 +84,7 @@ public class BwSidebar implements ISidebar {
             setTopStatistics(null);
         }
 
-        List<PlaceholderProvider> placeholders = this.getPlaceholders(this.getPlayer());
+        ConcurrentLinkedQueue<PlaceholderProvider> placeholders = this.getPlaceholders(this.getPlayer());
         placeholders.addAll(this.persistentProviders);
 
         // if it is the first time setting content we create the handle
@@ -235,8 +236,8 @@ public class BwSidebar implements ISidebar {
     }
 
     @Override
-    public void giveUpdateTabFormat(@NotNull Player player, boolean skipStateCheck) {
-        tabList.giveUpdateTabFormat(player, skipStateCheck);
+    public void giveUpdateTabFormat(@NotNull Player player, boolean skipStateCheck, @Nullable Boolean spectator) {
+        tabList.giveUpdateTabFormat(player, skipStateCheck, spectator);
     }
 
     @SuppressWarnings("removal")
@@ -252,8 +253,8 @@ public class BwSidebar implements ISidebar {
      * @return placeholders.
      */
     @Contract(pure = true)
-    @NotNull LinkedList<PlaceholderProvider> getPlaceholders(@NotNull Player player) {
-        LinkedList<PlaceholderProvider> providers = new LinkedList<>();
+    @NotNull ConcurrentLinkedQueue<PlaceholderProvider> getPlaceholders(@NotNull Player player) {
+        ConcurrentLinkedQueue<PlaceholderProvider> providers = new ConcurrentLinkedQueue<>();
         providers.add(new PlaceholderProvider("{player}", player::getDisplayName));
         providers.add(new PlaceholderProvider("{money}", () -> String.valueOf(getEconomy().getMoney(player))));
         providers.add(new PlaceholderProvider("{playerName}", player::getCustomName));

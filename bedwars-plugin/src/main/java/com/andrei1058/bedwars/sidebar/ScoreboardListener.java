@@ -85,7 +85,7 @@ public class ScoreboardListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void arenaJoin(@NotNull PlayerJoinArenaEvent e) {
         // add player to scoreboard tab list
-        SidebarService.getInstance().handleJoin(e.getArena(), e.getPlayer());
+        SidebarService.getInstance().handleJoin(e.getArena(), e.getPlayer(), e.isSpectator());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

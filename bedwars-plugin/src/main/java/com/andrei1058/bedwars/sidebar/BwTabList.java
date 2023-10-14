@@ -95,15 +95,15 @@ public class BwTabList {
                 if (null == lobby) {
                     return;
                 }
-                lobby.getPlayers().forEach(inLobby -> giveUpdateTabFormat(inLobby, true));
+                lobby.getPlayers().forEach(inLobby -> giveUpdateTabFormat(inLobby, true, null));
             }
             return;
         }
 
         handleHealthIcon();
 
-        sidebar.getArena().getPlayers().forEach(playing -> giveUpdateTabFormat(playing, true));
-        sidebar.getArena().getSpectators().forEach(spectating -> giveUpdateTabFormat(spectating, true));
+        sidebar.getArena().getPlayers().forEach(playing -> giveUpdateTabFormat(playing, true, null));
+        sidebar.getArena().getSpectators().forEach(spectating -> giveUpdateTabFormat(spectating, true, null));
     }
 
     public void handleHealthIcon() {
@@ -196,7 +196,7 @@ public class BwTabList {
      * Will remove existing tab and give a new one based on game conditions list like spectator, team red, etc.
      * Will handle invisibility potion as well.
      */
-    public void giveUpdateTabFormat(@NotNull Player player, boolean skipStateCheck) {
+    public void giveUpdateTabFormat(@NotNull Player player, boolean skipStateCheck, @Nullable Boolean spectator) {
         // if sidebar was not created
         if (sidebar.getHandle() == null) {
             return;
@@ -236,7 +236,7 @@ public class BwTabList {
         }
 
         // in-game tab has a special treatment
-        if (arena.isSpectator(player)) {
+        if (arena.isSpectator(player) || (spectator != null && spectator)) {
 
             // if has been eliminated from a team
             ITeam exTeam = arena.getExTeam(player.getUniqueId());
