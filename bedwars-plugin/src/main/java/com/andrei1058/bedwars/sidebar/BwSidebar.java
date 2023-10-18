@@ -90,7 +90,10 @@ public class BwSidebar implements ISidebar {
             }, 2L);
         }
         handlePlayerList();
-        setHeaderFooter();
+
+        if (config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_LIST_SET_HEADER_FOOTER)) {
+            setHeaderFooter();
+        }
     }
 
     public Player getPlayer() {
