@@ -389,18 +389,6 @@ public class Misc {
                 return true;
             }
         }
-        for (ITeam t : a.getTeams()) {
-            for (IGenerator o : t.getGenerators()) {
-                if (o.getLocation().distance(l) <= 1) {
-                    return true;
-                }
-            }
-        }
-        for (IGenerator o : a.getOreGenerators()) {
-            if (o.getLocation().distance(l) <= 1) {
-                return true;
-            }
-        }
         return isOutsideOfBorder(l);
     }
 
