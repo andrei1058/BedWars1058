@@ -242,55 +242,91 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-base</artifactId>
+<<<<<<< Updated upstream
             <version>23.6</version>
+=======
+            <version>23.10.1-SNAPSHOT</version>
+>>>>>>> Stashed changes
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_8_R3</artifactId>
+<<<<<<< Updated upstream
             <version>23.6</version>
+=======
+            <version>23.10.1-SNAPSHOT</version>
+>>>>>>> Stashed changes
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_12_R1</artifactId>
+<<<<<<< Updated upstream
             <version>23.6</version>
+=======
+            <version>23.10.1-SNAPSHOT</version>
+>>>>>>> Stashed changes
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_16_R1</artifactId>
+<<<<<<< Updated upstream
             <version>23.6</version>
+=======
+            <version>23.10.1-SNAPSHOT</version>
+>>>>>>> Stashed changes
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_17_R1</artifactId>
+<<<<<<< Updated upstream
             <version>23.6</version>
+=======
+            <version>23.10.1-SNAPSHOT</version>
+>>>>>>> Stashed changes
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_18_R2</artifactId>
+<<<<<<< Updated upstream
             <version>23.6</version>
+=======
+            <version>23.10.1-SNAPSHOT</version>
+>>>>>>> Stashed changes
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_19_R2</artifactId>
+<<<<<<< Updated upstream
             <version>23.6</version>
+=======
+            <version>23.10.1-SNAPSHOT</version>
+>>>>>>> Stashed changes
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_19_R3</artifactId>
+<<<<<<< Updated upstream
             <version>23.6</version>
+=======
+            <version>23.10.1-SNAPSHOT</version>
+>>>>>>> Stashed changes
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_20_R1</artifactId>
+<<<<<<< Updated upstream
             <version>23.6</version>
+=======
+            <version>23.10.1-SNAPSHOT</version>
+>>>>>>> Stashed changes
             <scope>compile</scope>
         </dependency>
         <!--        End of Sidebar LIB-->
