@@ -363,6 +363,26 @@ public class DamageDeathMove implements Listener {
             String message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_UNKNOWN_REASON_FINAL_KILL : Messages.PLAYER_DIE_UNKNOWN_REASON_REGULAR;
             PlayerKillEvent.PlayerKillCause cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.UNKNOWN_FINAL_KILL : PlayerKillEvent.PlayerKillCause.UNKNOWN;
             if (damageEvent != null) {
+                // FLY_INTO_WALL returns when player is killed by arena_y_min_height
+                if (damageEvent.getCause().equals(EntityDamageEvent.DamageCause.valueOf("FLY_INTO_WALL"))) {
+                    LastHit lh = getLastHit(victim);
+                    if (lh != null) {
+                        if (lh.getTime() >= System.currentTimeMillis() - 15000) {
+                            if (lh.getDamager() instanceof Player) killer = (Player) lh.getDamager();
+                            if (killer != null && killer.getUniqueId().equals(victim.getUniqueId())) killer = null;
+                        }
+                    }
+                    if (killer == null) {
+                        message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
+                    } else {
+                        if (killer != victim) {
+                            message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL : Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL;
+                        } else {
+                            message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
+                        }
+                    }
+                    cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.VOID_FINAL_KILL : PlayerKillEvent.PlayerKillCause.VOID;
+                }
                 if (damageEvent.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
                     LastHit lh = getLastHit(victim);
                     if (lh != null) {
@@ -622,6 +642,7 @@ public class DamageDeathMove implements Listener {
             } else {
                 if (a.getStatus() == GameState.playing) {
                     if (e.getPlayer().getLocation().getBlockY() <= a.getYKillHeight()) {
+
                         nms.voidKill(e.getPlayer());
                     }
                     for (ITeam t : a.getTeams()) {
