@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.commands.party;
 
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Messages;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -28,11 +29,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-import static com.andrei1058.bedwars.BedWars.getParty;
+import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getList;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
@@ -68,8 +70,16 @@ public class PartyCommand extends BukkitCommand {
                         p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_CANNOT_INVITE_YOURSELF));
                         return true;
                     }
-                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT).replace("{playername}", p.getName()).replace("{player}", args[1]));
-                    TextComponent tc = new TextComponent(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT_TARGET_RECEIVE_MSG).replace("{player}", p.getName()));
+                    Player player = Bukkit.getPlayer(args[1]);
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT)
+                            .replace("{vPrefix}", getChatSupport().getPrefix(player))
+                            .replace("{vSuffix}", getChatSupport().getSuffix(player))
+                            .replace("{owner}", p.getName())
+                            .replace("{player}", player.getName()));
+                    TextComponent tc = new TextComponent(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT_TARGET_RECEIVE_MSG)
+                            .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                            .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                            .replace("{player}", p.getName()));
                     tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept " + p.getName()));
                     Bukkit.getPlayer(args[1]).spigot().sendMessage(tc);
                     if (partySessionRequest.containsKey(p.getUniqueId())) {
@@ -102,12 +112,18 @@ public class PartyCommand extends BukkitCommand {
                     if (getParty().hasParty(Bukkit.getPlayer(args[1]))) {
                         getParty().addMember(Bukkit.getPlayer(args[1]), p);
                         for (Player on : getParty().getMembers(Bukkit.getPlayer(args[1]))) {
-                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS)
+                                    .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                                    .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                                    .replace("{player}", p.getName()));
                         }
                     } else {
                         getParty().createParty(Bukkit.getPlayer(args[1]), p);
                         for (Player on : getParty().getMembers(Bukkit.getPlayer(args[1]))) {
-                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS).replace("{playername}", p.getName()).replace("{player}", p.getDisplayName()));
+                            on.sendMessage(getMsg(p, Messages.COMMAND_PARTY_ACCEPT_SUCCESS)
+                                    .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                                    .replace("{vSuffix}", getChatSupport().getSuffix(p))
+                                    .replace("{player}", p.getName()));
                         }
                     }
                 } else {
@@ -176,11 +192,20 @@ public class PartyCommand extends BukkitCommand {
                 getParty().promote(p, target1);
                 for (Player p1 : getParty().getMembers(p)) {
                     if (p1.equals(p)) {
-                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_SUCCESS).replace("{player}", args[1]));
+                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_SUCCESS)
+                                .replace("{vPrefix}", getChatSupport().getPrefix(target1))
+                                .replace("{vSuffix}", getChatSupport().getSuffix(target1))
+                                .replace("{player}", target1.getName()));
                     } else if (p1.equals(target1)) {
-                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_OWNER));
+                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_OWNER)
+                                .replace("{vPrefix}", getChatSupport().getPrefix(target1))
+                                .replace("{vSuffix}", getChatSupport().getSuffix(target1))
+                                .replace("{player}", p.getName()));
                     } else {
-                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER).replace("{player}", args[1]));
+                        p1.sendMessage(getMsg(p1, Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER)
+                                .replace("{vPrefix}", getChatSupport().getPrefix(target1))
+                                .replace("{vSuffix}", getChatSupport().getSuffix(target1))
+                                .replace("{player}", target1.getName()));
                     }
                 }
                 break;
@@ -191,10 +216,16 @@ public class PartyCommand extends BukkitCommand {
                     return true;
                 }
                 Player owner = getParty().getOwner(p);
-                p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_OWNER).replace("{owner}", owner.getName()));
+                p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_OWNER)
+                        .replace("{vPrefix}", getChatSupport().getPrefix(owner))
+                        .replace("{vSuffix}", getChatSupport().getSuffix(owner))
+                        .replace("{owner}", owner.getName()));
                 p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_PLAYERS));
                 for (Player p1 : getParty().getMembers(owner)) {
-                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_PLAYER).replace("{player}", p1.getName()));
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_PLAYER)
+                            .replace("{vPrefix}", getChatSupport().getPrefix(p1))
+                            .replace("{vSuffix}", getChatSupport().getSuffix(p1))
+                            .replace("{player}", p1.getName()));
                 }
                 break;
             default:

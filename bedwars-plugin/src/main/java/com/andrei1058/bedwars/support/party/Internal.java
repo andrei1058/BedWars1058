@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.support.party;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.party.Party;
 import org.bukkit.entity.Player;
@@ -98,7 +99,11 @@ public class Internal implements Party {
                 disband(member);
             } else if (p.members.contains(member)) {
                 for (Player mem : p.members) {
-                    mem.sendMessage(getMsg(mem, Messages.COMMAND_PARTY_LEAVE_SUCCESS).replace("{playername}", member.getName()).replace("{player}", member.getDisplayName()));
+                    mem.sendMessage(getMsg(mem, Messages.COMMAND_PARTY_LEAVE_SUCCESS)
+                            .replace("{vPrefix}", BedWars.getChatSupport().getPrefix(member))
+                            .replace("{vSuffix}", BedWars.getChatSupport().getSuffix(member))
+                            .replace("{owner}", p.owner.getName())
+                            .replace("{player}", member.getName()));
                 }
                 p.members.remove(member);
                 if (p.members.isEmpty() || p.members.size() == 1) {
@@ -137,7 +142,11 @@ public class Internal implements Party {
         if (p != null) {
             if (p.members.contains(target)) {
                 for (Player mem : p.members) {
-                    mem.sendMessage(getMsg(mem, Messages.COMMAND_PARTY_REMOVE_SUCCESS).replace("{player}", target.getName()));
+                    mem.sendMessage(getMsg(mem, Messages.COMMAND_PARTY_REMOVE_SUCCESS)
+                            .replace("{vPrefix}", BedWars.getChatSupport().getPrefix(target))
+                            .replace("{vSuffix}", BedWars.getChatSupport().getSuffix(target))
+                            .replace("{owner}", p.owner.getName())
+                            .replace("{player}", target.getName()));
                 }
                 p.members.remove(owner);
                 if (p.members.isEmpty() || p.members.size() == 1) {
