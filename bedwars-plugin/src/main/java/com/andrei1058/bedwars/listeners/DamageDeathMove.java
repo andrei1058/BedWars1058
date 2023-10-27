@@ -132,6 +132,8 @@ public class DamageDeathMove implements Listener {
         Projectile projectile = (Projectile) e.getDamager();
         if (projectile.getShooter() == null) return;
         if (!(projectile.getShooter() instanceof Player)) return;
+        // check if projectile is arrow
+        if (!e.getDamager().getType().equals(EntityType.ARROW)) return;
 
         Player p = (Player) e.getEntity();
         Player damager = (Player) projectile.getShooter();
@@ -143,8 +145,12 @@ public class DamageDeathMove implements Listener {
         ITeam team = a.getTeam(p);
         Language lang = Language.getPlayerLanguage(damager);
         if (lang.m(Messages.PLAYER_HIT_BOW).isEmpty()) return;
+
+        // prevent sending message with "-"
+        String finalDamage = new DecimalFormat("00.#").format(((Player) e.getEntity()).getHealth() - e.getFinalDamage());
+        if (finalDamage.contains("-")) return;
         String message = lang.m(Messages.PLAYER_HIT_BOW)
-                .replace("{amount}", new DecimalFormat("00.#").format(((Player) e.getEntity()).getHealth() - e.getFinalDamage()))
+                .replace("{amount}", finalDamage)
                 .replace("{TeamColor}", team.getColor().chat().toString())
                 .replace("{TeamName}", team.getDisplayName(lang))
                 .replace("{PlayerName}", ChatColor.stripColor(p.getDisplayName()));
