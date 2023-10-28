@@ -27,7 +27,9 @@ public class Messages {
 
     public static String PREFIX = "prefix";
 
-    /** next event related */
+    /**
+     * next event related
+     */
     public static String NEXT_EVENT_DIAMOND_UPGRADE_II = "next-event-diamondII";
     public static String NEXT_EVENT_DIAMOND_UPGRADE_III = "next-event-diamondIII";
     public static String NEXT_EVENT_EMERALD_UPGRADE_II = "next-event-emeraldII";
@@ -42,7 +44,9 @@ public class Messages {
     public static String NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH = "next-event-sudden-death-sub-title";
     public static String NEXT_EVENT_CHAT_ANNOUNCE_SUDDEN_DEATH = "next-event-sudden-death-chat";
 
-    /** General commands reply */
+    /**
+     * General commands reply
+     */
     public static String COMMAND_MAIN = "cmd-main-list";
     public static String COMMAND_LANG_LIST_HEADER = "cmd-lang-list-header";
     public static String COMMAND_LANG_LIST_FORMAT = "cmd-lang-list-format";
@@ -101,7 +105,9 @@ public class Messages {
     public static String COMMAND_FORCESTART_NO_PERM = "cmd-start-no-perm";
     public static String COMMAND_COOLDOWN = "cmd-cooldown";
 
-    /** Arena join/ leave related */
+    /**
+     * Arena join/ leave related
+     */
     public static String ARENA_JOIN_VIP_KICK = "arena-kicked-by-vip";
     public static String ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT = "arena-countdown-stopped";
     //public static String ARENA_PLAYER_QUIT = "player.quit";
@@ -111,7 +117,9 @@ public class Messages {
     public static String ARENA_SPECTATE_DENIED_SELECTOR = "arena-spectate-denied-selector";
     public static String ARENA_LEAVE_PARTY_DISBANDED = "arena-leave-party-disbanded";
 
-    /** Arena status/ status change related */
+    /**
+     * Arena status/ status change related
+     */
     public static String ARENA_STATUS_WAITING_NAME = "arena-status-waiting";
     public static String ARENA_STATUS_STARTING_NAME = "arena-status-starting";
     public static String ARENA_STATUS_PLAYING_NAME = "arena-status-playing";
@@ -125,14 +133,18 @@ public class Messages {
     public static String ARENA_STATUS_START_COUNTDOWN_CANCELLED_SUB_TITLE = "arena-countdown-stopped-subtitle";
     public static String ARENA_DISPLAY_GROUP_PATH = "display-group-";
 
-    /** Arena GUI related */
+    /**
+     * Arena GUI related
+     */
     public static String ARENA_GUI_INV_NAME = "arena-selector-gui-name";
     public static String ARENA_GUI_ARENA_CONTENT_NAME = "arena-selector-content-name";
     public static String ARENA_GUI_ARENA_CONTENT_LORE = "arena-selector-content-lore";
     public static String ARENA_GUI_SKIPPED_ITEM_NAME = "arena-selector-skipped-item-name";
     public static String ARENA_GUI_SKIPPED_ITEM_LORE = "arena-selector-skipped-item-lore";
 
-    /** Spectator related */
+    /**
+     * Spectator related
+     */
     public static String ARENA_SPECTATOR_TELEPORTER_GUI_NAME = "spectator-tp-gui-name";
     //{player} - returns display name, {prefix} - returns the player rank
     public static String ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME = "spectator-tp-gui-head-name";
@@ -147,18 +159,24 @@ public class Messages {
     public static String ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE = "spectator-first-person-quit-title";
     public static String ARENA_SPECTATOR_FIRST_PERSON_LEAVE_SUBTITLE = "spectator-first-person-quit-subtitle";
 
-    /** Stats related */
+    /**
+     * Stats related
+     */
     public static String PLAYER_STATS_GUI_PATH = "stats";
-    public static String PLAYER_STATS_GUI_INV_NAME = PLAYER_STATS_GUI_PATH+"-inv-name";
+    public static String PLAYER_STATS_GUI_INV_NAME = PLAYER_STATS_GUI_PATH + "-inv-name";
 
-    /** Arena generators related */
+    /**
+     * Arena generators related
+     */
     public static String GENERATOR_HOLOGRAM_TIER = "generator-tier";
     public static String GENERATOR_HOLOGRAM_TYPE_DIAMOND = "generator-diamond";
     public static String GENERATOR_HOLOGRAM_TYPE_EMERALD = "generator-emerald";
     public static String GENERATOR_HOLOGRAM_TIMER = "generator-timer";
     public static String GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT = "generator-upgrade-announce";
 
-    /** General formatting */
+    /**
+     * General formatting
+     */
     public static String FORMATTING_CHAT_LOBBY = "format-chat-lobby";
     public static String FORMATTING_CHAT_WAITING = "format-chat-waiting";
     public static String FORMATTING_CHAT_SHOUT = "format-chat-global";
@@ -167,39 +185,80 @@ public class Messages {
     public static String FORMATTING_SCOREBOARD_DATE = "format-sb-date";
     public static String FORMATTING_SCOREBOARD_TEAM_GENERIC = "format-sb-team-generic";
     public static String FORMATTING_SCOREBOARD_HEALTH = "format-sb-health";
-    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY = "format-sb-tab-prefix.lobby";
-    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY = "format-sb-tab-suffix.lobby";
-    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING = "format-sb-tab-prefix.waiting";
-    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING = "format-sb-tab-suffix.waiting";
-    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING = "format-sb-tab-prefix.starting";
-    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING = "format-sb-tab-suffix.starting";
-    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING = "format-sb-tab-prefix.playing";
-    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING = "format-sb-tab-suffix.playing";
 
-    public static String FORMATTING_SIDEBAR_TAB_HEADER_LOBBY = "format-sb-tab-header.lobby";
-    public static String FORMATTING_SIDEBAR_TAB_HEADER_WAITING = "format-sb-tab-header.waiting";
-    public static String FORMATTING_SIDEBAR_TAB_HEADER_STARTING = "format-sb-tab-header.starting";
-    public static String FORMATTING_SIDEBAR_TAB_HEADER_PLAYING = "format-sb-tab-header.playing";
-    public static String FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING = "format-sb-tab-header.restarting";
-    public static String FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR = "format-sb-tab-header.spectator";
+    // TAB
+    public static String FORMATTING_SB_TAB_BASE = "format-tab";
 
-    public static String FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY = "format-sb-tab-footer.lobby";
-    public static String FORMATTING_SIDEBAR_TAB_FOOTER_WAITING = "format-sb-tab-footer.waiting";
-    public static String FORMATTING_SIDEBAR_TAB_FOOTER_STARTING = "format-sb-tab-footer.starting";
-    public static String FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING = "format-sb-tab-footer.playing";
-    public static String FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING = "format-sb-tab-footer.restarting";
-    public static String FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR = "format-sb-tab-footer.spectator";
-    @Deprecated
-    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_PRESTARTING = "format-sb-tab-prefix.restarting";
-    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING = "format-sb-tab-prefix.restarting";
-    @Deprecated
-    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_PRESTARTING = "format-sb-tab-suffix.restarting";
-    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING = "format-sb-tab-suffix.restarting";
-    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR = "format-sb-tab-prefix.spectator";
-    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_SPECTATOR = "format-sb-tab-suffix.spectator";
-    public static String FORMATTING_SPECTATOR_TEAM = "format-spectator-team";
-    @Deprecated
-    public static String FORMATTING_SPECTATOR_COLOR = "format-spectator-color";
+    // TAB LOBBY
+    public static String FORMATTING_SB_TAB_LOBBY_HEADER = FORMATTING_SB_TAB_BASE + ".lobby.header";
+    public static String FORMATTING_SB_TAB_LOBBY_FOOTER = FORMATTING_SB_TAB_BASE + ".lobby.footer";
+    public static String FORMATTING_SB_TAB_LOBBY_PREFIX = FORMATTING_SB_TAB_BASE + ".lobby.prefix";
+    public static String FORMATTING_SB_TAB_LOBBY_SUFFIX = FORMATTING_SB_TAB_BASE + ".lobby.suffix";
+
+    // TAB WAITING
+    public static String FORMATTING_SB_TAB_WAITING_HEADER = FORMATTING_SB_TAB_BASE+".waiting.player.header";
+    public static String FORMATTING_SB_TAB_WAITING_FOOTER = FORMATTING_SB_TAB_BASE+".waiting.player.footer";
+    public static String FORMATTING_SB_TAB_WAITING_PREFIX = FORMATTING_SB_TAB_BASE+".waiting.player.prefix";
+    public static String FORMATTING_SB_TAB_WAITING_SUFFIX = FORMATTING_SB_TAB_BASE+".waiting.player.suffix";
+    // TAB WAITING FOR SPECTATORS
+    public static String FORMATTING_SB_TAB_WAITING_HEADER_SPEC = FORMATTING_SB_TAB_BASE+".waiting.spectator.header";
+    public static String FORMATTING_SB_TAB_WAITING_FOOTER_SPEC = FORMATTING_SB_TAB_BASE+".waiting.spectator.footer";
+    public static String FORMATTING_SB_TAB_WAITING_PREFIX_SPEC = FORMATTING_SB_TAB_BASE+".waiting.spectator.prefix";
+    public static String FORMATTING_SB_TAB_WAITING_SUFFIX_SPEC = FORMATTING_SB_TAB_BASE+".waiting.spectator.suffix";
+
+    // TAB STARTING
+    public static String FORMATTING_SB_TAB_STARTING_HEADER = FORMATTING_SB_TAB_BASE+".starting.player.header";
+    public static String FORMATTING_SB_TAB_STARTING_FOOTER = FORMATTING_SB_TAB_BASE+".starting.player.footer";
+    public static String FORMATTING_SB_TAB_STARTING_PREFIX = FORMATTING_SB_TAB_BASE+".starting.player.prefix";
+    public static String FORMATTING_SB_TAB_STARTING_SUFFIX = FORMATTING_SB_TAB_BASE+".starting.player.suffix";
+    // TAB STARTING FOR SPECTATORS
+    public static String FORMATTING_SB_TAB_STARTING_HEADER_SPEC = FORMATTING_SB_TAB_BASE+".starting.spectator.header";
+    public static String FORMATTING_SB_TAB_STARTING_FOOTER_SPEC = FORMATTING_SB_TAB_BASE+".starting.spectator.footer";
+    public static String FORMATTING_SB_TAB_STARTING_PREFIX_SPEC = FORMATTING_SB_TAB_BASE+".starting.player.prefix";
+    public static String FORMATTING_SB_TAB_STARTING_SUFFIX_SPEC = FORMATTING_SB_TAB_BASE+".starting.player.suffix";
+
+    // TAB PLAYING
+    public static String FORMATTING_SB_TAB_PLAYING_HEADER = FORMATTING_SB_TAB_BASE+".playing.alive.header";
+    public static String FORMATTING_SB_TAB_PLAYING_FOOTER = FORMATTING_SB_TAB_BASE+".playing.alive.footer";
+    public static String FORMATTING_SB_TAB_PLAYING_PREFIX = FORMATTING_SB_TAB_BASE+".playing.alive.prefix";
+    public static String FORMATTING_SB_TAB_PLAYING_SUFFIX = FORMATTING_SB_TAB_BASE+".playing.alive.suffix";
+
+    // TAB PLAYING-ELIMINATED
+    public static String FORMATTING_SB_TAB_PLAYING_ELM_HEADER = FORMATTING_SB_TAB_BASE+".playing.eliminated.header";
+    public static String FORMATTING_SB_TAB_PLAYING_ELM_FOOTER = FORMATTING_SB_TAB_BASE+".playing.eliminated.footer";
+    public static String FORMATTING_SB_TAB_PLAYING_ELM_PREFIX = FORMATTING_SB_TAB_BASE+".playing.eliminated.prefix";
+    public static String FORMATTING_SB_TAB_PLAYING_ELM_SUFFIX = FORMATTING_SB_TAB_BASE+".playing.eliminated.suffix";
+
+    // TAB PLAYING FOR SPECTATORS
+    public static String FORMATTING_SB_TAB_PLAYING_SPEC_HEADER = FORMATTING_SB_TAB_BASE+".playing.spectator.header";
+    public static String FORMATTING_SB_TAB_PLAYING_SPEC_FOOTER = FORMATTING_SB_TAB_BASE+".playing.spectator.footer";
+    public static String FORMATTING_SB_TAB_PLAYING_SPEC_PREFIX = FORMATTING_SB_TAB_BASE+".playing.spectator.prefix";
+    public static String FORMATTING_SB_TAB_PLAYING_SPEC_SUFFIX = FORMATTING_SB_TAB_BASE+".playing.spectator.suffix";
+
+    // TAB RESTARTING FOR WINNERS ALIVE
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN1_HEADER = FORMATTING_SB_TAB_BASE+".restarting.winner-alive.header";
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN1_FOOTER = FORMATTING_SB_TAB_BASE+".restarting.winner-alive.footer";
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN1_PREFIX = FORMATTING_SB_TAB_BASE+".restarting.winner-alive.prefix";
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN1_SUFFIX = FORMATTING_SB_TAB_BASE+".restarting.winner-alive.suffix";
+
+    // TAB RESTARTING FOR WINNERS DEAD
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN2_HEADER = FORMATTING_SB_TAB_BASE+".restarting.winner-dead.header";
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN2_FOOTER = FORMATTING_SB_TAB_BASE+".restarting.winner-dead.footer";
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN2_PREFIX = FORMATTING_SB_TAB_BASE+".restarting.winner-dead.prefix";
+    public static String FORMATTING_SB_TAB_RESTARTING_WIN2_SUFFIX = FORMATTING_SB_TAB_BASE+".restarting.winner-dead.suffix";
+
+
+    // TAB RESTARTING FOR LOSERS
+    public static String FORMATTING_SB_TAB_RESTARTING_ELM_HEADER = FORMATTING_SB_TAB_BASE+".restarting.loser.header";
+    public static String FORMATTING_SB_TAB_RESTARTING_ELM_FOOTER = FORMATTING_SB_TAB_BASE+".restarting.loser.footer";
+    public static String FORMATTING_SB_TAB_RESTARTING_ELM_PREFIX = FORMATTING_SB_TAB_BASE+".restarting.loser.prefix";
+    public static String FORMATTING_SB_TAB_RESTARTING_ELM_SUFFIX = FORMATTING_SB_TAB_BASE+".restarting.loser.suffix";
+
+    // TAB RESTARTING FOR SPECTATORS
+    public static String FORMATTING_SB_TAB_RESTARTING_SPEC_HEADER = FORMATTING_SB_TAB_BASE+".restarting.spectator.header";
+    public static String FORMATTING_SB_TAB_RESTARTING_SPEC_FOOTER = FORMATTING_SB_TAB_BASE+".restarting.spectator.footer";
+    public static String FORMATTING_SB_TAB_RESTARTING_SPEC_PREFIX = FORMATTING_SB_TAB_BASE+".restarting.spectator.prefix";
+    public static String FORMATTING_SB_TAB_RESTARTING_SPEC_SUFFIX = FORMATTING_SB_TAB_BASE+".restarting.spectator.suffix";
 
     public static String FORMATTING_SCOREBOARD_TEAM_ELIMINATED = "format-sb-team-eliminated";
     public static String FORMATTING_SCOREBOARD_BED_DESTROYED = "format-sb-bed-destroyed";
@@ -224,8 +283,11 @@ public class Messages {
     public static String FORMAT_UPGRADE_COLOR_CAN_AFFORD = "format-upgrade-color-can-afford";
     public static String FORMAT_UPGRADE_COLOR_UNLOCKED = "format-upgrade-color-unlocked";
     public static String FORMAT_UPGRADE_TRAP_COST = "format-upgrade-trap-cost";
+    public static String FORMAT_SPECTATOR_TARGET = "format-spectator-target";
 
-    /** Meaning/ Translations */
+    /**
+     * Meaning/ Translations
+     */
     public static String MEANING_FULL = "meaning-full";
     public static String MEANING_SHOUT = "meaning-shout";
     public static String MEANING_NEVER = "meaning-never";
@@ -242,13 +304,24 @@ public class Messages {
     public static String MEANING_VAULT_PLURAL = "meaning-vault-plural";
     public static String MEANING_NO_TRAP = "meaning-no-trap";
 
-    /** Scoreboard related */
-    public static String SCOREBOARD_DEFAULT_WAITING = "scoreboard.Default.waiting";
-    public static String SCOREBOARD_DEFAULT_STARTING = "scoreboard.Default.starting";
-    public static String SCOREBOARD_DEFAULT_PLAYING = "scoreboard.Default.playing";
-    public static String SCOREBOARD_LOBBY = "scoreboard.lobby";
+    /**
+     * Scoreboard related
+     */
+    public static String SCOREBOARD_LOBBY = "sidebar.lobby";
+    public static String SCOREBOARD_DEFAULT_WAITING = "sidebar.Default.waiting.player";
+    public static String SCOREBOARD_DEFAULT_WAITING_SPEC = "sidebar.Default.waiting.spectator";
+    public static String SCOREBOARD_DEFAULT_STARTING = "sidebar.Default.starting.player";
+    public static String SCOREBOARD_DEFAULT_STARTING_SPEC = "sidebar.Default.starting.spectator";
+    public static String SCOREBOARD_DEFAULT_PLAYING = "sidebar.Default.playing.alive";
+    public static String SCOREBOARD_DEFAULT_PLAYING_SPEC = "sidebar.Default.playing.spectator";
+    public static String SCOREBOARD_DEFAULT_RESTARTING_SPEC = "sidebar.Default.restarting.spectator";
+    public static String SCOREBOARD_DEFAULT_RESTARTING_WIN1 = "sidebar.Default.restarting.winner-alive";
+    public static String SCOREBOARD_DEFAULT_RESTARTING_WIN2 = "sidebar.Default.restarting.winner-eliminated";
+    public static String SCOREBOARD_DEFAULT_RESTARTING_LOSER = "sidebar.Default.restarting.loser";
 
-    /** Player interact related */
+    /**
+     * Player interact related
+     */
     public static String INTERACT_CANNOT_PLACE_BLOCK = "interact-cant-place";
     public static String INTERACT_CANNOT_BREAK_BLOCK = "interact-cant-break";
     public static String INTERACT_CANNOT_BREAK_OWN_BED = "interact-cant-destroy-bed";
@@ -259,7 +332,9 @@ public class Messages {
     public static String INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED = "interact-cant-open-chest";
     public static String INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN = "interact-invisibility-removed-damaged";
 
-    /** PvP related */
+    /**
+     * PvP related
+     */
     public static String PLAYER_DIE_RESPAWN_TITLE = "player-respawn-title";
     public static String PLAYER_DIE_RESPAWN_SUBTITLE = "player-respawn-subtitle";
     public static String PLAYER_DIE_RESPAWN_CHAT = "player-respawn-timer-chat";
@@ -267,7 +342,7 @@ public class Messages {
     public static String PLAYER_DIE_ELIMINATED_CHAT = "player-eliminated-chat";
 
     public static String PLAYER_DIE_VOID_FALL_REGULAR_KILL = "player-die-void-regular";
-    public static String PLAYER_DIE_VOID_FALL_FINAL_KILL =  "player-die-void-final";
+    public static String PLAYER_DIE_VOID_FALL_FINAL_KILL = "player-die-void-final";
     public static String PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL = "player-die-knocked-void-regular";
     public static String PLAYER_DIE_KNOCKED_IN_VOID_FINAL_KILL = "player-die-knocked-void-final";
     public static String PLAYER_DIE_KNOCKED_BY_REGULAR_KILL = "player-die-knocked-fall-regular";
@@ -296,7 +371,9 @@ public class Messages {
 
     public static String PLAYER_HIT_BOW = "player-hit-bow";
 
-    /** Misc */
+    /**
+     * Misc
+     */
     public static String GAME_END_GAME_OVER_PLAYER_TITLE = "game-end-game-over-title";
     public static String GAME_END_VICTORY_PLAYER_TITLE = "game-end-victory-title";
     public static String GAME_END_TOP_PLAYER_CHAT = "game-end-top-chat";
@@ -320,7 +397,9 @@ public class Messages {
     public static String TEAM_ELIMINATED_CHAT = "team-eliminated";
 
 
-    /** Upgrades/ Shop*/
+    /**
+     * Upgrades/ Shop
+     */
     public static String NPC_NAME_TEAM_UPGRADES = "npc-team-upgrades";
     public static String NPC_NAME_TEAM_SHOP = "npc-team-shop";
     public static String NPC_NAME_SOLO_UPGRADES = "npc-solo-upgrades";
@@ -361,10 +440,10 @@ public class Messages {
     public static final String SHOP_PATH = "shop-items-messages";
     public static final String SHOP_LORE_STATUS_CANT_AFFORD = "shop-lore-status-cant-afford";
     public static final String SHOP_LORE_STATUS_CAN_BUY = "shop-lore-status-can-buy";
-    public static final String SHOP_LORE_STATUS_MAXED  = "shop-lore-status-tier-maxed";
+    public static final String SHOP_LORE_STATUS_MAXED = "shop-lore-status-tier-maxed";
     public static final String SHOP_LORE_STATUS_ARMOR = "shop-lore-status-armor";
-    public static final String SHOP_LORE_QUICK_ADD  = "shop-lore-quick-add";
-    public static final String SHOP_LORE_QUICK_REMOVE  = "shop-lore-quick-remove";
+    public static final String SHOP_LORE_QUICK_ADD = "shop-lore-quick-add";
+    public static final String SHOP_LORE_QUICK_REMOVE = "shop-lore-quick-remove";
     public static final String SHOP_INDEX_NAME = SHOP_PATH + ".inventory-name";
     public static final String SHOP_QUICK_ADD_NAME = SHOP_PATH + ".quick-buy-add-inventory-name";
     public static final String SHOP_SEPARATOR_NAME = SHOP_PATH + ".separator-item-name";
@@ -379,18 +458,86 @@ public class Messages {
     public static final String SHOP_CATEGORY_ITEM_LORE = SHOP_PATH + ".%category%.category-item-lore";
     public static final String SHOP_CONTENT_TIER_ITEM_NAME = SHOP_PATH + ".%category%.content-item-%content%-name";
     public static final String SHOP_CONTENT_TIER_ITEM_LORE = SHOP_PATH + ".%category%.content-item-%content%-lore";
-    public static final String SHOP_CAN_BUY_COLOR = SHOP_PATH+ ".can-buy-color";
-    public static final String SHOP_CANT_BUY_COLOR = SHOP_PATH+ ".cant-buy-color";
+    public static final String SHOP_CAN_BUY_COLOR = SHOP_PATH + ".can-buy-color";
+    public static final String SHOP_CANT_BUY_COLOR = SHOP_PATH + ".cant-buy-color";
 
     /* MultiArena Lobby Item Messages */
-    public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+"-%path%-name";
-    public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH+"-%path%-lore";
+    public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + "-%path%-name";
+    public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + "-%path%-lore";
 
     /* Spectator Items Messages */
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH+"-%path%-name";
-    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH+"-%path%-lore";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH + "-%path%-name";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH + "-%path%-lore";
 
     /* Arena waiting Items Messages */
-    public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+"-%path%-name";
-    public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH+"-%path%-lore";
+    public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + "-%path%-name";
+    public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + "-%path%-lore";
+
+
+
+    // DEPRECATIONS FOR REMOVAL
+
+    // LOBBY TAB
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SIDEBAR_TAB_HEADER_LOBBY = FORMATTING_SB_TAB_LOBBY_HEADER;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_LOBBY = FORMATTING_SB_TAB_LOBBY_FOOTER;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_LOBBY = FORMATTING_SB_TAB_LOBBY_PREFIX;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_LOBBY = FORMATTING_SB_TAB_LOBBY_SUFFIX;
+    // WAITING TAB
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SIDEBAR_TAB_HEADER_WAITING = FORMATTING_SB_TAB_WAITING_HEADER;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_WAITING = FORMATTING_SB_TAB_WAITING_FOOTER;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_WAITING = FORMATTING_SB_TAB_WAITING_PREFIX;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_WAITING = FORMATTING_SB_TAB_WAITING_SUFFIX;
+    // STARTING TAB
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SIDEBAR_TAB_HEADER_STARTING = FORMATTING_SB_TAB_STARTING_HEADER;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_STARTING = FORMATTING_SB_TAB_STARTING_FOOTER;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_STARTING = FORMATTING_SB_TAB_STARTING_PREFIX;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_STARTING = FORMATTING_SB_TAB_STARTING_SUFFIX;
+    // PLAYING TAB
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SIDEBAR_TAB_HEADER_PLAYING = FORMATTING_SB_TAB_PLAYING_HEADER;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_PLAYING = FORMATTING_SB_TAB_PLAYING_FOOTER;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_PLAYING = FORMATTING_SB_TAB_PLAYING_PREFIX;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_PLAYING = FORMATTING_SB_TAB_PLAYING_SUFFIX;
+    // SPECTATING TAB
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SIDEBAR_TAB_HEADER_SPECTATOR = FORMATTING_SB_TAB_PLAYING_SPEC_HEADER;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_SPECTATOR = FORMATTING_SB_TAB_PLAYING_SPEC_FOOTER;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_SPECTATOR = FORMATTING_SB_TAB_PLAYING_SPEC_PREFIX;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_SPECTATOR = FORMATTING_SB_TAB_PLAYING_SPEC_SUFFIX;
+    // RESTARTING TAB
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_PRESTARTING = FORMATTING_SB_TAB_RESTARTING_WIN2_PREFIX;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_PREFIX_RESTARTING = FORMATTING_SB_TAB_RESTARTING_WIN2_PREFIX;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_PRESTARTING = FORMATTING_SB_TAB_RESTARTING_WIN2_SUFFIX;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SCOREBOARD_TAB_SUFFIX_RESTARTING = FORMATTING_SB_TAB_RESTARTING_WIN2_SUFFIX;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SIDEBAR_TAB_HEADER_RESTARTING = FORMATTING_SB_TAB_RESTARTING_ELM_HEADER;
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SIDEBAR_TAB_FOOTER_RESTARTING = FORMATTING_SB_TAB_PLAYING_SPEC_HEADER;
+
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SPECTATOR_TEAM = "format-spectator-team";
+    @Deprecated(forRemoval = true)
+    public static String FORMATTING_SPECTATOR_COLOR = FORMATTING_SPECTATOR_TEAM;
 }

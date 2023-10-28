@@ -21,7 +21,6 @@
 package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.BedWars;
-import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
@@ -35,10 +34,11 @@ import com.andrei1058.bedwars.sidebar.SidebarService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -47,7 +47,7 @@ import static com.andrei1058.bedwars.BedWars.*;
 public class QuitAndTeleportListener implements Listener {
 
     @EventHandler
-    public void onLeave(PlayerQuitEvent e) {
+    public void onLeave(@NotNull PlayerQuitEvent e) {
         Player p = e.getPlayer();
         // Remove from arena
         IArena a = Arena.getArenaByPlayer(p);
@@ -100,54 +100,31 @@ public class QuitAndTeleportListener implements Listener {
         CmdStats.getStatsCoolDown().remove(e.getPlayer().getUniqueId());
     }
 
-    @EventHandler
-    public void onTeleport(PlayerTeleportEvent e) {
-        if (e == null) return;
-        if (e.isCancelled()) return;
-        if (e.getTo() == null) return;
-        if (e.getTo().getWorld() == null) return;
-        IArena a = Arena.getArenaByPlayer(e.getPlayer());
-        if (a != null) {
-            IArena a1 = Arena.getArenaByIdentifier(e.getTo().getWorld().getName());
-            if (a1 != null) {
-                if (!a1.equals(a)) {
-                    if (a.isSpectator(e.getPlayer())) a.removeSpectator(e.getPlayer(), false);
-                    if (a.isPlayer(e.getPlayer())) a.removePlayer(e.getPlayer(), false);
-                    e.getPlayer().sendMessage("PlayerTeleportEvent something went wrong. You have joined an arena world while playing on a different map.");
-                }
-            }
-        }
-    }
+    /**
+     * Handle players teleported outside.
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onWorldChange(@NotNull PlayerChangedWorldEvent e) {
 
-    @EventHandler
-    public void onWorldChange(PlayerChangedWorldEvent e) {
-        // I think this for shared mode should be removed
-        if (BedWars.getServerType() == ServerType.SHARED) {
-            if (BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
-                //Bukkit.getScheduler().runTaskLater(plugin, ()-> {
-                if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
-                    SidebarService.getInstance().giveSidebar(e.getPlayer(), null, true);
-                } else {
-                    SidebarService.getInstance().remove(e.getPlayer());
-                }
-                //}, 2L);
-            }
-        } else if (BedWars.getServerType() == ServerType.MULTIARENA) {
-            if (BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
-                if (e.getPlayer().getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
-                    SidebarService.getInstance().giveSidebar(e.getPlayer(), null, true);
-                }
-            }
+        // if player was teleported outside arena
+        IArena arena = Arena.getArenaByPlayer(e.getPlayer());
+
+        if (null == arena) {
+            return;
         }
-        IArena a = Arena.getArenaByPlayer(e.getPlayer());
-        if (a != null) {
-            if (a.isPlayer(e.getPlayer())) {
-                if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) return;
-                if (!e.getPlayer().getWorld().getName().equalsIgnoreCase(a.getWorld().getName())) {
-                    a.removePlayer(e.getPlayer(), BedWars.getServerType() == ServerType.BUNGEE);
-                    debug(e.getPlayer().getName() + " was removed from " + a.getDisplayName() + " because he was teleported outside the arena.");
-                }
-            }
+
+        if (e.getPlayer().getWorld().getName().equals(arena.getWorldName())) {
+            return;
+        }
+
+        if (arena.isPlayer(e.getPlayer())) {
+            // it will teleport you to the lobby world or cached location
+            arena.removePlayer(e.getPlayer(), false);
+        }
+
+        if (arena.isSpectator(e.getPlayer())) {
+            // it will teleport you to the lobby world or cached location
+            arena.removeSpectator(e.getPlayer(), false);
         }
     }
 }
