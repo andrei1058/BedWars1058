@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static com.andrei1058.bedwars.BedWars.*;
-import static com.andrei1058.bedwars.api.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.*;
 
 public class BwSidebar implements ISidebar {
 
@@ -307,6 +307,28 @@ public class BwSidebar implements ISidebar {
             providers.add(new PlaceholderProvider("{on}", () -> String.valueOf(arena.getPlayers().size())));
             providers.add(new PlaceholderProvider("{max}", () -> String.valueOf(arena.getMaxPlayers())));
             providers.add(new PlaceholderProvider("{nextEvent}", this::getNextEventName));
+
+            if (arena.isSpectator(player)) {
+                Language lang = getPlayerLanguage(player);
+                String targetFormat = lang.m(Messages.FORMAT_SPECTATOR_TARGET);
+
+                providers.add(new PlaceholderProvider("{spectatorTarget}", () -> {
+                    if (null == player.getSpectatorTarget() || !(player.getSpectatorTarget() instanceof Player)) {
+                        return "";
+                    }
+                    Player target = (Player) player.getSpectatorTarget();
+                    ITeam targetTeam = arena.getTeam(target);
+
+                    if (null == targetTeam) {
+                        return "";
+                    }
+                    return targetFormat.replace("{targetTeamColor}", targetTeam.getColor().chat().toString())
+                            .replace("{targetDisplayName}", target.getDisplayName())
+                            .replace("{targetName}", target.getDisplayName())
+                            .replace("{targetTeamName}", targetTeam.getDisplayName(lang));
+                }));
+            }
+
             providers.add(new PlaceholderProvider("{time}", () -> {
                 GameState status = this.arena.getStatus();
                 if (status == GameState.playing || status == GameState.restarting) {

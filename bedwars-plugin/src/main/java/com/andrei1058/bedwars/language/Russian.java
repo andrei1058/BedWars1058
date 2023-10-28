@@ -132,6 +132,21 @@ public class Russian extends Language{
                 "",
                 "&e{serverIp}")
         );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING_SPEC, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date} &8{server}",
+                "&o&7Spectating",
+                "&fКарта: &a{map}",
+                "",
+                "&fИгроков: &a{on}/{max}",
+                "",
+                "&fОжидание,&fОжидание.,&fОжидание..,&fОжидание...",
+                "",
+                "&fТип: &a{group}",
+                "&fВерсия: &7{version}",
+                "",
+                "&e{serverIp}")
+        );
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date} &8{server}",
@@ -147,10 +162,45 @@ public class Russian extends Language{
                 "",
                 "&e{serverIp}")
         );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING_SPEC, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date} &8{server}",
+                "&o&7Spectating",
+                "&fКарта: &a{map}",
+                "",
+                "&fИгроков: &a{on}/{max}",
+                "",
+                "&fСтарт через &a{time}s",
+                "",
+                "&fТип: &a{group}",
+                "&fВерсия: &7{version}",
+                "",
+                "&e{serverIp}")
+        );
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
                 "",
+                "&f{nextEvent} in &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&e{serverIp}")
+        );
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
                 "&f{nextEvent} in &a{time}",
                 "",
                 "{team}",
@@ -260,6 +310,24 @@ public class Russian extends Language{
                 "&e{serverIp}")
         );
 
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "Doubles"), Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
+                "&f{nextEvent} in &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&e{serverIp}")
+        );
+
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "3v3v3v3"), Arrays.asList(
                 "&e&lBED WARS",
                 "&7{date}",
@@ -282,10 +350,50 @@ public class Russian extends Language{
                 "&e{serverIp}")
         );
 
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "3v3v3v3"), Arrays.asList(
+                "&e&lBED WARS",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
+                "&f{nextEvent} in &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&fУбийств: &a{kills}",
+                "&fФинальных убийств: &a{finalKills}",
+                "&fКроватей уничтожено: &a{beds}",
+                "",
+                "&e{serverIp}")
+        );
+
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "4v4v4v4"), Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
                 "",
+                "&f{nextEvent} in &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&fУбийств: &a{kills}",
+                "&fФинальных убийств: &a{finalKills}",
+                "&fКроватей уничтожено: &a{beds}",
+                "",
+                "&e{serverIp}")
+        );
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "4v4v4v4"), Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
                 "&f{nextEvent} in &a{time}",
                 "",
                 "{team}",
@@ -884,6 +992,7 @@ public class Russian extends Language{
 
 
         yml.addDefault(Messages.MEANING_NO_TRAP, "Ловушки отсутствуют!");
+        yml.addDefault(Messages.FORMAT_SPECTATOR_TARGET, "{targetTeamColor}{targetDisplayName}");
         yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Цена: {currencyColor}{cost} {currency}");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CAN_AFFORD, "&e");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD, "&c");

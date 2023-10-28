@@ -283,6 +283,7 @@ public class Messages {
     public static String FORMAT_UPGRADE_COLOR_CAN_AFFORD = "format-upgrade-color-can-afford";
     public static String FORMAT_UPGRADE_COLOR_UNLOCKED = "format-upgrade-color-unlocked";
     public static String FORMAT_UPGRADE_TRAP_COST = "format-upgrade-trap-cost";
+    public static String FORMAT_SPECTATOR_TARGET = "format-spectator-target";
 
     /**
      * Meaning/ Translations
@@ -307,9 +308,12 @@ public class Messages {
      * Scoreboard related
      */
     public static String SCOREBOARD_LOBBY = "scoreboard.lobby";
-    public static String SCOREBOARD_DEFAULT_WAITING = "scoreboard.Default.waiting";
-    public static String SCOREBOARD_DEFAULT_STARTING = "scoreboard.Default.starting";
-    public static String SCOREBOARD_DEFAULT_PLAYING = "scoreboard.Default.playing";
+    public static String SCOREBOARD_DEFAULT_WAITING = "scoreboard.Default.waiting.player";
+    public static String SCOREBOARD_DEFAULT_WAITING_SPEC = "scoreboard.Default.waiting.spectator";
+    public static String SCOREBOARD_DEFAULT_STARTING = "scoreboard.Default.starting.player";
+    public static String SCOREBOARD_DEFAULT_STARTING_SPEC = "scoreboard.Default.starting.spectator";
+    public static String SCOREBOARD_DEFAULT_PLAYING = "scoreboard.Default.playing.alive";
+    public static String SCOREBOARD_DEFAULT_PLAYING_SPEC = "scoreboard.Default.playing.spectator";
     public static String SCOREBOARD_DEFAULT_RESTARTING_SPEC = "scoreboard.Default.restarting.spectator";
     public static String SCOREBOARD_DEFAULT_RESTARTING_WIN1 = "scoreboard.Default.restarting.winner-alive";
     public static String SCOREBOARD_DEFAULT_RESTARTING_WIN2 = "scoreboard.Default.restarting.winner-eliminated";

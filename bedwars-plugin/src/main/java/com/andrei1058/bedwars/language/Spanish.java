@@ -133,6 +133,21 @@ public class Spanish extends Language {
                 "",
                 "&e{serverIp}")
         );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING_SPEC, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date} &8{server}",
+                "&o&7Spectating",
+                "&fMapa: &a{map}",
+                "",
+                "&fJugador: &a{on}/{max}",
+                "",
+                "&fEsperando,&fEsperando.,&fEsperando..,&fEsperando...",
+                "",
+                "&fMode: &a{group}",
+                "&fVersion: &7{version}",
+                "",
+                "&e{serverIp}")
+        );
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date} &8{server}",
@@ -148,10 +163,45 @@ public class Spanish extends Language {
                 "",
                 "&e{serverIp}")
         );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING_SPEC, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date} &8{server}",
+                "&o&7Spectating",
+                "&fMapa: &a{map}",
+                "",
+                "&fJugador: &a{on}/{max}",
+                "",
+                "&fomenzando en &a{time}s",
+                "",
+                "&fMode: &a{group}",
+                "&fVersion: &7{version}",
+                "",
+                "&e{serverIp}")
+        );
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
                 "",
+                "&f{nextEvent} in &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&e{serverIp}")
+        );
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
                 "&f{nextEvent} in &a{time}",
                 "",
                 "{team}",
@@ -261,6 +311,24 @@ public class Spanish extends Language {
                 "&e{serverIp}")
         );
 
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "Doubles"), Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
+                "&f{nextEvent} in &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&e{serverIp}")
+        );
+
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "3v3v3v3"), Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
@@ -283,10 +351,32 @@ public class Spanish extends Language {
                 "&e{serverIp}")
         );
 
-        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "4v4v4v4"), Arrays.asList(
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "3v3v3v3"), Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
+                "&f{nextEvent} in &a{time}",
                 "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&finalKills: &a{kills}",
+                "&fAsesinatos Finales: &a{finalKills}",
+                "&fCamas Destruidas: &a{beds}",
+                "",
+                "&e{serverIp}")
+        );
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "4v4v4v4"), Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
                 "&f{nextEvent} in &a{time}",
                 "",
                 "{team}",
@@ -902,6 +992,7 @@ public class Spanish extends Language {
         yml.addDefault(Messages.REJOIN_ALLOWED, "{prefix}&eHas ingresado nuevamente a &a{arena}&e!");
 
         yml.addDefault(Messages.MEANING_NO_TRAP, "Sin trampa!");
+        yml.addDefault(Messages.FORMAT_SPECTATOR_TARGET, "{targetTeamColor}{targetDisplayName}");
         yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Precio: {currencyColor}{cost} {currency}");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CAN_AFFORD, "&e");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD, "&c");

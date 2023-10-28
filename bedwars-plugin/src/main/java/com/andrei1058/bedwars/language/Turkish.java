@@ -356,6 +356,21 @@ public class Turkish extends Language {
                 "",
                 "&e{serverIp}")
         );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING_SPEC, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date} &8{server}",
+                "&o&7Spectating",
+                "&fHarita: &a{map}",
+                "",
+                "&fOyuncular: &a{on}/{max}",
+                "",
+                "&fBekleniyor,&fBekleniyor.,&fBekleniyor..,&fBekleniyor...",
+                "",
+                "&fTür: &a{group}",
+                "&fSürüm: &7{version}",
+                "",
+                "&e{serverIp}")
+        );
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date} &8{server}",
@@ -371,10 +386,45 @@ public class Turkish extends Language {
                 "",
                 "&e{serverIp}")
         );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING_SPEC, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date} &8{server}",
+                "&o&7Spectating",
+                "&fHarita: &a{map}",
+                "",
+                "&fOyuncular: &a{on}/{max}",
+                "",
+                "&f&a{time}s sonra başlatılıyor",
+                "",
+                "&fTür: &a{group}",
+                "&fSürüm: &7{version}",
+                "",
+                "&e{serverIp}")
+        );
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
                 "",
+                "&a{time} sonra &f{nextEvent}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&e{serverIp}")
+        );
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC, Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
                 "&a{time} sonra &f{nextEvent}",
                 "",
                 "{team}",
@@ -484,6 +534,24 @@ public class Turkish extends Language {
                 "&e{serverIp}")
         );
 
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "Doubles"), Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
+                "&a{time} sonra &f{nextEvent}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&e{serverIp}")
+        );
+
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "3v3v3v3"), Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
@@ -506,10 +574,50 @@ public class Turkish extends Language {
                 "&e{serverIp}")
         );
 
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "3v3v3v3"), Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
+                "&a{time} sonra &f{nextEvent}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&fÖldürme: &a{kills}",
+                "&fFinal Öldürme: &a{finalKills}",
+                "&fYatak Kırma: &a{beds}",
+                "",
+                "&e{serverIp}")
+        );
+
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "4v4v4v4"), Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
                 "",
+                "&a{time} sonra &f{nextEvent}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&fÖldürme: &a{kills}",
+                "&fFinal Öldürme: &a{finalKills}",
+                "&fYatak Kırma: &a{beds}",
+                "",
+                "&e{serverIp}")
+        );
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "4v4v4v4"), Arrays.asList(
+                "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
                 "&a{time} sonra &f{nextEvent}",
                 "",
                 "{team}",
@@ -848,6 +956,7 @@ public class Turkish extends Language {
 
         //
         yml.addDefault(Messages.MEANING_NO_TRAP, "Tuzak yok!");
+        yml.addDefault(Messages.FORMAT_SPECTATOR_TARGET, "{targetTeamColor}{targetDisplayName}");
         yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7Ücret: {currencyColor}{cost} {currency}");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CAN_AFFORD, "&e");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD, "&c");

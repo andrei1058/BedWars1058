@@ -354,6 +354,21 @@ public class SimplifiedChinese extends Language {
                 "",
                 "&e{serverIp}")
         );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING_SPEC, Arrays.asList(
+                "&f&l起床战争",
+                "&7{date} &8{server}",
+                "&o&7Spectating",
+                "&f地图：&a{map}",
+                "",
+                "&f玩家数：&a{on}/{max}",
+                "",
+                "&f等待中,&f等待中.,&f等待中..,&f等待中...",
+                "",
+                "&f模式：&a{group}",
+                "&f版本：&7{version}",
+                "",
+                "&e{serverIp}")
+        );
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING, Arrays.asList(
                 "&f&l起床战争",
                 "&7{date} &8{server}",
@@ -369,10 +384,45 @@ public class SimplifiedChinese extends Language {
                 "",
                 "&e{serverIp}")
         );
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING_SPEC, Arrays.asList(
+                "&f&l起床战争",
+                "&7{date} &8{server}",
+                "&o&7Spectating",
+                "&f地图：&a{map}",
+                "",
+                "&f玩家数：&a{on}/{max}",
+                "",
+                "&f &a{time} &f秒后开始",
+                "",
+                "&f模式：&a{group}",
+                "&f模式：&7{version}",
+                "",
+                "&e{serverIp}")
+        );
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING, Arrays.asList(
                 "&e&l起床战争",
                 "&7{date}",
                 "",
+                "&f{nextEvent} - &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&e{serverIp}")
+        );
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC, Arrays.asList(
+                "&e&l起床战争",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
                 "&f{nextEvent} - &a{time}",
                 "",
                 "{team}",
@@ -482,6 +532,24 @@ public class SimplifiedChinese extends Language {
                 "&e{serverIp}")
         );
 
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "Doubles"), Arrays.asList(
+                "&e&l起床战争",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
+                "&f{nextEvent} - &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&e{serverIp}")
+        );
+
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "3v3v3v3"), Arrays.asList(
                 "&e&l起床战争",
                 "&7{date}",
@@ -504,10 +572,50 @@ public class SimplifiedChinese extends Language {
                 "&e{serverIp}")
         );
 
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "3v3v3v3"), Arrays.asList(
+                "&e&l起床战争",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
+                "&f{nextEvent} - &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&f击杀：&a{kills}",
+                "&f最终击杀：&a{finalKills}",
+                "&f破坏床：&a{beds}",
+                "",
+                "&e{serverIp}")
+        );
+
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING.replaceFirst("Default", "4v4v4v4"), Arrays.asList(
                 "&e&l起床战争",
                 "&7{date}",
                 "",
+                "&f{nextEvent} - &a{time}",
+                "",
+                "{team}",
+                "{team}",
+                "{team}",
+                "{team}",
+                "",
+                "&f击杀：&a{kills}",
+                "&f最终击杀：&a{finalKills}",
+                "&f破坏床：&a{beds}",
+                "",
+                "&e{serverIp}")
+        );
+
+        yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "4v4v4v4"), Arrays.asList(
+                "&e&l起床战争",
+                "&7{date}",
+                "&o&7Spectating {spectatorTarget}",
                 "&f{nextEvent} - &a{time}",
                 "",
                 "{team}",
@@ -847,6 +955,7 @@ public class SimplifiedChinese extends Language {
                 "&7放置一个袖珍弹出塔", "&7塔防！", "", "{quick_buy}", "{buy_status}"));
 
         yml.addDefault(Messages.MEANING_NO_TRAP, "无陷阱！");
+        yml.addDefault(Messages.FORMAT_SPECTATOR_TARGET, "{targetTeamColor}{targetDisplayName}");
         yml.addDefault(Messages.FORMAT_UPGRADE_TRAP_COST, "&7花费：{currencyColor}{cost} {currency}");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CAN_AFFORD, "&e");
         yml.addDefault(Messages.FORMAT_UPGRADE_COLOR_CANT_AFFORD, "&c");

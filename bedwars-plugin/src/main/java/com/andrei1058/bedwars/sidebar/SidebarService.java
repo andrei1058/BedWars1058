@@ -80,11 +80,23 @@ public class SidebarService implements ISidebarService {
             }
         } else {
             if (arena.getStatus() == GameState.waiting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING);
+                if (arena.isSpectator(player)) {
+                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting.spectator", Messages.SCOREBOARD_DEFAULT_WAITING_SPEC);
+                } else {
+                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting.player", Messages.SCOREBOARD_DEFAULT_WAITING);
+                }
             } else if (arena.getStatus() == GameState.starting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING);
+                if (arena.isSpectator(player)) {
+                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting.spectator", Messages.SCOREBOARD_DEFAULT_STARTING_SPEC);
+                } else {
+                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting.player", Messages.SCOREBOARD_DEFAULT_STARTING);
+                }
             } else if (arena.getStatus() == GameState.playing) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
+                if (arena.isSpectator(player)) {
+                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing.spectator", Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC);
+                } else {
+                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing.alive", Messages.SCOREBOARD_DEFAULT_PLAYING);
+                }
             } else if (arena.getStatus() == GameState.restarting) {
 
                 ITeam holderTeam = arena.getTeam(player);
