@@ -48,13 +48,25 @@ public interface ISidebar {
      *
      * @param player         format given player on current holder's sidebar.
      * @param skipStateCheck will skip checking if tab formatting is disabled.
+     * @param spectator when you already know the player is a spectator. E.g. on join. Null will let the plugin whether the player is spectator or not.
      */
-    void giveUpdateTabFormat(@NotNull Player player, boolean skipStateCheck);
+    void giveUpdateTabFormat(@NotNull Player player, boolean skipStateCheck, @Nullable Boolean spectator);
+
+    /**
+     * Will update tab prefix and suffix for the given player on current sidebar.
+     *
+     * @param player         format given player on current holder's sidebar.
+     * @param skipStateCheck will skip checking if tab formatting is disabled.
+     */
+    default void giveUpdateTabFormat(@NotNull Player player, boolean skipStateCheck) {
+        giveUpdateTabFormat(player, skipStateCheck, null);
+    }
 
 
     /**
-     * @return true if tab formatting is disabled for current sidebar/ arena stage
+     * @return true if tab formatting is disabled for current sidebar/ arena stage.
      */
+    @Deprecated(forRemoval = true)
     boolean isTabFormattingDisabled();
 
     /**

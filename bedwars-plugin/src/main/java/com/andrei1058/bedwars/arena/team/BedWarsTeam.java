@@ -37,7 +37,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
-import com.andrei1058.bedwars.support.paper.PaperSupport;
+import com.andrei1058.bedwars.support.paper.TeleportManager;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
@@ -97,6 +97,7 @@ public class BedWarsTeam implements ITeam {
     // Invulnerability at re-spawn
     // Fall invulnerability when teammates respawn
     public static HashMap<UUID, Long> reSpawnInvulnerability = new HashMap<>();
+    private UUID identity;
 
     public BedWarsTeam(String name, TeamColor color, Location spawn, Location bed, Location shop, Location teamUpgrades, Arena arena) {
         if (arena == null) return;
@@ -114,6 +115,7 @@ public class BedWarsTeam implements ITeam {
         if (drops != null) {
             setKillDropsLocation(drops);
         }
+        this.identity = UUID.randomUUID();
     }
 
     public int getSize() {
@@ -142,7 +144,7 @@ public class BedWarsTeam implements ITeam {
      */
     public void firstSpawn(Player p) {
         if (p == null) return;
-        PaperSupport.teleportC(p, spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        TeleportManager.teleportC(p, spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.setGameMode(GameMode.SURVIVAL);
         p.setCanPickupItems(true);
         nms.setCollide(p, getArena(), true);
@@ -340,7 +342,7 @@ public class BedWarsTeam implements ITeam {
         } else {
             reSpawnInvulnerability.put(p.getUniqueId(), System.currentTimeMillis() + config.getInt(ConfigPath.GENERAL_CONFIGURATION_RE_SPAWN_INVULNERABILITY));
         }
-        PaperSupport.teleportC(p, getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+        TeleportManager.teleportC(p, getSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         p.setVelocity(new Vector(0, 0, 0));
         p.removePotionEffect(PotionEffectType.INVISIBILITY);
         nms.setCollide(p, arena, true);
@@ -478,6 +480,11 @@ public class BedWarsTeam implements ITeam {
         if (p.getInventory().getLeggings() == null)
             p.getInventory().setLeggings(createArmor(Material.LEATHER_LEGGINGS));
         if (p.getInventory().getBoots() == null) p.getInventory().setBoots(createArmor(Material.LEATHER_BOOTS));
+    }
+
+    @Override
+    public UUID getIdentity() {
+        return identity;
     }
 
     /**

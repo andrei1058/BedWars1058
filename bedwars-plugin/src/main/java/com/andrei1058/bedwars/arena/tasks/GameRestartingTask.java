@@ -30,19 +30,24 @@ import com.andrei1058.bedwars.api.tasks.RestartingTask;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.support.paper.TeleportManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GameRestartingTask implements Runnable, RestartingTask {
 
     private Arena arena;
-    private int restarting = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RESTART) + 3;
+    private int restarting = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_RESTART) + 5;
     private final BukkitTask task;
 
     public GameRestartingTask(@NotNull Arena arena) {
@@ -50,6 +55,36 @@ public class GameRestartingTask implements Runnable, RestartingTask {
         task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, this, 0, 20L);
         Sounds.playSound("game-end", arena.getPlayers());
         Sounds.playSound("game-end", arena.getSpectators());
+
+        // teleport to alive players
+        if (arena.getConfig().getGameOverridableBoolean(ConfigPath.GENERAL_GAME_END_TELEPORT_ELIMINATED)) {
+            if (!arena.getPlayers().isEmpty()) {
+                Random r = new Random();
+                for (Player spectator : arena.getSpectators()) {
+                    Player target = arena.getPlayers().get(r.nextInt(arena.getPlayers().size()));
+                    Location loc = target.getLocation().clone();
+                    loc.setDirection(target.getLocation().getDirection().multiply(-1));
+                    loc.add(0,2,0);
+
+                    TeleportManager.teleportC(spectator, loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                }
+            }
+        }
+
+        // show eliminated players
+        if (arena.getConfig().getGameOverridableBoolean(ConfigPath.GENERAL_GAME_END_SHOW_ELIMINATED)) {
+            for (Player spectator : arena.getSpectators()) {
+                ITeam exTeam = arena.getExTeam(spectator.getUniqueId());
+                if (null == exTeam) {
+                    continue;
+                }
+                spectator.removePotionEffect(PotionEffectType.INVISIBILITY);
+                for (Player player : arena.getPlayers()) {
+                    BedWars.nms.spigotShowPlayer(player, spectator);
+                    BedWars.nms.spigotShowPlayer(spectator, player);
+                }
+            }
+        }
     }
 
     /**

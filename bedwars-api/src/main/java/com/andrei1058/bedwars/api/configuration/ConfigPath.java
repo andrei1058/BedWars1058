@@ -23,6 +23,20 @@ package com.andrei1058.bedwars.api.configuration;
 @SuppressWarnings("WeakerAccess")
 public class ConfigPath {
 
+    public static final String GAME_END_PATH = "game-end";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_SHOW_ELIMINATED = GAME_END_PATH+".show-eliminated";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_TELEPORT_ELIMINATED = GAME_END_PATH+".teleport-eliminated";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_CHAT_TOP_STATISTIC = GAME_END_PATH+".chat-top.order-by";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_CHAT_TOP_HIDE_MISSING = GAME_END_PATH+".chat-top.hide-missing";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_SB_TOP_STATISTIC = GAME_END_PATH+".sb-top.order-by";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_SB_TOP_HIDE_MISSING = GAME_END_PATH+".sb-top.hide-missing";
+
     public static final String GENERATOR_STACK_ITEMS = "stack-items";
 
     public static final String GENERATOR_IRON_DELAY = "iron.delay";
@@ -136,8 +150,13 @@ public class ConfigPath {
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING = "scoreboard-settings.player-list.format-playing-list";
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING = "scoreboard-settings.player-list.format-restarting-list";
     public static final String SB_CONFIG_SIDEBAR_LIST_REFRESH = "scoreboard-settings.player-list.names-refresh-interval";
+    public static final String SB_CONFIG_SIDEBAR_HEALTH_ENABLE = "scoreboard-settings.health.enable";
     public static final String SB_CONFIG_SIDEBAR_HEALTH_IN_TAB = "scoreboard-settings.health.display-in-tab";
     public static final String SB_CONFIG_SIDEBAR_HEALTH_REFRESH = "scoreboard-settings.health.animation-refresh-interval";
+
+    public static final String SB_CONFIG_TAB_HEADER_FOOTER_ENABLE = "scoreboard-settings.tab-header-footer.enable";
+    public static final String SB_CONFIG_TAB_HEADER_FOOTER_REFRESH_INTERVAL = "scoreboard-settings.tab-header-footer.refresh-interval";
+
     public static final String GENERAL_CONFIGURATION_DISABLED_LANGUAGES = "disabled-languages";
 
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH = "arena-gui";
@@ -156,6 +175,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT = "enable-gen-split";
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
+    public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_POWERED_BY = "powered-by";
 
     private static final String GENERAL_CHAT = "chat-settings.";
     public static final String GENERAL_CHAT_FORMATTING = GENERAL_CHAT+"format";

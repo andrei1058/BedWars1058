@@ -47,6 +47,7 @@ public class ConfigManager {
      */
     public ConfigManager(Plugin plugin, String name, String dir) {
         File d = new File(dir);
+
         if (!d.exists()) {
             if (!d.mkdirs()) {
                 plugin.getLogger().log(Level.SEVERE, "Could not create " + d.getPath());

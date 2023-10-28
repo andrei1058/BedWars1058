@@ -21,18 +21,24 @@
 package com.andrei1058.bedwars.api.events.player;
 
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
+@SuppressWarnings("unused")
 public class PlayerKillEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private final IArena arena;
     private final Player victim;
+    private ITeam victimTeam;
     private final Player killer;
+    private ITeam killerTeam;
     private final PlayerKillCause cause;
     private Function<Player, String> message;
     private boolean playSound = true;
@@ -42,12 +48,46 @@ public class PlayerKillEvent extends Event {
      *
      * @param killer can be NULL.
      */
-    public PlayerKillEvent(IArena arena, Player victim, Player killer, Function<Player, String> message, PlayerKillCause cause) {
+    @Deprecated()
+    public PlayerKillEvent(
+            @NotNull IArena arena,
+            Player victim,
+            Player killer,
+            Function<Player, String> message,
+            PlayerKillCause cause) {
+        victimTeam = arena.getTeam(victim);
+        if (null == victimTeam) {
+            victimTeam = arena.getExTeam(victim.getUniqueId());
+        }
+
+        if (null != killer) {
+            killerTeam = arena.getTeam(killer);
+            if (null == killerTeam) {
+                killerTeam = arena.getExTeam(killer.getUniqueId());
+            }
+        }
         this.arena = arena;
         this.victim = victim;
         this.killer = killer;
         this.message = message;
         this.cause = cause;
+    }
+
+    public PlayerKillEvent(
+            @NotNull IArena arena,
+            @NotNull Player victim,
+            @Nullable ITeam victimTeam,
+            @Nullable Player killer,
+            @Nullable ITeam killerTeam,
+            @Nullable Function<Player, String> message,
+            @NotNull PlayerKillCause cause) {
+        this.arena = arena;
+        this.victim = victim;
+        this.killer = killer;
+        this.message = message;
+        this.cause = cause;
+        this.victimTeam = victimTeam;
+        this.killerTeam = killerTeam;
     }
 
     public enum PlayerKillCause {
@@ -109,14 +149,14 @@ public class PlayerKillEvent extends Event {
     /**
      * Get kill chat message.
      */
-    public Function<Player, String> getMessage() {
+    public @Nullable Function<Player, String> getMessage() {
         return message;
     }
 
     /**
      * Set chat message.
      */
-    public void setMessage(Function<Player, String> message) {
+    public void setMessage(@Nullable Function<Player, String> message) {
         this.message = message;
     }
 
@@ -150,6 +190,23 @@ public class PlayerKillEvent extends Event {
      */
     public void setPlaySound(boolean playSound) {
         this.playSound = playSound;
+    }
+
+
+    public ITeam getKillerTeam() {
+        return killerTeam;
+    }
+
+    public ITeam getVictimTeam() {
+        return victimTeam;
+    }
+
+    public void setKillerTeam(ITeam killerTeam) {
+        this.killerTeam = killerTeam;
+    }
+
+    public void setVictimTeam(ITeam victimTeam) {
+        this.victimTeam = victimTeam;
     }
 
     public HandlerList getHandlers() {

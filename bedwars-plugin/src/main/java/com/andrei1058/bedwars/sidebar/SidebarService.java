@@ -47,8 +47,9 @@ public class SidebarService implements ISidebarService {
         // check if we might need to remove the existing sidebar
         if (null != sidebar) {
             if (null == arena) {
-                // if sidebar is disabled in lobby on shared mode
-                if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) {
+                // if sidebar is disabled in lobby on shared or multi-arena mode
+                if (!config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR) ||
+                        BedWars.getServerType() == ServerType.SHARED) {
                     this.remove(sidebar);
                     return;
                 }
@@ -79,11 +80,39 @@ public class SidebarService implements ISidebarService {
             }
         } else {
             if (arena.getStatus() == GameState.waiting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting", Messages.SCOREBOARD_DEFAULT_WAITING);
+                if (arena.isSpectator(player)) {
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".waiting.spectator", Messages.SCOREBOARD_DEFAULT_WAITING_SPEC);
+                } else {
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".waiting.player", Messages.SCOREBOARD_DEFAULT_WAITING);
+                }
             } else if (arena.getStatus() == GameState.starting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting", Messages.SCOREBOARD_DEFAULT_STARTING);
-            } else if (arena.getStatus() == GameState.playing || arena.getStatus() == GameState.restarting) {
-                lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING);
+                if (arena.isSpectator(player)) {
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".starting.spectator", Messages.SCOREBOARD_DEFAULT_STARTING_SPEC);
+                } else {
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".starting.player", Messages.SCOREBOARD_DEFAULT_STARTING);
+                }
+            } else if (arena.getStatus() == GameState.playing) {
+                if (arena.isSpectator(player)) {
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".playing.spectator", Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC);
+                } else {
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".playing.alive", Messages.SCOREBOARD_DEFAULT_PLAYING);
+                }
+            } else if (arena.getStatus() == GameState.restarting) {
+
+                ITeam holderTeam = arena.getTeam(player);
+                ITeam holderExTeam = null == holderTeam ? arena.getExTeam(player.getUniqueId()) : null;
+
+                if (null == holderTeam && null == holderExTeam) {
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".restarting.spectator", Messages.SCOREBOARD_DEFAULT_RESTARTING_SPEC);
+                } else {
+                    if (null == holderTeam && holderExTeam.equals(arena.getWinner())) {
+                        lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".restarting.winner-eliminated", Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN2);
+                    } else if (null == holderExTeam && holderTeam.equals(arena.getWinner())) {
+                        lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".restarting.winner-alive", Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN1);
+                    } else {
+                        lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".restarting.loser", Messages.SCOREBOARD_DEFAULT_RESTARTING_LOSER);
+                    }
+                }
             }
         }
 
@@ -165,11 +194,19 @@ public class SidebarService implements ISidebarService {
         this.sidebars.forEach((k, v) -> v.getHandle().playerTabRefreshAnimation());
     }
 
+    public void refreshTabHeaderFooter() {
+        this.sidebars.forEach((k, v) -> {
+            if (null != v && null != v.getHeaderFooter()) {
+                this.sidebarHandler.sendHeaderFooter(v.getPlayer(), v.getHeaderFooter());
+            }
+        });
+    }
+
     public void refreshHealth() {
         this.sidebars.forEach((k, v) -> {
             if (null != v.getArena()) {
                 v.getHandle().playerHealthRefreshAnimation();
-                for (Player player : v.getArena().getPlayers()){
+                for (Player player : v.getArena().getPlayers()) {
                     v.getHandle().setPlayerHealth(player, (int) Math.ceil(player.getHealth()));
                 }
             }
@@ -182,7 +219,7 @@ public class SidebarService implements ISidebarService {
     }
 
     public void refreshHealth(IArena arena, Player player, int health) {
-        this.sidebars.forEach((k,v) -> {
+        this.sidebars.forEach((k, v) -> {
             if (null != v.getArena() && v.getArena().equals(arena)) {
                 v.getHandle().setPlayerHealth(player, health);
             }
@@ -190,15 +227,35 @@ public class SidebarService implements ISidebarService {
     }
 
     public void handleReJoin(IArena arena, Player player) {
-        this.sidebars.forEach((k,v) -> {
+        this.sidebars.forEach((k, v) -> {
             if (null != v.getArena() && v.getArena().equals(arena)) {
                 v.giveUpdateTabFormat(player, false);
             }
         });
     }
 
+    public void handleJoin(IArena arena, Player player, @Nullable Boolean spectator) {
+        this.sidebars.forEach((k, v) -> {
+            if (null != v.getArena() && v.getArena().equals(arena)) {
+                if (!v.getPlayer().equals(player)) {
+                    v.giveUpdateTabFormat(player, false, spectator);
+                }
+            }
+        });
+    }
+
+    public void applyLobbyTab(Player player) {
+        this.sidebars.forEach((k, v) -> {
+            if (null == v.getArena()) {
+                if (!v.getPlayer().equals(player)) {
+                    v.giveUpdateTabFormat(player, false);
+                }
+            }
+        });
+    }
+
     public void handleInvisibility(ITeam team, Player player, boolean toggle) {
-        this.sidebars.forEach((k,v) -> {
+        this.sidebars.forEach((k, v) -> {
             if (null != v.getArena() && v.getArena().equals(team.getArena())) {
                 v.handleInvisibilityPotion(player, toggle);
             }
