@@ -81,21 +81,21 @@ public class SidebarService implements ISidebarService {
         } else {
             if (arena.getStatus() == GameState.waiting) {
                 if (arena.isSpectator(player)) {
-                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting.spectator", Messages.SCOREBOARD_DEFAULT_WAITING_SPEC);
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".waiting.spectator", Messages.SCOREBOARD_DEFAULT_WAITING_SPEC);
                 } else {
-                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".waiting.player", Messages.SCOREBOARD_DEFAULT_WAITING);
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".waiting.player", Messages.SCOREBOARD_DEFAULT_WAITING);
                 }
             } else if (arena.getStatus() == GameState.starting) {
                 if (arena.isSpectator(player)) {
-                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting.spectator", Messages.SCOREBOARD_DEFAULT_STARTING_SPEC);
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".starting.spectator", Messages.SCOREBOARD_DEFAULT_STARTING_SPEC);
                 } else {
-                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".starting.player", Messages.SCOREBOARD_DEFAULT_STARTING);
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".starting.player", Messages.SCOREBOARD_DEFAULT_STARTING);
                 }
             } else if (arena.getStatus() == GameState.playing) {
                 if (arena.isSpectator(player)) {
-                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing.spectator", Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC);
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".playing.spectator", Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC);
                 } else {
-                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".playing.alive", Messages.SCOREBOARD_DEFAULT_PLAYING);
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".playing.alive", Messages.SCOREBOARD_DEFAULT_PLAYING);
                 }
             } else if (arena.getStatus() == GameState.restarting) {
 
@@ -103,14 +103,14 @@ public class SidebarService implements ISidebarService {
                 ITeam holderExTeam = null == holderTeam ? arena.getExTeam(player.getUniqueId()) : null;
 
                 if (null == holderTeam && null == holderExTeam) {
-                    lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting.spectator", Messages.SCOREBOARD_DEFAULT_RESTARTING_SPEC);
+                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".restarting.spectator", Messages.SCOREBOARD_DEFAULT_RESTARTING_SPEC);
                 } else {
                     if (null == holderTeam && holderExTeam.equals(arena.getWinner())) {
-                        lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting.winner-eliminated", Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN2);
+                        lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".restarting.winner-eliminated", Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN2);
                     } else if (null == holderExTeam && holderTeam.equals(arena.getWinner())) {
-                        lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting.winner-alive", Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN1);
+                        lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".restarting.winner-alive", Messages.SCOREBOARD_DEFAULT_RESTARTING_WIN1);
                     } else {
-                        lines = getScoreboard(player, "scoreboard." + arena.getGroup() + ".restarting.loser", Messages.SCOREBOARD_DEFAULT_RESTARTING_LOSER);
+                        lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".restarting.loser", Messages.SCOREBOARD_DEFAULT_RESTARTING_LOSER);
                     }
                 }
             }

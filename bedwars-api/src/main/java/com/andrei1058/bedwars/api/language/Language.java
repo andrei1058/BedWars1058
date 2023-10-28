@@ -67,7 +67,35 @@ public class Language extends ConfigManager {
             getYml().set(Messages.GAME_END_TOP_PLAYER_CHAT, newMsg);
         }
 
-        // todo convert old scoreboard lines default and custom to new paths
+        if (null != getYml().get("scoreboard")) {
+            for (String group : getYml().getConfigurationSection("scoreboard").getKeys(false)) {
+                if (group.equalsIgnoreCase("lobby")) {
+                    relocate("scoreboard." + group, "sidebar." + group);
+                } else {
+                    Map<String, String[]> stages = new HashMap<>();
+                    stages.put("waiting", new String[]{Messages.SCOREBOARD_DEFAULT_WAITING, Messages.SCOREBOARD_DEFAULT_WAITING_SPEC});
+                    stages.put("starting", new String[]{Messages.SCOREBOARD_DEFAULT_STARTING, Messages.SCOREBOARD_DEFAULT_STARTING_SPEC});
+
+                    for (Map.Entry<String, String[]> stage : stages.entrySet()) {
+                        if (exists("scoreboard." + group + "." + stage.getKey() + ".player")) {
+                            relocate("scoreboard." + group + "." + stage.getKey() + ".player", stage.getValue()[0].replace("Default", group));
+                        } else {
+                            relocate("scoreboard." + group + "." + stage.getKey(), stage.getValue()[0].replace("Default", group));
+                        }
+                        if (exists("scoreboard." + group + "." + stage.getKey() + ".spectator")) {
+                            relocate("scoreboard." + group + "." + stage.getKey() + ".spectator", stage.getValue()[1].replace("Default", group));
+                        }
+                    }
+                    if (exists("scoreboard." + group + ".playing.alive")) {
+                        relocate("scoreboard." + group + ".playing.alive", Messages.SCOREBOARD_DEFAULT_PLAYING.replace("Default", group));
+                        relocate("scoreboard." + group + ".playing.spectator", Messages.SCOREBOARD_DEFAULT_PLAYING.replace("Default", group));
+                    } else {
+                        relocate("scoreboard." + group + ".playing", Messages.SCOREBOARD_DEFAULT_PLAYING.replace("Default", group));
+                    }
+                }
+            }
+            getYml().set("scoreboard", null);
+        }
 
         languages.add(this);
     }

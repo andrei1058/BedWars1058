@@ -307,17 +307,17 @@ public class Messages {
     /**
      * Scoreboard related
      */
-    public static String SCOREBOARD_LOBBY = "scoreboard.lobby";
-    public static String SCOREBOARD_DEFAULT_WAITING = "scoreboard.Default.waiting.player";
-    public static String SCOREBOARD_DEFAULT_WAITING_SPEC = "scoreboard.Default.waiting.spectator";
-    public static String SCOREBOARD_DEFAULT_STARTING = "scoreboard.Default.starting.player";
-    public static String SCOREBOARD_DEFAULT_STARTING_SPEC = "scoreboard.Default.starting.spectator";
-    public static String SCOREBOARD_DEFAULT_PLAYING = "scoreboard.Default.playing.alive";
-    public static String SCOREBOARD_DEFAULT_PLAYING_SPEC = "scoreboard.Default.playing.spectator";
-    public static String SCOREBOARD_DEFAULT_RESTARTING_SPEC = "scoreboard.Default.restarting.spectator";
-    public static String SCOREBOARD_DEFAULT_RESTARTING_WIN1 = "scoreboard.Default.restarting.winner-alive";
-    public static String SCOREBOARD_DEFAULT_RESTARTING_WIN2 = "scoreboard.Default.restarting.winner-eliminated";
-    public static String SCOREBOARD_DEFAULT_RESTARTING_LOSER = "scoreboard.Default.restarting.loser";
+    public static String SCOREBOARD_LOBBY = "sidebar.lobby";
+    public static String SCOREBOARD_DEFAULT_WAITING = "sidebar.Default.waiting.player";
+    public static String SCOREBOARD_DEFAULT_WAITING_SPEC = "sidebar.Default.waiting.spectator";
+    public static String SCOREBOARD_DEFAULT_STARTING = "sidebar.Default.starting.player";
+    public static String SCOREBOARD_DEFAULT_STARTING_SPEC = "sidebar.Default.starting.spectator";
+    public static String SCOREBOARD_DEFAULT_PLAYING = "sidebar.Default.playing.alive";
+    public static String SCOREBOARD_DEFAULT_PLAYING_SPEC = "sidebar.Default.playing.spectator";
+    public static String SCOREBOARD_DEFAULT_RESTARTING_SPEC = "sidebar.Default.restarting.spectator";
+    public static String SCOREBOARD_DEFAULT_RESTARTING_WIN1 = "sidebar.Default.restarting.winner-alive";
+    public static String SCOREBOARD_DEFAULT_RESTARTING_WIN2 = "sidebar.Default.restarting.winner-eliminated";
+    public static String SCOREBOARD_DEFAULT_RESTARTING_LOSER = "sidebar.Default.restarting.loser";
 
     /**
      * Player interact related
