@@ -1,9 +1,9 @@
 package com.andrei1058.bedwars.api.arena.stats;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -25,14 +25,15 @@ public interface PlayerGameStats {
 
     void registerStatistic(@NotNull String id, @NotNull GameStatistic<?> defaultValue);
 
-    @Nullable GameStatistic<?> getStatistic(@NotNull String id);
+    Optional<GameStatistic<?>> getStatistic(@NotNull String id);
 
-    default  @Nullable GameStatistic<?> getStatistic(@NotNull DefaultStatistics id) {
+    default Optional<GameStatistic<?>> getStatistic(@NotNull DefaultStatistics id) {
         return getStatistic(id.toString());
     }
 
     /**
      * List of registered statistics.
      */
+    @SuppressWarnings("unused")
     List<String> getRegistered();
 }

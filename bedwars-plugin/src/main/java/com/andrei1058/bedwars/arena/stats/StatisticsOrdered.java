@@ -12,19 +12,23 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This cannot be used for live tops.
  */
 public class StatisticsOrdered {
 
-    private final List<PlayerGameStats> ordered;
+    private final List<Optional<PlayerGameStats>> ordered;
     private final IArena arena;
     private BoundsPolicy boundsPolicy = BoundsPolicy.EMPTY;
     private final String orderBy;
 
     public StatisticsOrdered(@NotNull IArena arena, String orderBy) {
         this.arena = arena;
+        if (null == arena.getStatsHolder()) {
+            throw new RuntimeException("Arena stats holder is null.");
+        }
         if (!arena.getStatsHolder().hasStatistic(orderBy)) {
             throw new RuntimeException("Invalid order by. Provided: " + orderBy);
         }
@@ -44,6 +48,10 @@ public class StatisticsOrdered {
          * @param emptyReplacement replace empty top position with this string.
          */
         public @Nullable String parseString(String string, @Nullable Language lang, String emptyReplacement) {
+            if (null == arena.getStatsHolder()) {
+                return null;
+            }
+
             if (index >= ordered.size()) {
                 if (boundsPolicy == BoundsPolicy.SKIP) {
                     if (string.isBlank()){
@@ -91,7 +99,13 @@ public class StatisticsOrdered {
                 return string;
             }
 
-            PlayerGameStats stats = ordered.get(index);
+            Optional<PlayerGameStats> statsOptional = ordered.get(index);
+
+            if (statsOptional.isEmpty()) {
+                return string;
+            }
+
+            PlayerGameStats stats = statsOptional.get();
 
             boolean increment = string.contains("{topPlayerName}") || string.contains("{topPlayerDisplayName}");
 
@@ -109,13 +123,13 @@ public class StatisticsOrdered {
                     .replace("{topValue}", "{topValue-"+orderBy+"}");
 
             for (String registered : arena.getStatsHolder().getRegistered()) {
-                GameStatistic<?> statistic = stats.getStatistic(registered);
+                Optional<GameStatistic<?>> statistic = stats.getStatistic(registered);
 
                 if (!increment && string.contains("{topValue-" + registered + "}")) {
                     increment = true;
                 }
 
-                String displayValue = null == statistic ? null : statistic.getDisplayValue(lang);
+                String displayValue = statistic.map(gameStatistic -> gameStatistic.getDisplayValue(lang)).orElse(null);
                 if (null == displayValue) {
                     GameStatisticProvider<?> provider = arena.getStatsHolder().getProvider(registered);
                     if (null == provider) {

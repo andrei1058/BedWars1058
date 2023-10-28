@@ -7,8 +7,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public interface GameStatsHolder {
 
     IArena getArena();
@@ -44,37 +46,38 @@ public interface GameStatsHolder {
      * @param holder player holder.
      * @return Existing or new statistic.
      */
-    @Nullable PlayerGameStats get(@NotNull UUID holder);
+    Optional<PlayerGameStats> get(@NotNull UUID holder);
 
     /**
      * Get existing or initialize statistic for given player.
      * @param holder player holder.
      * @return Existing or new statistic.
      */
-    default @Nullable PlayerGameStats get(@NotNull Player holder) {
+    default Optional<PlayerGameStats> get(@NotNull Player holder) {
         return get(holder.getUniqueId());
     }
 
     /**
      * Get tracked players.
+     *
      * @return Unmodifiable list of tracked players.
      */
-    Collection<PlayerGameStats> getPlayers();
+    Collection<Optional<PlayerGameStats>> getTrackedPlayers();
 
 
     /**
      * @param statistic Order collection by given statistic.
-     * @return Unmodifiable top list.
+     * @return top list.
      */
-    default Collection<PlayerGameStats> getOrderedBy(@NotNull DefaultStatistics statistic) {
+    default Collection<Optional<PlayerGameStats>> getOrderedBy(@NotNull DefaultStatistics statistic) {
         return getOrderedBy(statistic.toString());
     }
 
     /**
      * @param statistic Order collection by given statistic.
-     * @return Unmodifiable top list.
+     * @return top list.
      */
-    List<PlayerGameStats> getOrderedBy(@NotNull String statistic);
+    List<Optional<PlayerGameStats>> getOrderedBy(@NotNull String statistic);
 
     /**
      * Check if given statistic is registered.

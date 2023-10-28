@@ -41,6 +41,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("unused")
 public interface IArena {
 
     /**
@@ -263,12 +264,14 @@ public interface IArena {
      * @param p          Target player
      * @param finalKills True if you want to get the Final Kills. False for regular kills.
      */
+    @Deprecated
     int getPlayerKills(Player p, boolean finalKills);
 
     /**
      * Session stats.
      * @return stats container for this game.
      */
+    @Nullable
     GameStatsHolder getStatsHolder();
 
     /**
@@ -276,6 +279,7 @@ public interface IArena {
      *
      * @param p Target player
      */
+    @Deprecated
     int getPlayerBedsDestroyed(Player p);
 
     /**
@@ -323,11 +327,13 @@ public interface IArena {
     /**
      * Add a kill point to the game stats.
      */
+    @Deprecated
     void addPlayerKill(Player p, boolean finalKill, Player victim);
 
     /**
      * Add a destroyed bed point to the player temp stats.
      */
+    @Deprecated
     void addPlayerBedDestroyed(Player p);
 
 
@@ -348,6 +354,7 @@ public interface IArena {
     /**
      * Add a kill to the player temp stats.
      */
+    @Deprecated
     void addPlayerDeath(Player p);
 
     /**
@@ -397,6 +404,7 @@ public interface IArena {
     /**
      * Get player deaths.
      */
+    @Deprecated
     int getPlayerDeaths(Player p, boolean finalDeaths);
 
     /**

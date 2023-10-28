@@ -3,6 +3,7 @@ package com.andrei1058.bedwars.sidebar;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.stats.DefaultStatistics;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
@@ -196,7 +197,7 @@ public class BwSidebar implements ISidebar {
                             );
                 }
 
-                if (null != this.topStatistics) {
+                if (null != this.topStatistics && null != statParser) {
                     line = statParser.parseString(line, language, language.m(Messages.MEANING_NOBODY));
                     if (null == line) {
                         continue;
@@ -275,32 +276,32 @@ public class BwSidebar implements ISidebar {
             providers.add(new PlaceholderProvider("{on}", () ->
                     String.valueOf(Bukkit.getOnlinePlayers().size()))
             );
-            PlayerStats stats = BedWars.getStatsManager().get(player.getUniqueId());
+            PlayerStats persistentStats = BedWars.getStatsManager().get(player.getUniqueId());
             //noinspection ConstantConditions
-            if (null != stats) {
+            if (null != persistentStats) {
                 providers.add(new PlaceholderProvider("{kills}", () ->
-                        String.valueOf(stats.getKills()))
+                        String.valueOf(persistentStats.getKills()))
                 );
                 providers.add(new PlaceholderProvider("{finalKills}", () ->
-                        String.valueOf(stats.getFinalKills()))
+                        String.valueOf(persistentStats.getFinalKills()))
                 );
                 providers.add(new PlaceholderProvider("{beds}", () ->
-                        String.valueOf(stats.getBedsDestroyed()))
+                        String.valueOf(persistentStats.getBedsDestroyed()))
                 );
                 providers.add(new PlaceholderProvider("{deaths}", () ->
-                        String.valueOf(stats.getDeaths()))
+                        String.valueOf(persistentStats.getDeaths()))
                 );
                 providers.add(new PlaceholderProvider("{finalDeaths}", () ->
-                        String.valueOf(stats.getFinalDeaths()))
+                        String.valueOf(persistentStats.getFinalDeaths()))
                 );
                 providers.add(new PlaceholderProvider("{wins}", () ->
-                        String.valueOf(stats.getWins()))
+                        String.valueOf(persistentStats.getWins()))
                 );
                 providers.add(new PlaceholderProvider("{losses}", () ->
-                        String.valueOf(stats.getLosses()))
+                        String.valueOf(persistentStats.getLosses()))
                 );
                 providers.add(new PlaceholderProvider("{gamesPlayed}", () ->
-                        String.valueOf(stats.getGamesPlayed()))
+                        String.valueOf(persistentStats.getGamesPlayed()))
                 );
             }
         } else {
@@ -342,18 +343,31 @@ public class BwSidebar implements ISidebar {
                     return dateFormat.format(new Date(System.currentTimeMillis()));
                 }
             }));
-            providers.add(new PlaceholderProvider("{kills}", () ->
-                    String.valueOf(arena.getPlayerKills(player, false))
-            ));
-            providers.add(new PlaceholderProvider("{finalKills}", () ->
-                    String.valueOf(arena.getPlayerKills(player, true))
-            ));
-            providers.add(new PlaceholderProvider("{beds}", () ->
-                    String.valueOf(arena.getPlayerBedsDestroyed(player))
-            ));
-            providers.add(new PlaceholderProvider("{deaths}", () ->
-                    String.valueOf(arena.getPlayerDeaths(player, false))
-            ));
+
+            if (null != arena.getStatsHolder()) {
+
+                arena.getStatsHolder().get(player).ifPresent(holder -> {
+                    holder.getStatistic(DefaultStatistics.KILLS).ifPresent(st ->
+                            providers.add(new PlaceholderProvider("{kills}", () ->
+                                    String.valueOf(st.getDisplayValue(null))
+                            )));
+
+                    holder.getStatistic(DefaultStatistics.KILLS_FINAL).ifPresent(st ->
+                            providers.add(new PlaceholderProvider("{finalKills}", () ->
+                                    String.valueOf(st.getDisplayValue(null))
+                            )));
+
+                    holder.getStatistic(DefaultStatistics.BEDS_DESTROYED).ifPresent(st ->
+                            providers.add(new PlaceholderProvider("{beds}", () ->
+                                    String.valueOf(st.getDisplayValue(null))
+                            )));
+
+                    holder.getStatistic(DefaultStatistics.DEATHS).ifPresent(st ->
+                            providers.add(new PlaceholderProvider("{deaths}", () ->
+                                    String.valueOf(st.getDisplayValue(null))
+                            )));
+                });
+            }
 
             // Dynamic team placeholders
             for (ITeam currentTeam : arena.getTeams()) {

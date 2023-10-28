@@ -73,7 +73,6 @@ import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.paper.TeleportManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.vault.WithEconomy;
-import com.andrei1058.spigot.sidebar.SidebarManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -851,24 +850,34 @@ public class Arena implements IArena {
                         message = Messages.PLAYER_DIE_PVP_LOG_OUT_REGULAR;
                         cause = PlayerKillEvent.PlayerKillCause.PLAYER_DISCONNECT;
                     }
-                    PlayerKillEvent event = new PlayerKillEvent(this, p, lastDamager, player -> Language.getMsg(player, message), cause);
-                    for (Player inGame : getPlayers()) {
-                        Language lang = Language.getPlayerLanguage(inGame);
-                        inGame.sendMessage(event.getMessage().apply(inGame)
-                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
-                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
-                                .replace("{KillerName}", lastDamager.getDisplayName())
-                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+
+                    PlayerKillEvent event = new PlayerKillEvent(this, p, team, lastDamager, killerTeam,
+                            player -> Language.getMsg(player, message), cause
+                    );
+                    Bukkit.getPluginManager().callEvent(event);
+
+                    if (null != event.getMessage()) {
+                        for (Player inGame : getPlayers()) {
+                            Language lang = Language.getPlayerLanguage(inGame);
+                            inGame.sendMessage(event.getMessage().apply(inGame)
+                                    .replace("{PlayerTeamName}", team.getDisplayName(lang))
+                                    .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
+                                    .replace("{KillerColor}", killerTeam.getColor().chat().toString())
+                                    .replace("{KillerName}", lastDamager.getDisplayName())
+                                    .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+                        }
                     }
-                    for (Player inGame : getSpectators()) {
-                        Language lang = Language.getPlayerLanguage(inGame);
-                        inGame.sendMessage(event.getMessage().apply(inGame)
-                                .replace("{PlayerTeamName}", team.getDisplayName(lang))
-                                .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
-                                .replace("{KillerColor}", killerTeam.getColor().chat().toString())
-                                .replace("{KillerName}", lastDamager.getDisplayName())
-                                .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+
+                    if (null != event.getMessage()) {
+                        for (Player inGame : getSpectators()) {
+                            Language lang = Language.getPlayerLanguage(inGame);
+                            inGame.sendMessage(event.getMessage().apply(inGame)
+                                    .replace("{PlayerTeamName}", team.getDisplayName(lang))
+                                    .replace("{PlayerColor}", team.getColor().chat().toString()).replace("{PlayerName}", p.getDisplayName())
+                                    .replace("{KillerColor}", killerTeam.getColor().chat().toString())
+                                    .replace("{KillerName}", lastDamager.getDisplayName())
+                                    .replace("{KillerTeamName}", killerTeam.getDisplayName(lang)));
+                        }
                     }
                     PlayerDrops.handlePlayerDrops(this, p, lastDamager, team, killerTeam, cause, new ArrayList<>(Arrays.asList(p.getInventory().getContents())));
                 }
@@ -1381,16 +1390,20 @@ public class Arena implements IArena {
      */
     @Deprecated(forRemoval = true)
     public int getPlayerKills(Player player, boolean finalKills) {
-        PlayerGameStats playerStats = gameStats.get(player);
-        if (null == playerStats) {
+        if (null == player || null == getStatsHolder()) {
             return 0;
         }
 
-        GameStatistic<?> kills = playerStats.getStatistic(
-                finalKills ? DefaultStatistics.KILLS_FINAL : DefaultStatistics.KILLS
+        Optional<GameStatistic<?>> st = getStatsHolder().get(player).flatMap(stats ->
+                stats.getStatistic(finalKills ? DefaultStatistics.KILLS_FINAL : DefaultStatistics.BEDS_DESTROYED)
         );
 
-        return null == kills ? 0 : (kills.getValue() instanceof Integer ? (Integer) kills.getValue() : 0);
+        if (st.isEmpty()) {
+            return 0;
+        }
+
+        GameStatistic<?> gs = st.get();
+        return gs instanceof Incrementable ? (int) gs.getValue() : 0;
     }
 
     /**
@@ -1400,18 +1413,19 @@ public class Arena implements IArena {
      */
     @Deprecated(forRemoval = true)
     public int getPlayerBedsDestroyed(Player player) {
-        if (null == player) {
+        if (null == player || null == getStatsHolder()) {
             return 0;
         }
 
-        PlayerGameStats stats = gameStats.get(player);
-        if (null == stats) {
+        Optional<GameStatistic<?>> st = getStatsHolder().get(player)
+                .flatMap(stats -> stats.getStatistic(DefaultStatistics.BEDS_DESTROYED));
+
+        if (st.isEmpty()) {
             return 0;
         }
 
-        GameStatistic<?> beds = stats.getStatistic(DefaultStatistics.BEDS_DESTROYED);
-
-        return null == beds ? 0 : beds.getValue() instanceof Integer ? (Integer) beds.getValue() : 0;
+        GameStatistic<?> gs = st.get();
+        return gs instanceof Incrementable ? (int) gs.getValue() : 0;
     }
 
     /**
@@ -1651,42 +1665,6 @@ public class Arena implements IArena {
      */
     @Deprecated(forRemoval = true)
     public void addPlayerKill(Player player, boolean finalKill, Player victim) {
-        if (player == null || victim == null) {
-            return;
-        }
-
-        PlayerGameStats killerStats = gameStats.get(player);
-        if (null != killerStats) {
-            GameStatistic<?> kills = killerStats.getStatistic(DefaultStatistics.KILLS);
-            if (kills instanceof Incrementable) {
-                ((Incrementable) kills).increment();
-            }
-
-            if (finalKill) {
-                GameStatistic<?> finalKills = killerStats.getStatistic(DefaultStatistics.KILLS_FINAL);
-                if (finalKills instanceof Incrementable) {
-                    ((Incrementable) finalKills).increment();
-                }
-            }
-        }
-
-
-        PlayerGameStats victimStats = gameStats.get(victim);
-        if (null == victimStats) {
-            return;
-        }
-
-        GameStatistic<?> deaths = victimStats.getStatistic(DefaultStatistics.DEATHS);
-        if (deaths instanceof Incrementable) {
-            ((Incrementable) deaths).increment();
-        }
-
-        if (finalKill) {
-            GameStatistic<?> finalDeaths = victimStats.getStatistic(DefaultStatistics.DEATHS_FINAL);
-            if (finalDeaths instanceof Incrementable) {
-                ((Incrementable) finalDeaths).increment();
-            }
-        }
     }
 
     /**
@@ -1694,17 +1672,6 @@ public class Arena implements IArena {
      */
     @Deprecated(forRemoval = true)
     public void addPlayerBedDestroyed(Player player) {
-
-        PlayerGameStats stats = gameStats.get(player);
-        if (null == stats) {
-            return;
-        }
-
-        GameStatistic<?> beds = stats.getStatistic(DefaultStatistics.BEDS_DESTROYED);
-
-        if (beds instanceof Incrementable) {
-            ((Incrementable) beds).increment();
-        }
     }
 
     /**
@@ -1918,13 +1885,16 @@ public class Arena implements IArena {
                         winners = new StringBuilder(winners.substring(0, winners.length() - 1));
                     }
 
-                    StatisticsOrdered topInChat = new StatisticsOrdered(
-                            this, getConfig().getGameOverridableString(ConfigPath.GENERAL_GAME_END_CHAT_TOP_STATISTIC)
-                    );
+                    StatisticsOrdered topInChat = null;
 
-                    // hide stats row completely when placeholders cannot be replaced
-                    if (getConfig().getGameOverridableBoolean(ConfigPath.GENERAL_GAME_END_CHAT_TOP_HIDE_MISSING)) {
-                        topInChat.setBoundsPolicy(StatisticsOrdered.BoundsPolicy.SKIP);
+                    if (null != getStatsHolder()) {
+                        topInChat = new StatisticsOrdered(
+                                this, getConfig().getGameOverridableString(ConfigPath.GENERAL_GAME_END_CHAT_TOP_STATISTIC)
+                        );
+                        // hide stats row completely when placeholders cannot be replaced
+                        if (getConfig().getGameOverridableBoolean(ConfigPath.GENERAL_GAME_END_CHAT_TOP_HIDE_MISSING)) {
+                            topInChat.setBoundsPolicy(StatisticsOrdered.BoundsPolicy.SKIP);
+                        }
                     }
 
                     // this is assigned to scoreboards
@@ -1937,55 +1907,58 @@ public class Arena implements IArena {
                         topInSidebar.setBoundsPolicy(StatisticsOrdered.BoundsPolicy.SKIP);
                     }
 
-                    List<Player> receivers = new ArrayList<>(getPlayers().size()+getSpectators().size());
+                    List<Player> receivers = new ArrayList<>(getPlayers().size() + getSpectators().size());
                     receivers.addAll(getPlayers());
                     receivers.addAll(getSpectators());
 
-                    StatisticsOrdered.StringParser statParser = topInChat.newParser();
+                    if (null != topInChat) {
+                        StatisticsOrdered.StringParser statParser = topInChat.newParser();
 
-                    for (Player receiver : receivers) {
+                        for (Player receiver : receivers) {
 
-                        Language playerLang = Language.getPlayerLanguage(receiver);
+                            Language playerLang = Language.getPlayerLanguage(receiver);
 
-                        String winnerTeamChat = playerLang.m(Messages.GAME_END_TEAM_WON_CHAT);
-                        // check if message disabled
-                        if (null != winnerTeamChat && !winnerTeamChat.isBlank()) {
-                            receiver.sendMessage(winnerTeamChat.replace("{TeamColor}", winner.getColor().chat().toString())
-                                    .replace("{TeamName}", winner.getDisplayName(playerLang)));
-                        }
+                            String winnerTeamChat = playerLang.m(Messages.GAME_END_TEAM_WON_CHAT);
+                            // check if message disabled
+                            if (null != winnerTeamChat && !winnerTeamChat.isBlank()) {
+                                receiver.sendMessage(winnerTeamChat.replace("{TeamColor}", winner.getColor().chat().toString())
+                                        .replace("{TeamName}", winner.getDisplayName(playerLang)));
+                            }
 
-                        if (winner.getMembers().contains(receiver) || winner.wasMember(receiver.getUniqueId())) {
-                            nms.sendTitle(receiver, getMsg(receiver, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 70, 20);
-                        } else {
-                            nms.sendTitle(receiver, playerLang.m(Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 20);
-                        }
+                            if (winner.getMembers().contains(receiver) || winner.wasMember(receiver.getUniqueId())) {
+                                nms.sendTitle(receiver, getMsg(receiver, Messages.GAME_END_VICTORY_PLAYER_TITLE), null, 0, 70, 20);
+                            } else {
+                                nms.sendTitle(receiver, playerLang.m(Messages.GAME_END_GAME_OVER_PLAYER_TITLE), null, 0, 70, 20);
+                            }
 
-                        statParser.resetIndex();
+                            statParser.resetIndex();
 
-                        // check if message is disabled
-                        List<String> topChat = getList(receiver, Messages.GAME_END_TOP_PLAYER_CHAT);
-                        if (topChat.isEmpty() || topChat.size() == 1 && topChat.get(0).isEmpty()){
-                            continue;
-                        }
-
-                        for (String s : topChat) {
-
-                            String msg = statParser.parseString(s, playerLang, playerLang.m(Messages.MEANING_NOBODY));
-                            if (null == msg) {
+                            // check if message is disabled
+                            List<String> topChat = getList(receiver, Messages.GAME_END_TOP_PLAYER_CHAT);
+                            if (topChat.isEmpty() || topChat.size() == 1 && topChat.get(0).isEmpty()) {
                                 continue;
                             }
 
-                            msg = msg.replace("{winnerFormat}", getMaxInTeam() > 1 ? playerLang.m(Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : playerLang.m(Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
-                                    .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(playerLang));
+                            for (String s : topChat) {
 
-                            receiver.sendMessage(SupportPAPI.getSupportPAPI().replace(receiver, msg));
-                        }
+                                String msg = statParser.parseString(s, playerLang, playerLang.m(Messages.MEANING_NOBODY));
+                                if (null == msg) {
+                                    continue;
+                                }
 
-                        ISidebar sidebar = SidebarService.getInstance().getSidebar(receiver);
-                        if (sidebar instanceof BwSidebar) {
-                            ((BwSidebar) sidebar).setTopStatistics(topInSidebar);
+                                msg = msg.replace("{winnerFormat}", getMaxInTeam() > 1 ? playerLang.m(Messages.FORMATTING_TEAM_WINNER_FORMAT).replace("{members}", winners.toString()) : playerLang.m(Messages.FORMATTING_SOLO_WINNER_FORMAT).replace("{members}", winners.toString()))
+                                        .replace("{TeamColor}", winner.getColor().chat().toString()).replace("{TeamName}", winner.getDisplayName(playerLang));
+
+                                receiver.sendMessage(SupportPAPI.getSupportPAPI().replace(receiver, msg));
+                            }
+
+                            ISidebar sidebar = SidebarService.getInstance().getSidebar(receiver);
+                            if (sidebar instanceof BwSidebar) {
+                                ((BwSidebar) sidebar).setTopStatistics(topInSidebar);
+                            }
                         }
                     }
+
                 }
                 changeStatus(GameState.restarting);
 
@@ -2023,16 +1996,6 @@ public class Arena implements IArena {
      */
     @Deprecated(forRemoval = true)
     public void addPlayerDeath(Player player) {
-
-        PlayerGameStats stats = gameStats.get(player);
-        if (null == stats) {
-            return;
-        }
-
-        GameStatistic<?> deaths = stats.getStatistic(DefaultStatistics.DEATHS);
-        if (deaths instanceof Incrementable) {
-            ((Incrementable) deaths).increment();
-        }
     }
 
 
@@ -2348,20 +2311,20 @@ public class Arena implements IArena {
      */
     @Deprecated(forRemoval = true)
     public int getPlayerDeaths(Player player, boolean finalDeaths) {
-        if (null == player) {
+        if (null == player || null == getStatsHolder()) {
             return 0;
         }
 
-        PlayerGameStats stats = gameStats.get(player);
-        if (null == stats) {
-            return 0;
-        }
-
-        GameStatistic<?> deaths = stats.getStatistic(
-                finalDeaths ? DefaultStatistics.DEATHS_FINAL : DefaultStatistics.DEATHS
+        Optional<GameStatistic<?>> st = getStatsHolder().get(player).flatMap(stats ->
+                stats.getStatistic(finalDeaths ? DefaultStatistics.DEATHS_FINAL : DefaultStatistics.DEATHS)
         );
 
-        return null == deaths ? 0 : (deaths.getValue() instanceof Integer ? (Integer) deaths.getValue() : 0);
+        if (st.isEmpty()) {
+            return 0;
+        }
+
+        GameStatistic<?> gs = st.get();
+        return gs instanceof Incrementable ? (int) gs.getValue() : 0;
     }
 
     /**

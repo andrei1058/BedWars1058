@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class GameStatsManager implements GameStatsHolder {
 
     private final HashMap<String, GameStatisticProvider<?>> registeredStats = new HashMap<>();
-    private final HashMap<UUID, PlayerGameStats> playerSessionStats = new HashMap<>();
+    private final HashMap<UUID, Optional<PlayerGameStats>> playerSessionStats = new HashMap<>();
 
     private final IArena arena;
 
@@ -62,7 +62,7 @@ public class GameStatsManager implements GameStatsHolder {
         PlayerGameStats stats = new PlayerGameStatsContainer(player);
         this.registeredStats.forEach((id, provider) -> stats.registerStatistic(id, provider.getDefault()));
 
-        playerSessionStats.put(player.getUniqueId(), stats);
+        playerSessionStats.put(player.getUniqueId(), Optional.of(stats));
         return stats;
     }
 
@@ -76,33 +76,35 @@ public class GameStatsManager implements GameStatsHolder {
 
     @Override
     public @NotNull PlayerGameStats getCreate(@NotNull Player holder) {
-        PlayerGameStats stats = playerSessionStats.getOrDefault(holder.getUniqueId(), null);
-        if (null == stats) {
-            stats = init(holder);
-            playerSessionStats.put(holder.getUniqueId(), stats);
+        Optional<PlayerGameStats> ps = playerSessionStats.getOrDefault(holder.getUniqueId(), Optional.empty());
+        if (ps.isEmpty()) {
+            PlayerGameStats stats = init(holder);
+            playerSessionStats.put(holder.getUniqueId(), Optional.of(stats));
+            return stats;
         }
-        return stats;
+        return ps.get();
     }
 
     @Override
-    public @Nullable PlayerGameStats get(@NotNull UUID holder) {
-        return playerSessionStats.getOrDefault(holder, null);
+    public Optional<PlayerGameStats> get(@NotNull UUID holder) {
+        return playerSessionStats.getOrDefault(holder, Optional.empty());
     }
 
     @Override
-    public Collection<PlayerGameStats> getPlayers() {
+    public Collection<Optional<PlayerGameStats>> getTrackedPlayers() {
         return Collections.unmodifiableCollection(playerSessionStats.values());
     }
 
     @Override
-    public List<PlayerGameStats> getOrderedBy(@NotNull String statistic) {
-        //noinspection DataFlowIssue
-        List<PlayerGameStats> list = playerSessionStats.values().stream()
-                .filter(data -> null != data.getStatistic(statistic))
-                .sorted(Comparator.comparing(a -> a.getStatistic(statistic)))
+    public List<Optional<PlayerGameStats>> getOrderedBy(@NotNull String statistic) {
+
+        //noinspection OptionalGetWithoutIsPresent
+        List<Optional<PlayerGameStats>> list = playerSessionStats.values().stream().filter(Optional::isPresent)
+                .filter(st -> st.get().getStatistic(statistic).isPresent())
+                .sorted(Comparator.comparing(a -> a.get().getStatistic(statistic).get()))
                 .collect(Collectors.toList());
         Collections.reverse(list);
-        return Collections.unmodifiableList(list);
+        return list;
     }
 
     @Override

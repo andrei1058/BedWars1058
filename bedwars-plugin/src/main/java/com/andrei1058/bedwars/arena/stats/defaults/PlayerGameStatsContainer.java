@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,7 @@ public class PlayerGameStatsContainer implements PlayerGameStats {
     private final String username;
     // last tracked display name
     private final String lastDisplayName;
-    private final HashMap<String, GameStatistic<?>> statsById = new HashMap<>();
+    private final HashMap<String, Optional<GameStatistic<?>>> statsById = new HashMap<>();
 
     public PlayerGameStatsContainer(@NotNull Player player) {
         this.player = player.getUniqueId();
@@ -50,12 +51,12 @@ public class PlayerGameStatsContainer implements PlayerGameStats {
         if (statsById.containsKey(id)) {
             throw new RuntimeException("Statistic "+id+" already registered for player "+ getPlayer());
         }
-        statsById.put(id, defaultValue);
+        statsById.put(id, Optional.of(defaultValue));
     }
 
     @Override
-    public @Nullable GameStatistic<?> getStatistic(@NotNull String id) {
-        return statsById.getOrDefault(id, null);
+    public @Nullable Optional<GameStatistic<?>> getStatistic(@NotNull String id) {
+        return statsById.getOrDefault(id, Optional.empty());
     }
 
     @Override
