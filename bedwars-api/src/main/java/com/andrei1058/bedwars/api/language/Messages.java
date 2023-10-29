@@ -540,4 +540,7 @@ public class Messages {
     public static String FORMATTING_SPECTATOR_TEAM = "format-spectator-team";
     @Deprecated(forRemoval = true)
     public static String FORMATTING_SPECTATOR_COLOR = FORMATTING_SPECTATOR_TEAM;
+
+
+    public static String BUNGEECORD_SERVERS = ConfigPath.BUNGEECORD_SERVERS_MESSAGE;
 }
