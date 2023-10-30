@@ -5,7 +5,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>23.10-SNAPSHOT</version>
+        <version>23.10.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-plugin</artifactId>
@@ -185,6 +185,11 @@
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>versionsupport_v1_20_R1</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars</groupId>
+            <artifactId>versionsupport_v1_20_R2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
