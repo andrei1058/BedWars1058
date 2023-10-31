@@ -14,6 +14,7 @@ import java.util.List;
 public class PAF implements Party {
     //Party and Friends for Spigot Support by JT122406
     private PlayerParty getPAFParty(Player p) {
+        if (PAFPlayerManager.getInstance() == null) return null;
         return PartyManager.getInstance().getParty(PAFPlayerManager.getInstance().getPlayer(p));
     }
 
