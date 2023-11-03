@@ -82,7 +82,7 @@ public class OreGenerator implements IGenerator {
         loadDefaults();
         BedWars.debug("Initializing new generator at: " + location + " - " + type + " - " + (bwt == null ? "NOTEAM" : bwt.getName()));
 
-        Cuboid c = new Cuboid(location, 1, true);
+        Cuboid c = new Cuboid(location, getArena().getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION), true);
         c.setMaxY(c.getMaxY() + 5);
         c.setMinY(c.getMinY() - 2);
         arena.getRegionsList().add(c);
