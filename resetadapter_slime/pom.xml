@@ -7,7 +7,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>22.9-SNAPSHOT</version>
+        <version>23.10.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>resetadapter-slime</artifactId>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>com.grinderwolf</groupId>
             <artifactId>slimeworldmanager-api</artifactId>
-            <version>[2.2.1,)</version>
+            <version>2.2.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

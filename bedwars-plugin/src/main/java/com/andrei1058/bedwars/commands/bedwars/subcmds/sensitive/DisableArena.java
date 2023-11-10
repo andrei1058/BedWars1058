@@ -21,6 +21,7 @@
 package com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
@@ -64,6 +65,10 @@ public class DisableArena extends SubCommand {
         IArena a = Arena.getArenaByName(args[0]);
         if (a == null) {
             p.sendMessage("§c▪ §7This arena is disabled yet!");
+            return true;
+        }
+        if (a.getStatus() == GameState.playing) {
+            p.sendMessage("§6 ▪ §7There is a game running on this Arena, please disable after the game!");
             return true;
         }
         p.sendMessage("§6 ▪ §7Disabling arena...");

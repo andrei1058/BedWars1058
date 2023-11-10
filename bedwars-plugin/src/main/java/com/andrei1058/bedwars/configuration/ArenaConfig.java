@@ -20,14 +20,22 @@
 
 package com.andrei1058.bedwars.configuration;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.configuration.GameMainOverridable;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ArenaConfig extends ConfigManager {
+
+    @SuppressWarnings({"SpellCheckingInspection"})
+    private List<String> cachedGameOverridables = new ArrayList<>();
 
     public ArenaConfig(Plugin plugin, String name, String dir) {
         super(plugin, name, dir);
@@ -81,9 +89,55 @@ public class ArenaConfig extends ConfigManager {
         if (yml.get("islandRadius") != null) {
             set(ConfigPath.ARENA_ISLAND_RADIUS, yml.getInt("islandRadius"));
         }
-        if (yml.get("voidKill") != null){
+        if (yml.get("voidKill") != null) {
             set("voidKill", null);
         }
         set(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT, null);
+
+        cachedGameOverridables = getGameOverridables();
+    }
+
+    @SuppressWarnings({"SpellCheckingInspection"})
+    private @NotNull List<String> getGameOverridables() {
+        List<String> paths = new ArrayList<>();
+        for (Field field : ConfigPath.class.getDeclaredFields()) {
+            if (field.isAnnotationPresent(GameMainOverridable.class)) {
+                try {
+                    Object value = field.get(field);
+                    if (value instanceof String) {
+                        paths.add((String) value);
+                    }
+                } catch (IllegalAccessException ignored) {
+                }
+            }
+        }
+
+        return paths;
+    }
+
+    public boolean isGameOverridable(String path) {
+        return cachedGameOverridables.contains(path);
+    }
+
+    public Object getGameOverridableValue(String path) {
+        if (!isGameOverridable(path)) {
+            throw new RuntimeException("Given path is not game-overridable: "+path);
+        }
+
+        Object value = getYml().get(path, null);
+        if (null == value){
+            return BedWars.config.getYml().get(path);
+        }
+        return value;
+    }
+
+    public Boolean getGameOverridableBoolean(String path) {
+        Object value = getGameOverridableValue(path);
+        return value instanceof Boolean ? (Boolean) value : false;
+    }
+
+    public String getGameOverridableString(String path) {
+        Object value = getGameOverridableValue(path);
+        return value instanceof String ? (String) value : "invalid";
     }
 }

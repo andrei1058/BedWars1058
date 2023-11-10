@@ -334,18 +334,17 @@ public class v1_19_R2 extends VersionSupport {
     }
 
     @Override
-    public void registerTntWhitelist() {
+    public void registerTntWhitelist(float endStoneBlast, float glassBlast) {
         try {
-            var protection = 300f;
             // blast resistance
             Field field = BlockBase.class.getDeclaredField("aH");
             field.setAccessible(true);
             // end stone
-            field.set(Blocks.fj, protection);
+            field.set(Blocks.fj, endStoneBlast);
             // obsidian
-            field.set(Blocks.ce, protection);
+            field.set(Blocks.ce, glassBlast);
             // standard glass
-            field.set(Blocks.aH, protection);
+            field.set(Blocks.aH, glassBlast);
 
             var coloredGlass = new net.minecraft.world.level.block.Block[]{
                     Blocks.dU, Blocks.dV, Blocks.dW, Blocks.dX,
@@ -358,7 +357,7 @@ public class v1_19_R2 extends VersionSupport {
             Arrays.stream(coloredGlass).forEach(
                     glass -> {
                         try {
-                            field.set(glass, protection);
+                            field.set(glass, glassBlast);
                         } catch (IllegalAccessException e) {
                             throw new RuntimeException(e);
                         }
@@ -439,12 +438,6 @@ public class v1_19_R2 extends VersionSupport {
             i = new org.bukkit.inventory.ItemStack(org.bukkit.Material.BEDROCK);
         }
         return i;
-    }
-
-    @Override
-    public void teamCollideRule(@NotNull Team team) {
-        team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-        team.setCanSeeFriendlyInvisibles(true);
     }
 
     @Override
@@ -831,4 +824,5 @@ public class v1_19_R2 extends VersionSupport {
     public void playVillagerEffect(@NotNull Player player, Location location){
         player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
     }
+
 }

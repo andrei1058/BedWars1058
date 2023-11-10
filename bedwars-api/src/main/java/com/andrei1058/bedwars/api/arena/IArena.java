@@ -21,6 +21,7 @@
 package com.andrei1058.bedwars.api.arena;
 
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
+import com.andrei1058.bedwars.api.arena.stats.GameStatsHolder;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.ITeamAssigner;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
@@ -34,14 +35,13 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("unused")
 public interface IArena {
 
     /**
@@ -264,13 +264,22 @@ public interface IArena {
      * @param p          Target player
      * @param finalKills True if you want to get the Final Kills. False for regular kills.
      */
+    @Deprecated
     int getPlayerKills(Player p, boolean finalKills);
+
+    /**
+     * Session stats.
+     * @return stats container for this game.
+     */
+    @Nullable
+    GameStatsHolder getStatsHolder();
 
     /**
      * Get the player beds destroyed count
      *
      * @param p Target player
      */
+    @Deprecated
     int getPlayerBedsDestroyed(Player p);
 
     /**
@@ -318,11 +327,13 @@ public interface IArena {
     /**
      * Add a kill point to the game stats.
      */
+    @Deprecated
     void addPlayerKill(Player p, boolean finalKill, Player victim);
 
     /**
      * Add a destroyed bed point to the player temp stats.
      */
+    @Deprecated
     void addPlayerBedDestroyed(Player p);
 
 
@@ -343,6 +354,7 @@ public interface IArena {
     /**
      * Add a kill to the player temp stats.
      */
+    @Deprecated
     void addPlayerDeath(Player p);
 
     /**
@@ -392,6 +404,7 @@ public interface IArena {
     /**
      * Get player deaths.
      */
+    @Deprecated
     int getPlayerDeaths(Player p, boolean finalDeaths);
 
     /**
@@ -494,4 +507,33 @@ public interface IArena {
     void setTeamAssigner(ITeamAssigner teamAssigner);
 
     List<Player> getLeavingPlayers();
+
+
+    /**
+     * Check if breaking map is allowed, otherwise only placed blocks are allowed.
+     * Some blocks like have a special protections, like blocks under shopkeepers, bed, ecc.
+     */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    boolean isAllowMapBreak();
+
+    /**
+     * Toggle map block break rule.
+     */
+    void setAllowMapBreak(boolean allowMapBreak);
+
+    /**
+     * Check if there is a player bed at given location.
+     */
+    boolean isTeamBed(Location location);
+
+    /**
+     * Get owner team of a bed based on location.
+     */
+    @Nullable ITeam getBedsTeam(Location location);
+
+    /**
+     * Provides the winner team.
+     * This is populated on restarting phase.
+     */
+    @Nullable ITeam getWinner();
 }

@@ -1,8 +1,11 @@
-[![Logo](./.github/assets/logo_open_source.png)](#)
+![Logo](./.github/assets/logo_open_source.png)
 
-[![Discord](https://discordapp.com/api/guilds/201345265821679617/widget.png?style=shield)](https://discord.gg/XdJfN2X) [![bStats](https://img.shields.io/bstats/servers/1885)](#)
 
 As from November 1st 2021 BedWars1058 by Andrei Dascălu becomes open source under GNU GPL 3.0 license. If you are a developer I would really appreciate if you'd come with pull requests instead of making hundreds of forks. Let's make updates available for everyone!
+
+[![Discord](https://discordapp.com/api/guilds/201345265821679617/widget.png?style=shield)](https://discord.gg/XdJfN2X)
+
+[![Crowdin](https://support.crowdin.com/assets/badges/localization-at-white-rounded-bordered@1x.svg)](https://crowdin.com/project/bedwars1058)
 
 # Description
 BedWars is a mini-game where you have to defend your bed and destroy the others.  
@@ -12,16 +15,20 @@ Once your bed is destroyed, you cannot respawn.
 This software runs on [Spigot](https://www.spigotmc.org/) and NMS.
 Spigot forks without compiled NMS code are not supported.
 Officially supported servers are [spigot](https://www.spigotmc.org/) and [paper](https://papermc.io/).
-It is required to use Java 11 or newer.
+It is required to use **Java 11** or newer.
 
 The internal world restore system is based on zipping and unzipping maps which can become
-heavy if you are still making use of HDD in 2021, and you do not have a decent CPU, for a better
-and faster restore system install [SlimeWorldManager](https://www.spigotmc.org/resources/slimeworldmanager.69974/) or [AdvancedWorldManager](https://www.spigotmc.org/resources/advanced-slimeworldmanager.87209/).
-BedWars1058 will hook into it and do everything for you.
+heavy if you are still making use of HDDs and you do not have a decent CPU, for a better
+and faster restore system we recommend using one of the following solutions:
+- [SlimeWorldManager](https://www.spigotmc.org/resources/slimeworldmanager.69974/) plug-in (v2.2.1 **only**)
+- [AdvancedWorldManager](https://www.spigotmc.org/resources/advanced-slimeworldmanager.87209/) plug-in (v2.8.0 **only**)
+- [AdvancedSlimePaper](https://github.com/InfernalSuite/AdvancedSlimePaper) server jar (**1.20 or newer**)
 
-# Pre-made setups and community addons
+BedWars1058 will hook into it and do everything for you, no additional configuration is needed.
 
-You can find a list of pre-made setups and community addons [on the wiki](https://wiki.andrei1058.dev/docs/BedWars1058/addons)
+# Pre-made setups and community add-ons
+
+You can find a list of pre-made server setups and a lot of community add-ons [on BedWars1058 Wiki](https://wiki.andrei1058.dev/docs/BedWars1058/addons).
 
 # Main features
 
@@ -115,20 +122,25 @@ If you get disconnected, or if you leave a game (configurable) you can re-join i
 ###### Season events:
 - Halloween special. It is enabled automatically based on your machine timezone and will provide cool effects.
 
-# Community servers
-Chosen by hundreds of servers all around the world.  
-[![Fear Games Logo](.github/assets/servers/fear_games.png)](https://feargames.it/)
-[![Gamster Logo](.github/assets/servers/gamster.png)](https://www.gamster.org/)  
-- mc.feargames.it
-- mc.gamster.org
+# Contributing
+Any help is appreciated, just give a quick look at [CONTRIBUTING.md](https://github.com/andrei1058/BedWars1058/blob/master/CONTRIBUTING.md) first!
 
+If you are not a programmer you can help answering people in the [Issues](https://github.com/andrei1058/BedWars1058/issues) section or even [translate the plugin in your languae on Crowdin](https://crowdin.com/project/bedwars1058).
+
+### Translation progress
+[Translation Chart](https://badges.awesome-crowdin.com/translation-12780139-594479.png)
 
 # 3rd party libraries
 - [bStats](https://bstats.org/getting-started/include-metrics)
-- [Sidebar API](https://github.com/andrei1058/SiderbarLib)
+- [SidebarLib](https://github.com/andrei1058/SiderbarLib)
 - [Commons IO](https://mvnrepository.com/artifact/commons-io/commons-io)
 - [HikariCP](https://mvnrepository.com/artifact/com.zaxxer/HikariCP)
 - [SLF4J](http://www.slf4j.org/)
 
 # Contact
 [![Discord Server](https://discordapp.com/api/guilds/201345265821679617/widget.png?style=banner3)](https://discord.gg/XdJfN2X)
+
+# Special Thanks To
+[<img src="https://user-images.githubusercontent.com/21148213/121807008-8ffc6700-cc52-11eb-96a7-2f6f260f8fda.png" alt="" width="150">](https://www.jetbrains.com)
+
+Jetbrains supports BedWars1058 with their [Open Source Licenses](https://www.jetbrains.com/opensource/).

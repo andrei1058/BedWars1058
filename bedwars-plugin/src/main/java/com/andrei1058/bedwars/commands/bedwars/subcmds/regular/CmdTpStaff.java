@@ -27,7 +27,7 @@ import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
-import com.andrei1058.bedwars.support.paper.PaperSupport;
+import com.andrei1058.bedwars.support.paper.TeleportManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -76,7 +76,7 @@ public class CmdTpStaff extends SubCommand {
                 if (a2.isPlayer(p2)) a2.removePlayer(p2, false);
                 if (a2.isSpectator(p2)) {
                     if (a2.getArenaName().equals(a.getArenaName())) {
-                        PaperSupport.teleport(p2, p.getLocation());
+                        TeleportManager.teleport(p2, p.getLocation());
                         return true;
                     } else a2.removeSpectator(p2, false);
                 }

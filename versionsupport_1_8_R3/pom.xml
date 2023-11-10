@@ -7,7 +7,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>22.9-SNAPSHOT</version>
+        <version>23.10.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>versionsupport_1_8_R3</artifactId>

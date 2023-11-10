@@ -122,13 +122,22 @@ public class SpoilPlayerTNTFeature {
         public void inventorySwitch(InventoryCloseEvent event) {
             Player player = (Player) event.getPlayer();
             IArena arena = Arena.getArenaByPlayer(player);
-            if (arena == null || !arena.isPlayer(player) || arena.isSpectator(player)) return;
+
+            // Ensure the player is in an arena, is not a spectator, and is indeed a player
+            if (arena == null || !arena.isPlayer(player) || arena.isSpectator(player)) {
+                return;
+            }
+
+            boolean hasTnt = player.getInventory().contains(Material.TNT);
+
             if (instance.playersWithTnt.contains(player)) {
-                if (player.getInventory().contains(Material.TNT)) return;
-                instance.playersWithTnt.remove(player);
-            } else if (!instance.playersWithTnt.contains(player)) {
-                if (!player.getInventory().contains(Material.TNT)) return;
-                instance.playersWithTnt.add(player);
+                if (!hasTnt) {
+                    instance.playersWithTnt.remove(player);
+                }
+            } else {
+                if (hasTnt) {
+                    instance.playersWithTnt.add(player);
+                }
             }
         }
     }

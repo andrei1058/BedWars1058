@@ -23,6 +23,20 @@ package com.andrei1058.bedwars.api.configuration;
 @SuppressWarnings("WeakerAccess")
 public class ConfigPath {
 
+    public static final String GAME_END_PATH = "game-end";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_SHOW_ELIMINATED = GAME_END_PATH+".show-eliminated";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_TELEPORT_ELIMINATED = GAME_END_PATH+".teleport-eliminated";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_CHAT_TOP_STATISTIC = GAME_END_PATH+".chat-top.order-by";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_CHAT_TOP_HIDE_MISSING = GAME_END_PATH+".chat-top.hide-missing";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_SB_TOP_STATISTIC = GAME_END_PATH+".sb-top.order-by";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_SB_TOP_HIDE_MISSING = GAME_END_PATH+".sb-top.hide-missing";
+
     public static final String GENERATOR_STACK_ITEMS = "stack-items";
 
     public static final String GENERATOR_IRON_DELAY = "iron.delay";
@@ -136,8 +150,13 @@ public class ConfigPath {
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_PLAYING = "scoreboard-settings.player-list.format-playing-list";
     public static final String SB_CONFIG_SIDEBAR_LIST_FORMAT_RESTARTING = "scoreboard-settings.player-list.format-restarting-list";
     public static final String SB_CONFIG_SIDEBAR_LIST_REFRESH = "scoreboard-settings.player-list.names-refresh-interval";
+    public static final String SB_CONFIG_SIDEBAR_HEALTH_ENABLE = "scoreboard-settings.health.enable";
     public static final String SB_CONFIG_SIDEBAR_HEALTH_IN_TAB = "scoreboard-settings.health.display-in-tab";
     public static final String SB_CONFIG_SIDEBAR_HEALTH_REFRESH = "scoreboard-settings.health.animation-refresh-interval";
+
+    public static final String SB_CONFIG_TAB_HEADER_FOOTER_ENABLE = "scoreboard-settings.tab-header-footer.enable";
+    public static final String SB_CONFIG_TAB_HEADER_FOOTER_REFRESH_INTERVAL = "scoreboard-settings.tab-header-footer.refresh-interval";
+
     public static final String GENERAL_CONFIGURATION_DISABLED_LANGUAGES = "disabled-languages";
 
     public static final String GENERAL_CONFIGURATION_ARENA_SELECTOR_PATH = "arena-gui";
@@ -156,6 +175,7 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT = "enable-gen-split";
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
+    public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_POWERED_BY = "powered-by";
 
     private static final String GENERAL_CHAT = "chat-settings.";
     public static final String GENERAL_CHAT_FORMATTING = GENERAL_CHAT+"format";
@@ -211,6 +231,15 @@ public class ConfigPath {
     public static final String GENERAL_TNT_JUMP_DAMAGE_TEAMMATES = GENERAL_TNT_JUMP_PATH + ".damage-teammates";
     public static final String GENERAL_TNT_JUMP_DAMAGE_OTHERS = GENERAL_TNT_JUMP_PATH + ".damage-others";
 
+    public static final String GENERAL_TNT_BLAST_PROTECTION = "blast-protection";
+    public static final String GENERAL_TNT_PROTECTION_END_STONE_BLAST = GENERAL_TNT_BLAST_PROTECTION+".end-stone";
+    public static final String GENERAL_TNT_PROTECTION_GLASS_BLAST = GENERAL_TNT_BLAST_PROTECTION+".glass";
+    public static final String GENERAL_TNT_RAY_BLOCKED_BY_GLASS = GENERAL_TNT_BLAST_PROTECTION+".ray-blocked-by-glass";
+
+    public static final String GENERAL_TNT_PRIME = "tnt-prime-settings";
+    public static final String GENERAL_TNT_AUTO_IGNITE = GENERAL_TNT_PRIME+".auto-ignite";
+    public static final String GENERAL_TNT_FUSE_TICKS = GENERAL_TNT_PRIME+".fuse-ticks";
+
     private static final String GENERAL_FIREBALL_PATH = "fireball";
     public static final String GENERAL_FIREBALL_EXPLOSION_SIZE = GENERAL_FIREBALL_PATH + ".explosion-size";
     public static final String GENERAL_FIREBALL_SPEED_MULTIPLIER = GENERAL_FIREBALL_PATH + ".speed-multiplier";
@@ -233,7 +262,7 @@ public class ConfigPath {
 
     private static final String GENERAL_CONFIGURATION_HEAL_POOL = GENERAL_CONFIGURATION_PERFORMANCE_PATH+".heal-pool";
     public static final String GENERAL_CONFIGURATION_HEAL_POOL_ENABLE = GENERAL_CONFIGURATION_HEAL_POOL+".enable";
-    public static final String GENERAL_CONFIGURATION_HEAL_POOL_SEEN_TEAM_ONLY = GENERAL_CONFIGURATION_HEAL_POOL_ENABLE+".seen-by-team-only";
+    public static final String GENERAL_CONFIGURATION_HEAL_POOL_SEEN_TEAM_ONLY = GENERAL_CONFIGURATION_HEAL_POOL+".seen-by-team-only";
     public static final String SHOP_SETTINGS_PATH = "shop-settings";
     public static final String SHOP_SPECIALS_PATH = "shop-specials";
     public static final String SHOP_QUICK_DEFAULTS_PATH = "quick-buy-defaults";

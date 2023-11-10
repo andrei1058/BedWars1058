@@ -25,6 +25,7 @@ import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.SetupSession;
@@ -94,7 +95,8 @@ public class CmdStart extends SubCommand {
 
         IArena a = Arena.getArenaByPlayer(p);
         if (a != null){
-            if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting){
+            GameState status = a.getStatus();
+            if (status == GameState.waiting || status == GameState.starting){
                 if (!a.isPlayer(p)) return false;
             } else {
                 return false;

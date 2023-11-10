@@ -22,7 +22,7 @@ package com.andrei1058.bedwars.commands;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.arena.SetupSession;
-import com.andrei1058.bedwars.support.paper.PaperSupport;
+import com.andrei1058.bedwars.support.paper.TeleportManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -106,7 +106,7 @@ public class Misc {
         Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             for (Location l : setupSession.getSkipAutoCreateGen()) {
                 Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                    PaperSupport.teleport(p, l);
+                    TeleportManager.teleport(p, l);
                     Bukkit.dispatchCommand(p, command + (l.add(0, -1, 0).getBlock().getType() == Material.EMERALD_BLOCK ? "emerald" : "diamond"));
                 }, 20);
             }

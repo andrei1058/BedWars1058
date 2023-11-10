@@ -362,6 +362,11 @@ public class SlimeAdapter extends RestoreAdapter {
         });
     }
 
+    @Override
+    public String getDisplayName() {
+        return "Slime World Manager by Grinderwolf";
+    }
+
     private void convertWorld(String name, Player player) {
         SlimeLoader sl = slime.getLoader("file");
         try {

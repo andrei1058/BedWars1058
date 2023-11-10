@@ -30,7 +30,7 @@ import com.andrei1058.bedwars.arena.ReJoin;
 import com.andrei1058.bedwars.configuration.Permissions;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.lobbysocket.LoadedUser;
-import com.andrei1058.bedwars.support.paper.PaperSupport;
+import com.andrei1058.bedwars.support.paper.TeleportManager;
 import com.andrei1058.bedwars.support.preloadedparty.PreLoadedParty;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -74,34 +74,42 @@ public class JoinListenerBungee implements Listener {
             }
 
             IArena arena = Arena.getArenaByIdentifier(proxyUser.getArenaIdentifier());
+            GameState status = arena != null ? arena.getStatus() : null;
+
             // check if arena is not available, time out etc.
-            if (arena == null || proxyUser.isTimedOut() || arena.getStatus() == GameState.restarting) {
+            if (arena == null || proxyUser.isTimedOut() || status == GameState.restarting) {
                 e.disallow(PlayerLoginEvent.Result.KICK_OTHER, playerLang.m(Messages.ARENA_STATUS_RESTARTING_NAME));
                 proxyUser.destroy("Time out or game unavailable at PlayerLoginEvent");
                 return;
             }
 
             // Player logic
-            if (arena.getStatus() == GameState.starting || arena.getStatus() == GameState.waiting) {
-                // Vip join/ kick feature
-                if (arena.getPlayers().size() >= arena.getMaxPlayers() && Arena.isVip(p)) {
-                    boolean canJoin = false;
-                    for (Player inGame : arena.getPlayers()) {
-                        if (!Arena.isVip(inGame)) {
-                            canJoin = true;
-                            inGame.kickPlayer(getMsg(inGame, Messages.ARENA_JOIN_VIP_KICK));
-                            break;
+            switch (status) {
+                case starting:
+                case waiting:
+                    // Vip join/ kick feature
+                    if (arena.getPlayers().size() >= arena.getMaxPlayers() && Arena.isVip(p)) {
+                        boolean canJoin = false;
+                        for (Player inGame : arena.getPlayers()) {
+                            if (!Arena.isVip(inGame)) {
+                                canJoin = true;
+                                inGame.kickPlayer(getMsg(inGame, Messages.ARENA_JOIN_VIP_KICK));
+                                break;
+                            }
+                        }
+                        if (!canJoin) {
+                            e.disallow(PlayerLoginEvent.Result.KICK_FULL, playerLang.m(Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
                         }
                     }
-                    if (!canJoin) {
-                        e.disallow(PlayerLoginEvent.Result.KICK_FULL, playerLang.m(Messages.COMMAND_JOIN_DENIED_IS_FULL_OF_VIPS));
+                    break;
+                case playing:
+                    // Spectator logic
+                    if (!arena.isAllowSpectate()) {
+                        e.disallow(PlayerLoginEvent.Result.KICK_OTHER, playerLang.m(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
                     }
-                }
-            } else if (arena.getStatus() == GameState.playing) {
-                // Spectator logic
-                if (!arena.isAllowSpectate()){
-                    e.disallow(PlayerLoginEvent.Result.KICK_OTHER, playerLang.m(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG));
-                }
+                    break;
+                default:
+                    throw new IllegalStateException("Unhandled game status!");
             }
 
         }
@@ -123,7 +131,7 @@ public class JoinListenerBungee implements Listener {
                 Bukkit.dispatchCommand(p, "bw");
                 World mainWorld = Bukkit.getWorlds().get(0);
                 if (mainWorld != null) {
-                    PaperSupport.teleportC(p, mainWorld.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    TeleportManager.teleportC(p, mainWorld.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }
                 // hide admin to in game users
                 for (Player inGame : Bukkit.getOnlinePlayers()){
@@ -160,9 +168,10 @@ public class JoinListenerBungee implements Listener {
 
             // There's nothing to re-join, so he might want to join an arena
             IArena arena = Arena.getArenaByIdentifier(proxyUser.getArenaIdentifier());
+            GameState status = arena != null ? arena.getStatus() : null;
 
             // Check if the arena is still available or request time-out etc.
-            if (arena == null || proxyUser.isTimedOut() || arena.getStatus() == GameState.restarting) {
+            if (arena == null || proxyUser.isTimedOut() || status == GameState.restarting) {
                 p.kickPlayer(playerLang.m(Messages.ARENA_STATUS_RESTARTING_NAME));
                 proxyUser.destroy("Time out or game unavailable at PlayerLoginEvent");
                 return;
@@ -173,58 +182,64 @@ public class JoinListenerBungee implements Listener {
             JoinHandlerCommon.displayCustomerDetails(p);
 
             // Join as player
-            if (arena.getStatus() == GameState.starting || arena.getStatus() == GameState.waiting) {
-                Sounds.playSound("join-allowed", p);
+            switch (status) {
+                case starting:
+                case waiting:
+                    Sounds.playSound("join-allowed", p);
 
-                // If has no party
-                if (proxyUser.getPartyOwnerOrSpectateTarget() == null) {
-                    // Add to arena
-                    if (!arena.addPlayer(p, true)){
-                        p.kickPlayer(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
-                    }
-                } else {
-                    // If is member or owner of a remote party
-
-                    Player partyOwner = Bukkit.getPlayer(proxyUser.getPartyOwnerOrSpectateTarget());
-                    // If party owner is connected
-                    if (partyOwner != null && partyOwner.isOnline()) {
-                        // If joiner is the party owner create the party
-                        if (partyOwner.equals(p)) {
-                            BedWars.getParty().createParty(p);
-
-                            // Handle to-be-teamed-up players. A list used if some party members join before the party owner.
-                            PreLoadedParty preLoadedParty = PreLoadedParty.getPartyByOwner(partyOwner.getName());
-                            if (preLoadedParty != null) {
-                                preLoadedParty.teamUp();
-                            }
-                        } else {
-                            // Add to a existing party
-                            BedWars.getParty().addMember(partyOwner, p);
+                    // If has no party
+                    if (proxyUser.getPartyOwnerOrSpectateTarget() == null) {
+                        // Add to arena
+                        if (!arena.addPlayer(p, true)) {
+                            p.kickPlayer(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
                         }
                     } else {
-                        // If a party member joined before the party owner create a waiting list
-                        // to-be-teamed-up players, when the owner will join
-                        PreLoadedParty preLoadedParty = PreLoadedParty.getPartyByOwner(proxyUser.getPartyOwnerOrSpectateTarget());
-                        if (preLoadedParty == null) {
-                            preLoadedParty = new PreLoadedParty(proxyUser.getPartyOwnerOrSpectateTarget());
+                        // If is member or owner of a remote party
+
+                        Player partyOwner = Bukkit.getPlayer(proxyUser.getPartyOwnerOrSpectateTarget());
+                        // If party owner is connected
+                        if (partyOwner != null && partyOwner.isOnline()) {
+                            // If joiner is the party owner create the party
+                            if (partyOwner.equals(p)) {
+                                BedWars.getParty().createParty(p);
+
+                                // Handle to-be-teamed-up players. A list used if some party members join before the party owner.
+                                PreLoadedParty preLoadedParty = PreLoadedParty.getPartyByOwner(partyOwner.getName());
+                                if (preLoadedParty != null) {
+                                    preLoadedParty.teamUp();
+                                }
+                            } else {
+                                // Add to a existing party
+                                BedWars.getParty().addMember(partyOwner, p);
+                            }
+                        } else {
+                            // If a party member joined before the party owner create a waiting list
+                            // to-be-teamed-up players, when the owner will join
+                            PreLoadedParty preLoadedParty = PreLoadedParty.getPartyByOwner(proxyUser.getPartyOwnerOrSpectateTarget());
+                            if (preLoadedParty == null) {
+                                preLoadedParty = new PreLoadedParty(proxyUser.getPartyOwnerOrSpectateTarget());
+                            }
+                            preLoadedParty.addMember(p);
                         }
-                        preLoadedParty.addMember(p);
+                        if (!arena.addPlayer(p, true)) {
+                            p.kickPlayer(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
+                        }
                     }
-                    if (!arena.addPlayer(p, true)){
-                        p.kickPlayer(Language.getMsg(p, Messages.ARENA_JOIN_DENIED_NO_PROXY));
+                    break;
+                case playing:
+                    // Join as spectator
+                    Sounds.playSound("spectate-allowed", p);
+                    Location spectatorTarget = null;
+                    if (proxyUser.getPartyOwnerOrSpectateTarget() != null) {
+                        Player targetPlayer = Bukkit.getPlayer(proxyUser.getPartyOwnerOrSpectateTarget());
+                        if (targetPlayer != null) {
+                            spectatorTarget = targetPlayer.getLocation();
+                        }
                     }
-                }
-            } else {
-                // Join as spectator
-                Sounds.playSound("spectate-allowed", p);
-                Location spectatorTarget = null;
-                if (proxyUser.getPartyOwnerOrSpectateTarget() != null) {
-                    Player targetPlayer = Bukkit.getPlayer(proxyUser.getPartyOwnerOrSpectateTarget());
-                    if (targetPlayer != null) {
-                        spectatorTarget = targetPlayer.getLocation();
-                    }
-                }
-                arena.addSpectator(p, false, spectatorTarget);
+                    arena.addSpectator(p, false, spectatorTarget);
+                    break;
+                default:
+                    throw new IllegalStateException("Unhandled game status!");
             }
             proxyUser.destroy("Joined as player or spectator. PreLoaded user no longer needed.");
         }

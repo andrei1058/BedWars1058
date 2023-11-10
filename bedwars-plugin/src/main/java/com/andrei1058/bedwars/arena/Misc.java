@@ -391,13 +391,13 @@ public class Misc {
         }
         for (ITeam t : a.getTeams()) {
             for (IGenerator o : t.getGenerators()) {
-                if (o.getLocation().distance(l) <= 1) {
+                if (o.getLocation().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
                     return true;
                 }
             }
         }
         for (IGenerator o : a.getOreGenerators()) {
-            if (o.getLocation().distance(l) <= 1) {
+            if (o.getLocation().distance(l) <= a.getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION)) {
                 return true;
             }
         }

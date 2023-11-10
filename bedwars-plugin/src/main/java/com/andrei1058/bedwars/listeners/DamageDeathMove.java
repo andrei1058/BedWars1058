@@ -40,7 +40,7 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
-import com.andrei1058.bedwars.support.paper.PaperSupport;
+import com.andrei1058.bedwars.support.paper.TeleportManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -56,6 +56,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.util.Map;
@@ -124,9 +125,8 @@ public class DamageDeathMove implements Listener {
     }
 
     // show player health on bow hit
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBowHit(EntityDamageByEntityEvent e) {
-        if(e.isCancelled()) return;
         if (e.getEntity().getType() != EntityType.PLAYER) return;
         if (!(e.getDamager() instanceof Projectile)) return;
         Projectile projectile = (Projectile) e.getDamager();
@@ -325,7 +325,7 @@ public class DamageDeathMove implements Listener {
     }
 
     @EventHandler
-    public void onDeath(PlayerDeathEvent e) {
+    public void onDeath(@NotNull PlayerDeathEvent e) {
         Player victim = e.getEntity(), killer = e.getEntity().getKiller();
         ITeam killersTeam = null;
         IArena a = Arena.getArenaByPlayer(victim);
@@ -438,39 +438,44 @@ public class DamageDeathMove implements Listener {
 
             if (killer != null) killersTeam = a.getTeam(killer);
             String finalMessage = message;
-            PlayerKillEvent playerKillEvent = new PlayerKillEvent(a, victim, killer, player -> Language.getMsg(player, finalMessage), cause);
+
+            PlayerKillEvent playerKillEvent = new PlayerKillEvent(a, victim, victimsTeam, killer, killersTeam,
+                    player -> Language.getMsg(player, finalMessage), cause
+            );
             Bukkit.getPluginManager().callEvent(playerKillEvent);
-            if(killer != null && playerKillEvent.playSound()) {
+
+            if (killer != null && playerKillEvent.playSound()) {
                 Sounds.playSound(ConfigPath.SOUNDS_KILL, killer);
             }
-            for (Player on : a.getPlayers()) {
-                Language lang = Language.getPlayerLanguage(on);
-                on.sendMessage(playerKillEvent.getMessage().apply(on).
-                        replace("{PlayerColor}", victimsTeam.getColor().chat().toString())
-                        .replace("{PlayerName}", victim.getDisplayName())
-                        .replace("{PlayerNameUnformatted}", victim.getName())
-                        .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
-                        .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
-                        .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
-                        .replace("{KillerNameUnformatted}", killer == null ? "" : killer.getName())
-                        .replace("{KillerTeamName}", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
-            }
-            for (Player on : a.getSpectators()) {
-                Language lang = Language.getPlayerLanguage(on);
-                on.sendMessage(playerKillEvent.getMessage().apply(on).
-                        replace("{PlayerColor}", victimsTeam.getColor().chat().toString())
-                        .replace("{PlayerName}", victim.getDisplayName())
-                        .replace("{PlayerNameUnformatted}", victim.getName())
-                        .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
-                        .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
-                        .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
-                        .replace("{KillerNameUnformatted}", killer == null ? "" : killer.getName())
-                        .replace("{KillerTeamName}", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
+
+            if (null != playerKillEvent.getMessage()) {
+                for (Player on : a.getPlayers()) {
+                    Language lang = Language.getPlayerLanguage(on);
+                    on.sendMessage(playerKillEvent.getMessage().apply(on).
+                            replace("{PlayerColor}", victimsTeam.getColor().chat().toString())
+                            .replace("{PlayerName}", victim.getDisplayName())
+                            .replace("{PlayerNameUnformatted}", victim.getName())
+                            .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
+                            .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
+                            .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
+                            .replace("{KillerNameUnformatted}", killer == null ? "" : killer.getName())
+                            .replace("{KillerTeamName}", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
+                }
             }
 
-            // increase stats to killer
-            if ((killer != null && !victimsTeam.equals(killersTeam)) && !victim.equals(killer)) {
-                a.addPlayerKill(killer, cause.isFinalKill(), victim);
+            if (null != playerKillEvent.getMessage()) {
+                for (Player on : a.getSpectators()) {
+                    Language lang = Language.getPlayerLanguage(on);
+                    on.sendMessage(playerKillEvent.getMessage().apply(on).
+                            replace("{PlayerColor}", victimsTeam.getColor().chat().toString())
+                            .replace("{PlayerName}", victim.getDisplayName())
+                            .replace("{PlayerNameUnformatted}", victim.getName())
+                            .replace("{KillerColor}", killersTeam == null ? "" : killersTeam.getColor().chat().toString())
+                            .replace("{PlayerTeamName}", victimsTeam.getDisplayName(lang))
+                            .replace("{KillerName}", killer == null ? "" : killer.getDisplayName())
+                            .replace("{KillerNameUnformatted}", killer == null ? "" : killer.getName())
+                            .replace("{KillerTeamName}", killersTeam == null ? "" : killersTeam.getDisplayName(lang)));
+                }
             }
 
             // handle drops
@@ -480,7 +485,6 @@ public class DamageDeathMove implements Listener {
 
             // send respawn packet
             Bukkit.getScheduler().runTaskLater(plugin, () -> victim.spigot().respawn(), 3L);
-            a.addPlayerDeath(victim);
 
             // reset last damager
             LastHit lastHit = LastHit.getLastHit(victim);
@@ -489,7 +493,7 @@ public class DamageDeathMove implements Listener {
             }
 
 
-            if (victimsTeam.isBedDestroyed() && victimsTeam.getSize() == 1 &&  a.getConfig().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
+            if (victimsTeam.isBedDestroyed() && victimsTeam.getSize() == 1 && a.getConfig().getBoolean(ConfigPath.ARENA_DISABLE_GENERATOR_FOR_EMPTY_TEAMS)) {
                 for (IGenerator g : victimsTeam.getGenerators()) {
                     g.disable();
                 }
@@ -608,7 +612,7 @@ public class DamageDeathMove implements Listener {
 
             if (a.isSpectator(e.getPlayer()) || a.isReSpawning(e.getPlayer())) {
                 if (e.getTo().getY() < 0) {
-                    PaperSupport.teleportC(e.getPlayer(), a.isSpectator(e.getPlayer()) ? a.getSpectatorLocation() : a.getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    TeleportManager.teleportC(e.getPlayer(), a.isSpectator(e.getPlayer()) ? a.getSpectatorLocation() : a.getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                     e.getPlayer().setAllowFlight(true);
                     e.getPlayer().setFlying(true);
                     // how to remove fall velocity?
@@ -643,9 +647,9 @@ public class DamageDeathMove implements Listener {
                     if (e.getPlayer().getLocation().getBlockY() <= 0) {
                         ITeam bwt = a.getTeam(e.getPlayer());
                         if (bwt != null) {
-                            PaperSupport.teleport(e.getPlayer(), bwt.getSpawn());
+                            TeleportManager.teleport(e.getPlayer(), bwt.getSpawn());
                         } else {
-                           PaperSupport.teleport(e.getPlayer(), a.getSpectatorLocation());
+                            TeleportManager.teleport(e.getPlayer(), a.getSpectatorLocation());
                         }
                     }
                 }
@@ -653,7 +657,7 @@ public class DamageDeathMove implements Listener {
         } else {
             if (config.getBoolean(ConfigPath.LOBBY_VOID_TELEPORT_ENABLED) && e.getPlayer().getWorld().getName().equalsIgnoreCase(config.getLobbyWorldName()) && BedWars.getServerType() == ServerType.MULTIARENA) {
                 if (e.getTo().getY() < config.getInt(ConfigPath.LOBBY_VOID_TELEPORT_HEIGHT)) {
-                    PaperSupport.teleportC(e.getPlayer(), config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    TeleportManager.teleportC(e.getPlayer(), config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 }
             }
         }
