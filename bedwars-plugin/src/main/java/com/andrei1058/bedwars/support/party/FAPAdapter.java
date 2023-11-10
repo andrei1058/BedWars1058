@@ -24,17 +24,20 @@ public class FAPAdapter implements Party {
 
 	@Override
 	public int partySize(Player p) {
-		return getParty(p) == null ? 0 : getParty(p).getAllMembers().size();
+		me.sk8ingduck.friendsystem.util.Party party = getParty(p);
+		return party == null ? 0 : party.getAllMembers().size();
 	}
 
 	@Override
 	public boolean isOwner(Player p) {
-		return getParty(p) != null && getParty(p).getLeaderUUID().equals(p.getUniqueId());
+		me.sk8ingduck.friendsystem.util.Party party = getParty(p);
+		return party != null && party.getLeaderUUID().equals(p.getUniqueId());
 	}
 
 	public List<Player> getMembers(Player owner) {
-		return getParty(owner) == null ? Collections.emptyList() :
-				getParty(owner).getAllMembers().stream()
+		me.sk8ingduck.friendsystem.util.Party party = getParty(owner);
+		return party == null ? Collections.emptyList() :
+				party.getAllMembers().stream()
 				.map(Bukkit::getPlayer)
 				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
@@ -75,7 +78,8 @@ public class FAPAdapter implements Party {
 
 	@Override
 	public Player getOwner(Player member) {
-		return getParty(member) == null ? member : Bukkit.getPlayer(getParty(member).getLeaderUUID());
+		me.sk8ingduck.friendsystem.util.Party party = getParty(member);
+		return party == null ? member : Bukkit.getPlayer(party.getLeaderUUID());
 	}
 
 	@Override
