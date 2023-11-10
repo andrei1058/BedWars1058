@@ -98,7 +98,7 @@ public class Silverfish extends EntitySilverfish {
         ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(true);
         ((CraftLivingEntity) customEnt.getBukkitEntity()).setPersistent(true);
 
-        customEnt.getBukkitEntity().setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME)
+        customEnt.getBukkitEntity().setCustomName(Language.getDefaultLanguage().m(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME)
                 .replace("{despawn}", String.valueOf(despawn)
                         .replace("{health}", StringUtils.repeat(Language.getDefaultLanguage().m(Messages.FORMATTING_DESPAWNABLE_UTILITY_NPC_HEALTH) + " ", 10))
                         .replace("{TeamColor}", team.getColor().chat().toString())));
