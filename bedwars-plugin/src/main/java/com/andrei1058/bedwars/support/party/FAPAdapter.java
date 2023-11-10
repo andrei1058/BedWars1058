@@ -1,0 +1,89 @@
+package com.andrei1058.bedwars.support.party;
+
+import com.andrei1058.bedwars.api.party.Party;
+import me.sk8ingduck.friendsystem.SpigotAPI;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+public class FAPAdapter implements Party {
+
+	private me.sk8ingduck.friendsystem.util.Party getParty(Player player) {
+		return SpigotAPI.getInstance().getMysql().getParty(player.getUniqueId());
+	}
+
+	@Override
+	public boolean hasParty(Player p) {
+		return getParty(p) != null;
+	}
+
+	@Override
+	public int partySize(Player p) {
+		return getParty(p) == null ? 0 : getParty(p).getAllMembers().size();
+	}
+
+	@Override
+	public boolean isOwner(Player p) {
+		return getParty(p) != null && getParty(p).getLeaderUUID().equals(p.getUniqueId());
+	}
+
+	public List<Player> getMembers(Player owner) {
+		return getParty(owner) == null ? Collections.emptyList() :
+				getParty(owner).getAllMembers().stream()
+				.map(Bukkit::getPlayer)
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public void createParty(Player owner, Player... members) {
+
+	}
+
+	@Override
+	public void addMember(Player owner, Player member) {
+
+	}
+
+	@Override
+	public void removeFromParty(Player member) {
+
+	}
+
+	@Override
+	public void disband(Player owner) {
+
+	}
+
+	@Override
+	public boolean isMember(Player owner, Player check) {
+		me.sk8ingduck.friendsystem.util.Party party = getParty(owner);
+		if (party == null) return false;
+
+		return party.getAllMembers().contains(check.getUniqueId());
+	}
+
+	@Override
+	public void removePlayer(Player owner, Player target) {
+
+	}
+
+	@Override
+	public Player getOwner(Player member) {
+		return getParty(member) == null ? member : Bukkit.getPlayer(getParty(member).getLeaderUUID());
+	}
+
+	@Override
+	public void promote(@NotNull Player owner, @NotNull Player target) {
+	}
+
+	@Override
+	public boolean isInternal() {
+		return false;
+	}
+}
