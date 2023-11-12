@@ -128,7 +128,7 @@ public class Spanish extends Language {
                 "",
                 "&fEsperando,&fEsperando.,&fEsperando..,&fEsperando...",
                 "",
-                "&fMode: &a{group}",
+                "&fModo: &a{group}",
                 "&fVersion: &7{version}",
                 "",
                 "&e{serverIp}")
@@ -136,14 +136,14 @@ public class Spanish extends Language {
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_WAITING_SPEC, Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date} &8{server}",
-                "&o&7Spectating",
+                "&o&7Espectador",
                 "&fMapa: &a{map}",
                 "",
                 "&fJugador: &a{on}/{max}",
                 "",
                 "&fEsperando,&fEsperando.,&fEsperando..,&fEsperando...",
                 "",
-                "&fMode: &a{group}",
+                "&fModo: &a{group}",
                 "&fVersion: &7{version}",
                 "",
                 "&e{serverIp}")
@@ -156,7 +156,7 @@ public class Spanish extends Language {
                 "",
                 "&fJugador: &a{on}/{max}",
                 "",
-                "&fomenzando en &a{time}s",
+                "&fComenzando en &a{time}s",
                 "",
                 "&fMode: &a{group}",
                 "&fVersion: &7{version}",
@@ -166,14 +166,14 @@ public class Spanish extends Language {
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_STARTING_SPEC, Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date} &8{server}",
-                "&o&7Spectating",
+                "&o&7Espectador",
                 "&fMapa: &a{map}",
                 "",
                 "&fJugador: &a{on}/{max}",
                 "",
-                "&fomenzando en &a{time}s",
+                "&fComenzando en &a{time}s",
                 "",
-                "&fMode: &a{group}",
+                "&fModo: &a{group}",
                 "&fVersion: &7{version}",
                 "",
                 "&e{serverIp}")
@@ -182,7 +182,7 @@ public class Spanish extends Language {
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
                 "",
-                "&f{nextEvent} in &a{time}",
+                "&f{nextEvent} en &a{time}",
                 "",
                 "{team}",
                 "{team}",
@@ -201,8 +201,8 @@ public class Spanish extends Language {
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC, Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
-                "&o&7Spectating {spectatorTarget}",
-                "&f{nextEvent} in &a{time}",
+                "&o&7Viendo a {spectatorTarget}",
+                "&f{nextEvent} en &a{time}",
                 "",
                 "{team}",
                 "{team}",
@@ -221,9 +221,9 @@ public class Spanish extends Language {
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
                 "",
-                "&6Winner: {winnerTeamColor}{winnerTeamName} &6⭐",
+                "&6Ganador: {winnerTeamColor}{winnerTeamName} &6⭐",
                 "",
-                "&7&lTop Kills:",
+                "&7&lTop Asesinatos:",
                 "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
                 "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
                 "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
@@ -240,7 +240,7 @@ public class Spanish extends Language {
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
                 "",
-                "&6Winner: {winnerTeamColor}{winnerTeamName} &6⭐",
+                "&6Ganador: {winnerTeamColor}{winnerTeamName} &6⭐",
                 "",
                 "&7&lTop Kills:",
                 "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
@@ -259,7 +259,7 @@ public class Spanish extends Language {
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
                 "",
-                "&6Winner: {winnerTeamColor}{winnerTeamName} &6⭐",
+                "&6Ganador: {winnerTeamColor}{winnerTeamName} &6⭐",
                 "",
                 "&7&lTop Kills:",
                 "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
@@ -278,7 +278,7 @@ public class Spanish extends Language {
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
                 "",
-                "&6Winner: {winnerTeamColor}{winnerTeamName} &6⭐",
+                "&6Ganador: {winnerTeamColor}{winnerTeamName} &6⭐",
                 "",
                 "&7&lTop Kills:",
                 "&f{topTeamColor}{topPlayerDisplayName}&7 - &l{topValue}",
@@ -297,7 +297,7 @@ public class Spanish extends Language {
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
                 "",
-                "&f{nextEvent} in &a{time}",
+                "&f{nextEvent} en &a{time}",
                 "",
                 "{team}",
                 "{team}",
@@ -314,8 +314,8 @@ public class Spanish extends Language {
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "Doubles"), Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
-                "&o&7Spectating {spectatorTarget}",
-                "&f{nextEvent} in &a{time}",
+                "&o&7Viendo {spectatorTarget}",
+                "&f{nextEvent} en &a{time}",
                 "",
                 "{team}",
                 "{team}",
@@ -333,7 +333,7 @@ public class Spanish extends Language {
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
                 "",
-                "&f{nextEvent} in &a{time}",
+                "&f{nextEvent} en &a{time}",
                 "",
                 "{team}",
                 "{team}",
@@ -344,7 +344,7 @@ public class Spanish extends Language {
                 "{team}",
                 "{team}",
                 "",
-                "&finalKills: &a{kills}",
+                "&fAsesinatos: &a{kills}",
                 "&fAsesinatos Finales: &a{finalKills}",
                 "&fCamas Destruidas: &a{beds}",
                 "",
@@ -354,8 +354,8 @@ public class Spanish extends Language {
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "3v3v3v3"), Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
-                "&o&7Spectating {spectatorTarget}",
-                "&f{nextEvent} in &a{time}",
+                "&o&7Viendo a {spectatorTarget}",
+                "&f{nextEvent} en &a{time}",
                 "",
                 "{team}",
                 "{team}",
@@ -366,7 +366,7 @@ public class Spanish extends Language {
                 "{team}",
                 "{team}",
                 "",
-                "&finalKills: &a{kills}",
+                "&fAsesinatos: &a{kills}",
                 "&fAsesinatos Finales: &a{finalKills}",
                 "&fCamas Destruidas: &a{beds}",
                 "",
@@ -376,8 +376,8 @@ public class Spanish extends Language {
         yml.addDefault(Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC.replaceFirst("Default", "4v4v4v4"), Arrays.asList(
                 "&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&lBED WARS,&f&l{poweredBy},&f&l{poweredBy},&f&l{poweredBy},&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&lBED WARS,&e&l{poweredBy},&e&l{poweredBy},&e&l{poweredBy}",
                 "&7{date}",
-                "&o&7Spectating {spectatorTarget}",
-                "&f{nextEvent} in &a{time}",
+                "&o&7Viendo a {spectatorTarget}",
+                "&f{nextEvent} en &a{time}",
                 "",
                 "{team}",
                 "{team}",
@@ -401,8 +401,8 @@ public class Spanish extends Language {
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_LOBBY_FOOTER, List.of(
                 "",
-                "&fThere are {on} players on this lobby",
-                "Powered by {poweredBy},&a{serverIp}",
+                "&fNo hay {on} jugadores en este lobby",
+                "Hecho por {poweredBy},&a{serverIp}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_LOBBY_PREFIX, List.of("{vPrefix}"));
@@ -415,11 +415,11 @@ public class Spanish extends Language {
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_FOOTER, List.of(
                 "",
-                "Waiting for more players,Waiting for more players.,Waiting for more players.., Waiting for more players...",
+                "Esperando más jugadores,Esperando más jugadores.,Esperando más jugadores.., Esperando más jugadores...",
                 "&f{on}&a/&f{max}",
                 "",
                 "&a{serverIp}",
-                "&fPowered by {poweredBy}",
+                "&fHecho por {poweredBy}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_PREFIX, List.of("{vPrefix}"));
@@ -432,12 +432,12 @@ public class Spanish extends Language {
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_FOOTER_SPEC, List.of(
                 "",
-                "&7&oYou are spectating",
-                "Waiting for more players,Waiting for more players.,Waiting for more players.., Waiting for more players...",
+                "&7&oEres espectador",
+                "Esperando más jugadores,Esperando más jugadores.,Esperando más jugadores.., Esperando más jugadores...",
                 "&f{on}&a/&f{max}",
                 "",
                 "&a{serverIp}",
-                "&fPowered by {poweredBy}",
+                "&fHecho por {poweredBy}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_WAITING_PREFIX_SPEC, List.of("{vPrefix}"));
@@ -447,16 +447,16 @@ public class Spanish extends Language {
                 "                                                                                                        ",
                 "&a{serverIp}",
                 "&7{date}",
-                "&7Map: &f{map} &7Mode: &f{group}",
+                "&7Mapa: &f{map} &7Modo: &f{group}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_STARTING_FOOTER, List.of(
                 "",
-                "&fStarting in &a{time} &fseconds,&fStarting in &a{time} &fseconds.,&fStarting in &a{time} &fseconds..,&fStarting in &a{time} &fseconds..",
+                "&fComenzando en &a{time} &fsegundos,&fComenzando en &a{time} &fsegundos.,&fComenzando en &a{time} &fsegundos..,&fComenzando en &a{time} &fsegundos..",
                 "&f{on}&a/&f{max}",
                 "",
                 "&a{serverIp}",
-                "&fPowered by {poweredBy}",
+                "&fHecho por {poweredBy}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_STARTING_PREFIX, List.of("{vPrefix} "));
@@ -466,16 +466,16 @@ public class Spanish extends Language {
                 "                                                                                                        ",
                 "&a{serverIp}",
                 "&7{date}",
-                "&7Map: &f{map} &7Mode: &f{group}",
+                "&7Mapa: &f{map} &7Modo: &f{group}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_STARTING_FOOTER_SPEC, List.of(
                 "",
-                "&fStarting in &a{time} &fseconds,&fStarting in &a{time} &fseconds.,&fStarting in &a{time} &fseconds..,&fStarting in &a{time} &fseconds..",
+                "&fComenzando en &a{time} &fsegundos,&fComenzando en &a{time} &fsegundos.,&fComenzando en &a{time} &fsegundos..,&fComenzando en &a{time} &fsegundos..",
                 "&f{on}&a/&f{max}",
                 "",
                 "&a{serverIp}",
-                "&fPowered by {poweredBy}",
+                "&fHecho por {poweredBy}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_STARTING_PREFIX_SPEC, List.of("{vPrefix} "));
@@ -485,16 +485,16 @@ public class Spanish extends Language {
                 "                                                                                                        ",
                 "&a{serverIp}",
                 "&7{date}",
-                "&7Map: &f{map} &7Mode: &f{group}",
+                "&7Mapa: &f{map} &7Modo: &f{group}",
                 "",
-                "{nextEvent} in {time}",
+                "{nextEvent} en {time}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_FOOTER, List.of(
                 "",
-                "&fYou are playing on the {teamColor}{teamName} Team",
+                "&fEstas jugando en el equipo {teamColor}{teamName}",
                 "&a{serverIp}",
-                "&fPowered by {poweredBy}",
+                "&fHecho por {poweredBy}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_PREFIX, List.of("{teamColor}{teamName} "));
@@ -504,54 +504,54 @@ public class Spanish extends Language {
                 "                                                                                                        ",
                 "&a{serverIp}",
                 "&7{date}",
-                "&7Map: &f{map} &7Mode: &f{group}",
+                "&7Mapa: &f{map} &7Modo: &f{group}",
                 "",
-                "{nextEvent} in {time}",
+                "{nextEvent} en {time}",
                 "",
-                "&7&oAYou've been eliminated,&f&oAYou've been eliminated"
+                "&7&oAHas sido eliminado,&f&oAHas sido eliminado"
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_ELM_FOOTER, List.of(
                 "",
-                "&fYou have played in the {teamColor}{teamName} Team",
+                "&fHas jugado en el equipo {teamColor}{teamName}",
                 "&a{serverIp}",
-                "&fPowered by {poweredBy}",
+                "&fHecho por {poweredBy}",
                 ""
         ));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_ELM_PREFIX, List.of("&f&oSpectator "));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_ELM_SUFFIX, List.of(" &c&oEliminated {teamColor}&o{teamName}", " {teamColor}&oEliminated {vPrefix}", "{teamColor}&oEliminated {level}"));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_ELM_PREFIX, List.of("&f&oEspectador "));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_ELM_SUFFIX, List.of(" &c&oHa eliminado {teamColor}&o{teamName}", " {teamColor}&oEliminado {vPrefix}", "{teamColor}&oEliminado {level}"));
         // spectator - playing state
         yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_SPEC_HEADER, List.of(
                 "                                                                                                        ",
                 "&a{serverIp}",
                 "&7{date}",
-                "&7Map: &f{map} &7Mode: &f{group}",
+                "&7Mapa: &f{map} &7Modo: &f{group}",
                 "",
-                "{nextEvent} in {time}",
+                "{nextEvent} en {time}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_SPEC_FOOTER, List.of(
                 "",
-                "&fPowered by {poweredBy}",
+                "&fHecho por {poweredBy}",
                 ""
         ));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_SPEC_PREFIX, List.of("&f&oSpectator "));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_SPEC_PREFIX, List.of("&f&oEspectador "));
         yml.addDefault(Messages.FORMATTING_SB_TAB_PLAYING_SPEC_SUFFIX, List.of(" {vPrefix}", " {level}"));
         // winner alive - restarting state
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN1_HEADER, List.of(
                 "                                                                                                        ",
-                "&6⭐ {winnerTeamColor}&lYour team won the game! &6⭐",
-                "&7{date}", "&7Map: &f{map} &7Mode: &f{group}",
+                "&6⭐ {winnerTeamColor}&lTu equipo ha ganado la partida! &6⭐",
+                "&7{date}", "&7Mapa: &f{map} &7Modo: &f{group}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN1_FOOTER, List.of(
                 "",
-                "&6&lYou won in the {teamColor}&l{teamName} Team&6&l!,&6&lYou won in the {teamColor}&l{teamName} Team&6&l!,&f&lYou won in the {teamColor}&l{teamName} Team&f&l!",
-                "&7Statistics from this match",
-                "&eKills: &f{kills} &8| &eFinal Kills: &f{finalKills} &8| &eBeds Destroyed: &f{beds} &8| &eDeaths: &f{deaths},&eKills: &7{kills} &8| &eFinal Kills: &7{finalKills} &8| &eBeds Destroyed: &7{beds} &8| &eDeaths: &7{deaths}",
+                "&6&lHas ganado en el equipo {teamColor}&l{teamName}&6&l!,&6&lHas ganado en el equipo {teamColor}&l{teamName}&6&l!,&f&lHas ganado en el equipo {teamColor}&l{teamName}&f&l!",
+                "&7Estadísticas de la partida",
+                "&eAsesinatos: &f{kills} &8| &eAsesinatos Finales: &f{finalKills} &8| &eCamas Destruidas: &f{beds} &8| &eMuertes: &f{deaths},&eAsesinatos: &7{kills} &8| &eAsesinatos Finales: &7{finalKills} &8| &eCamas Destruidas: &7{beds} &8| &eMuertes: &7{deaths}",
                 "",
-                "&fThanks for playing {player}!",
+                "&fGracias por jugar {player}!",
                 "&a{serverIp}",
-                "&fPowered by {poweredBy}",
+                "&fHecho por {poweredBy}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN1_PREFIX, List.of("&6&l⭐ {teamColor}{teamName} "));
@@ -559,61 +559,61 @@ public class Spanish extends Language {
         // winner dead - restarting state
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN2_HEADER, List.of(
                 "                                                                                                        ",
-                "&6⭐ {winnerTeamColor}&l{winnerTeamName} Team won the game! &6⭐",
+                "&6⭐ El equipo {winnerTeamColor}&l{winnerTeamName} ha ganado la partida! &6⭐",
                 "&7{date}",
-                "&7Map: &f{map} &7Mode: &f{group}",
+                "&7Mapa: &f{map} &7Modo: &f{group}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN2_FOOTER, List.of(
                 "",
-                "&6&lYou won in the {teamColor}&l{teamName} Team&6&l!,&6&lYou won in the {teamColor}&l{teamName} Team&6&l!,&f&lYou won in the {teamColor}&l{teamName} Team&f&l!",
-                "&7Statistics from this match",
-                "&eKills: &f{kills} &8| &eFinal Kills: &f{finalKills} &8| &eBeds Destroyed: &f{beds} &8| &eDeaths: &f{deaths},&eKills: &7{kills} &8| &eFinal Kills: &7{finalKills} &8| &eBeds Destroyed: &7{beds} &8| &eDeaths: &7{deaths}",
+                "&6&lHas ganado en el equipo {teamColor}&l{teamName}&6&l!,&6&lHas ganado en el equipo {teamColor}&l{teamName}&6&l!,&f&lHas ganado en el equipo {teamColor}&l{teamName}&f&l!",
+                "&7Estadísticas de la partida",
+                "&eAsesinatos: &f{kills} &8| &eAsesinatos Finales: &f{finalKills} &8| &eCamas Destruidas: &f{beds} &8| &eMuertes: &f{deaths},&eAsesinatos: &7{kills} &8| &eAsesinatos Finales: &7{finalKills} &8| &eCamas Destruidas: &7{beds} &8| &eMuertes: &7{deaths}",
 
-                "&fThanks for playing {player}!",
+                "&fGracias por jugar {player}!",
                 "&a{serverIp}",
-                "&fPowered by {poweredBy}",
+                "&fHecho por {poweredBy}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN2_PREFIX, List.of("&6&l⭐ {teamColor}{teamName} "));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN2_SUFFIX, List.of(" {vPrefix}", " &c&oEliminated", " {level}", " &c&oEliminated"));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_WIN2_SUFFIX, List.of(" {vPrefix}", " &c&oEliminado", " {level}", " &c&oEliminado"));
         // loser - restarting state
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_ELM_HEADER, List.of(
                 "                                                                                                        ",
-                "&6⭐ {winnerTeamColor}&l{winnerTeamName} Team won the game! &6⭐",
+                "&6⭐ El equipo {winnerTeamColor}&l{winnerTeamName} ha ganado la partida! &6⭐",
                 "&7{date}",
-                "&7Map: &f{map} &7Mode: &f{group}",
+                "&7Mapa: &f{map} &7Modo: &f{group}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_ELM_FOOTER, List.of(
                 "",
-                "&fYou have lost in the {teamColor}{teamName} Team",
-                "&7Statistics from this match",
-                "&eKills: &f{kills} &8| &eFinal Kills: &f{finalKills} &8| &eBeds Destroyed: &f{beds} &8| &eDeaths: &f{deaths},&eKills: &7{kills} &8| &eFinal Kills: &7{finalKills} &8| &eBeds Destroyed: &7{beds} &8| &eDeaths: &7{deaths}",
-                "&fThanks for playing {player}!",
+                "&fHas perdido en el equipo {teamColor}{teamName}",
+                "&7Estadísticas de la partida",
+                "&eAsesinatos: &f{kills} &8| &eAsesinatos Finales: &f{finalKills} &8| &eCamas Destruidas: &f{beds} &8| &eMuertes: &f{deaths},&eAsesinatos: &7{kills} &8| &eAsesinatos Finales: &7{finalKills} &8| &eCamas Destruidas: &7{beds} &8| &eMuertes: &7{deaths}",
+                "&fGracias por jugar {player}!",
                 "&a{serverIp}",
-                "&fPowered by {poweredBy}",
+                "&fHecho por {poweredBy}",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_ELM_PREFIX, List.of("{teamColor}{teamName} "));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_ELM_SUFFIX, List.of(" {vPrefix}", " &c&oEliminated", " {level}", " &c&oEliminated"));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_ELM_SUFFIX, List.of(" {vPrefix}", " &c&oEliminado", " {level}", " &c&oEliminado"));
         // spectator - restarting state
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_SPEC_HEADER, List.of(
                 "                                                                                                        ",
                 "&a{serverIp}",
-                "&6⭐ {winnerTeamColor}&l{winnerTeamName} Team won the game! &6⭐",
+                "&6⭐ El equipo {winnerTeamColor}&l{winnerTeamName} ha ganado la partida! &6⭐",
                 "&7{date}",
-                "&7Map: &f{map} &7Mode: &f{group}",
+                "&7Mapa: &f{map} &7Modo: &f{group}",
                 "",
-                "&fThanks for playing {player}!",
+                "&fGracias por jugar {player}!",
                 ""
         ));
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_SPEC_FOOTER, List.of(
                 "",
-                "&fPowered by {poweredBy}",
+                "&fHecho por {poweredBy}",
                 ""
         ));
-        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_SPEC_PREFIX, List.of("&f&oSpectator "));
+        yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_SPEC_PREFIX, List.of("&f&oEspectador "));
         yml.addDefault(Messages.FORMATTING_SB_TAB_RESTARTING_SPEC_SUFFIX, List.of(" {vPrefix}", " {level}"));
         // end of tab
 
