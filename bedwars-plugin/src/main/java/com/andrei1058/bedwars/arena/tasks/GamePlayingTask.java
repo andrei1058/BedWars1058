@@ -171,7 +171,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
             if (t.getSize() > 1) {
                 for (Player p : t.getMembers()) {
                     for (Player p2 : t.getMembers()) {
-                        if (p2 == p) continue;
+                        if (p2 == p || !p.getLocation().getWorld().equals(p2.getLocation().getWorld())) continue;
                         if (distance == 0) {
                             distance = (int) p.getLocation().distance(p2.getLocation());
                         } else if ((int) p.getLocation().distance(p2.getLocation()) < distance) {
