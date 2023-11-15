@@ -861,6 +861,7 @@ public class Indonesia extends Language {
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Adding to Quick Buy...");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cKamu tidak mempunyai {currency} yang cukup! Butuh {amount} lagi!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aKamu membeli &6{item}");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_SPACE, "&cYou don't have enough inventory space to buy this item!");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cKamu telah membeli itu!!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");

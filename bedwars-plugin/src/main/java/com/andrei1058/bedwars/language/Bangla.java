@@ -854,6 +854,7 @@ public class Bangla extends Language {
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Adding to Quick Buy...");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cApnar kache porjapto {currency} ney! Apnar aro {amount} beshi lagbe!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aApni &6{item} &akinlen.");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_SPACE, "&cYou don't have enough inventory space to buy this item!");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cYou've already bought that!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Silverfish");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");

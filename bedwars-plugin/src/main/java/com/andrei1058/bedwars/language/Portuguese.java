@@ -861,6 +861,7 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8Adicionando à compra rápida...");
         yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&cVocê não tem {currency} suficiente! Precisa de mais {amount}!");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&aVocê comprou &6{item}");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_SPACE, "&cYou don't have enough inventory space to buy this item!");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&cVocê já comprou isso!");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}Traça");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_IRON_GOLEM_NAME, "{TeamColor}{despawn}s &8[ {TeamColor}{health}&8]");
