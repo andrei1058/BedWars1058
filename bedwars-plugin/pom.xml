@@ -333,7 +333,7 @@
         <dependency>
             <groupId>com.github.sk8ingDuck</groupId>
             <artifactId>FriendSystem-Spigot-API</artifactId>
-            <version>master</version>
+            <version>c2b5d9a0c0</version>
         </dependency>
     </dependencies>
 

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class FAPAdapter implements Party {
 
 	private me.sk8ingduck.friendsystem.util.Party getParty(Player player) {
-		return SpigotAPI.getInstance().getMysql().getParty(player.getUniqueId());
+		return SpigotAPI.getInstance().getPartyManager().getParty(player.getUniqueId());
 	}
 
 	@Override
@@ -45,22 +45,39 @@ public class FAPAdapter implements Party {
 
 	@Override
 	public void createParty(Player owner, Player... members) {
+		me.sk8ingduck.friendsystem.util.Party party = getParty(owner);
+		if (party != null) return;
 
+		String[] memberUUIDs = new String[members.length];
+		for (int i = 0; i < members.length; i++) {
+			memberUUIDs[i] = members[i].getUniqueId().toString();
+		}
+
+		SpigotAPI.getInstance().getPartyManager().createParty(owner, memberUUIDs);
 	}
 
 	@Override
 	public void addMember(Player owner, Player member) {
+		me.sk8ingduck.friendsystem.util.Party party = getParty(owner);
+		if (party == null) return;
 
+		SpigotAPI.getInstance().getPartyManager().addPlayer(party.getLeaderUUID(), member);
 	}
 
 	@Override
 	public void removeFromParty(Player member) {
+		me.sk8ingduck.friendsystem.util.Party party = getParty(member);
+		if (party == null) return;
 
+		SpigotAPI.getInstance().getPartyManager().kickPlayer(party.getLeaderUUID(), member);
 	}
 
 	@Override
 	public void disband(Player owner) {
+		me.sk8ingduck.friendsystem.util.Party party = getParty(owner);
+		if (party == null) return;
 
+		SpigotAPI.getInstance().getPartyManager().disbandParty(owner);
 	}
 
 	@Override
@@ -73,7 +90,10 @@ public class FAPAdapter implements Party {
 
 	@Override
 	public void removePlayer(Player owner, Player target) {
+		me.sk8ingduck.friendsystem.util.Party party = getParty(owner);
+		if (party == null) return;
 
+		SpigotAPI.getInstance().getPartyManager().kickPlayer(party.getLeaderUUID(), target);
 	}
 
 	@Override
@@ -84,6 +104,10 @@ public class FAPAdapter implements Party {
 
 	@Override
 	public void promote(@NotNull Player owner, @NotNull Player target) {
+		me.sk8ingduck.friendsystem.util.Party party = getParty(owner);
+		if (party == null) return;
+
+		SpigotAPI.getInstance().getPartyManager().promotePlayer(party.getLeaderUUID(), target);
 	}
 
 	@Override
