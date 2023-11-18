@@ -42,7 +42,6 @@ import com.grinderwolf.swm.api.world.properties.SlimeProperties;
 import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
@@ -57,7 +56,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "CallToPrintStackTrace"})
 public class AdvancedSlimeAdapter extends RestoreAdapter {
 
     private final SlimePlugin slime;
@@ -247,36 +246,6 @@ public class AdvancedSlimeAdapter extends RestoreAdapter {
     }
 
     @Override
-    public void onLobbyRemoval(IArena a) {
-        Location loc1 = a.getConfig().getArenaLoc(ConfigPath.ARENA_WAITING_POS1),
-                loc2 = a.getConfig().getArenaLoc(ConfigPath.ARENA_WAITING_POS2);
-        if (loc1 == null || loc2 == null) return;
-        Bukkit.getScheduler().runTask(getOwner(), () -> {
-            int minX, minY, minZ;
-            int maxX, maxY, maxZ;
-            minX = Math.min(loc1.getBlockX(), loc2.getBlockX());
-            maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
-            minY = Math.min(loc1.getBlockY(), loc2.getBlockY());
-            maxY = Math.max(loc1.getBlockY(), loc2.getBlockY());
-            minZ = Math.min(loc1.getBlockZ(), loc2.getBlockZ());
-            maxZ = Math.max(loc1.getBlockZ(), loc2.getBlockZ());
-
-            for (int x = minX; x < maxX; x++) {
-                for (int y = minY; y < maxY; y++) {
-                    for (int z = minZ; z < maxZ; z++) {
-                        Objects.requireNonNull(loc1.getWorld()).getBlockAt(x, y, z).setType(Material.AIR);
-                    }
-                }
-            }
-
-            Bukkit.getScheduler().runTaskLater(getOwner(), () ->
-                    Objects.requireNonNull(loc1.getWorld()).getEntities().forEach(e -> {
-                        if (e instanceof Item) e.remove();
-                    }), 15L);
-        });
-    }
-
-    @Override
     public boolean isWorld(String name) {
         try {
             return slime.getLoader("file").worldExists(name);
@@ -358,9 +327,11 @@ public class AdvancedSlimeAdapter extends RestoreAdapter {
                                         FileUtil.delete(ff);
                                         ZipFileUtil.unzipFileIntoDirectory(bc, new File(Bukkit.getWorldContainer(), name));
                                     }
+                                    // clean up world folder
                                     deleteWorldTrash(name);
+                                    // check if level.dat is missing in world folder
                                     handleLevelDat(name);
-
+                                    // start Slime conversion
                                     convertWorld(name, null);
                                 }
                             } catch (IOException e) {
@@ -396,6 +367,13 @@ public class AdvancedSlimeAdapter extends RestoreAdapter {
 
     @SuppressWarnings("SameParameterValue")
     private void convertWorld(String name, @Nullable Player player) {
+        File worldFolder = new File(Bukkit.getWorldContainer(), name);
+        if (!worldFolder.exists() || !worldFolder.isDirectory()) {
+            getOwner().getLogger().severe("Tried converting arena " + name + " to Slime format, but couldn't find any bukkit world folder.");
+            return;
+        }
+
+        // todo allow data loaders
         SlimeLoader sl = slime.getLoader("file");
         try {
             getOwner().getLogger().log(Level.INFO, "Converting " + name + " to the Slime format.");
@@ -430,42 +408,93 @@ public class AdvancedSlimeAdapter extends RestoreAdapter {
         }
     }
 
+    /**
+     * Create level.dat in world folder before converting to Slime format.
+     * References:
+     * <a href="https://github.com/cijaaimee/Slime-World-Manager/blob/develop/slimeworldmanager-importer/src/main/java/com/grinderwolf/swm/importer/SWMImporter.java">Slime importer requirements</a>
+     * <a href="https://wiki.vg/Map_Format#level.dat">level.dat NBT TAG</a>
+     *
+     * @param world folder name.
+     */
     private void handleLevelDat(String world) throws IOException {
+        File worldFolder = new File(Bukkit.getWorldContainer(), world);
 
-        File level = new File(Bukkit.getWorldContainer(), world + "/level.dat");
+        if (!worldFolder.exists() || !worldFolder.isDirectory()) {
+            return;
+        }
 
-        if (!level.exists()) {
-            if (level.createNewFile()) {
-                File regions = new File(Bukkit.getWorldContainer(), "world/region");
-                if (regions.exists() && Objects.requireNonNull(regions.list()).length > 0) {
-                    if (Arrays.stream(Objects.requireNonNull(regions.list())).filter(p -> p.endsWith(".mca")).toArray().length > 0) {
-                        File region = new File(Bukkit.getWorldContainer(), world + "/" + Arrays.stream(Objects.requireNonNull(regions.list())).filter(p -> p.endsWith(".mca")).toArray()[0]);
-                        NBTInputStream inputStream = new NBTInputStream(new FileInputStream(region));
-                        Optional<CompoundTag> tag = inputStream.readTag().getAsCompoundTag();
-                        inputStream.close();
-                        if (tag.isPresent()) {
-                            Optional<CompoundTag> dataTag = tag.get().getAsCompoundTag("Chunk");
-                            if (dataTag.isPresent()) {
-                                int dataVersion = dataTag.get().getIntValue("DataVersion").orElse(-1);
+        File levelFile = new File(worldFolder, "level.dat");
+        if (levelFile.exists()) {
+            return;
+        }
 
-                                NBTOutputStream outputStream = new NBTOutputStream(new FileOutputStream(level));
+        // try detecting world version from region files
+        File regionFolder = new File(worldFolder, "region");
+        File[] regionFiles = regionFolder.listFiles();
 
-                                CompoundMap cm = new CompoundMap();
-                                cm.put(new IntTag("SpawnX", 0));
-                                cm.put(new IntTag("SpawnY", 255));
-                                cm.put(new IntTag("SpawnZ", 0));
-                                if (dataVersion != -1) {
-                                    cm.put(new IntTag("DataVersion", dataVersion));
-                                }
-                                CompoundTag root = new CompoundTag("Data", cm);
-                                outputStream.writeTag(root);
-                                outputStream.flush();
-                                outputStream.close();
-                            }
-                        }
+        if (!regionFolder.exists() || null == regionFiles || !regionFolder.isDirectory()) {
+            getOwner().getLogger().severe("Tried detecting world version, but it has no regions! (" + world + ")");
+            return;
+        }
+
+        Optional<File> firstRegion = Arrays.stream(regionFiles).filter(
+                regionFile -> regionFile.isFile() && regionFile.getName().endsWith(".mca")
+        ).findFirst();
+
+        Optional<Integer> dataVersion = Optional.empty();
+
+        // try getting world version from NBT TAG
+        if (firstRegion.isPresent()) {
+            try {
+                NBTInputStream inputStream = new NBTInputStream(new FileInputStream(firstRegion.get()));
+                Optional<CompoundTag> tag = inputStream.readTag().getAsCompoundTag();
+                inputStream.close();
+
+                if (tag.isPresent()) {
+                    Optional<CompoundTag> dataTag = tag.get().getAsCompoundTag("Chunk");
+                    Optional<Integer> version = dataTag.flatMap(tagMap -> tagMap.getIntValue("DataVersion"));
+                    if (version.isPresent()) {
+                        dataVersion = version;
+                        Bukkit.getLogger().info(
+                                "Detected world version from region file for level.dat creation: v" +
+                                        version.get() + " (" + world + ")"
+                        );
                     }
                 }
+            } catch (Exception ignored) {
             }
+        }
+
+        String errorMessage = "Cannot create level.dat in " + worldFolder;
+
+        // if world version was not detected we assume it is 1.8.8 and move on :)
+        // create new level.dat file and write TAG
+        if (!levelFile.createNewFile()) {
+            getOwner().getLogger().severe(errorMessage);
+            return;
+        }
+
+        try (NBTOutputStream outputStream = new NBTOutputStream(new FileOutputStream(levelFile))) {
+            CompoundMap cm = new CompoundMap();
+            cm.put(new IntTag("SpawnX", 0));
+            cm.put(new IntTag("SpawnY", 255));
+            cm.put(new IntTag("SpawnZ", 0));
+            dataVersion.ifPresent(integer -> cm.put(new IntTag("DataVersion", integer)));
+
+            CompoundTag dataTag = new CompoundTag("Data", cm);
+            CompoundMap rootTag = new CompoundMap();
+            rootTag.put(dataTag);
+
+            outputStream.writeTag(new CompoundTag("", rootTag));
+            outputStream.flush();
+        } catch (Exception ignored) {
+            try {
+                // clean up empty file
+                // noinspection ResultOfMethodCallIgnored
+                levelFile.delete();
+            } catch (Exception ignored2) {
+            }
+            getOwner().getLogger().severe(errorMessage);
         }
     }
 
