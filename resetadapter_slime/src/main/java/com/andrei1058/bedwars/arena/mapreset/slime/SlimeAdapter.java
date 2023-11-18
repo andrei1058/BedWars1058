@@ -42,9 +42,10 @@ import com.grinderwolf.swm.api.world.properties.SlimeProperties;
 import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,6 +54,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 
+@SuppressWarnings({"CallToPrintStackTrace", "unused"})
 public class SlimeAdapter extends RestoreAdapter {
 
     private final SlimePlugin slime;
@@ -61,11 +63,11 @@ public class SlimeAdapter extends RestoreAdapter {
     public SlimeAdapter(Plugin plugin) {
         super(plugin);
         slime = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
-        api = Bukkit.getServer().getServicesManager().getRegistration(BedWars.class).getProvider();
+        api = Objects.requireNonNull(Bukkit.getServer().getServicesManager().getRegistration(BedWars.class)).getProvider();
     }
 
     @Override
-    public void onEnable(IArena a) {
+    public void onEnable(@NotNull IArena a) {
         if (api.getVersionSupport().getMainLevel().equalsIgnoreCase(a.getWorldName())) {
             if (!(api.getServerType() == ServerType.BUNGEE && api.getArenaUtil().getGamesBeforeRestart() == 1)) {
                 FileUtil.setMainLevel("ignore_main_level", api.getVersionSupport());
@@ -87,19 +89,9 @@ public class SlimeAdapter extends RestoreAdapter {
             SlimeLoader flat = slime.getLoader("file");
             String[] spawn = a.getConfig().getString("waiting.Loc").split(",");
 
-            SlimePropertyMap spm = new SlimePropertyMap();
-            spm.setString(SlimeProperties.WORLD_TYPE, "flat");
-            spm.setInt(SlimeProperties.SPAWN_X, (int) Double.parseDouble(spawn[0]));
-            spm.setInt(SlimeProperties.SPAWN_Y, (int) Double.parseDouble(spawn[1]));
-            spm.setInt(SlimeProperties.SPAWN_Z, (int) Double.parseDouble(spawn[2]));
-            spm.setBoolean(SlimeProperties.ALLOW_ANIMALS, false);
-            spm.setBoolean(SlimeProperties.ALLOW_MONSTERS, false);
-            spm.setString(SlimeProperties.DIFFICULTY, "easy");
-            spm.setBoolean(SlimeProperties.PVP, true);
-
             try {
                 // Note that this method should be called asynchronously
-                SlimeWorld world = slime.loadWorld(flat, a.getArenaName(), true, spm);
+                SlimeWorld world = slime.loadWorld(flat, a.getArenaName(), true, this.buildPropertyMap(spawn));
                 if (api.getServerType() == ServerType.BUNGEE && api.isAutoScale()) {
                     world = world.clone(a.getWorldName());
                 }
@@ -107,10 +99,11 @@ public class SlimeAdapter extends RestoreAdapter {
                 // This method must be called synchronously
                 SlimeWorld finalWorld = world;
                 Bukkit.getScheduler().runTask(getOwner(), () -> slime.generateWorld(finalWorld));
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException ex) {
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
+                     WorldInUseException ex) {
                 api.getArenaUtil().removeFromEnableQueue(a);
                 ex.printStackTrace();
-            } catch (ConcurrentModificationException thisShouldNotHappenSWM){
+            } catch (ConcurrentModificationException thisShouldNotHappenSWM) {
                 // this should not happen since they say to use #load async
                 // https://github.com/Grinderwolf/Slime-World-Manager/blob/develop/.docs/api/load-world.md
                 thisShouldNotHappenSWM.printStackTrace();
@@ -123,6 +116,20 @@ public class SlimeAdapter extends RestoreAdapter {
                 onEnable(a);
             }
         });
+    }
+
+    private @NotNull SlimePropertyMap buildPropertyMap(String @NotNull [] spawn) {
+        SlimePropertyMap spm = new SlimePropertyMap();
+        spm.setString(SlimeProperties.WORLD_TYPE, "flat");
+        spm.setInt(SlimeProperties.SPAWN_X, (int) Double.parseDouble(spawn[0]));
+        spm.setInt(SlimeProperties.SPAWN_Y, (int) Double.parseDouble(spawn[1]));
+        spm.setInt(SlimeProperties.SPAWN_Z, (int) Double.parseDouble(spawn[2]));
+        spm.setBoolean(SlimeProperties.ALLOW_ANIMALS, false);
+        spm.setBoolean(SlimeProperties.ALLOW_MONSTERS, false);
+        spm.setString(SlimeProperties.DIFFICULTY, "easy");
+        spm.setBoolean(SlimeProperties.PVP, true);
+
+        return spm;
     }
 
     @Override
@@ -154,7 +161,7 @@ public class SlimeAdapter extends RestoreAdapter {
 
     @Override
     public void onDisable(IArena a) {
-        if(api.isShuttingDown()) {
+        if (api.isShuttingDown()) {
             Bukkit.unloadWorld(a.getWorldName(), false);
             return;
         }
@@ -169,15 +176,7 @@ public class SlimeAdapter extends RestoreAdapter {
             if (s.getConfig().getYml().getString("waiting.Loc") != null) {
                 spawn = s.getConfig().getString("waiting.Loc").split(",");
             }
-            SlimePropertyMap spm = new SlimePropertyMap();
-            spm.setString(SlimeProperties.WORLD_TYPE, "flat");
-            spm.setInt(SlimeProperties.SPAWN_X, (int) Double.parseDouble(spawn[0]));
-            spm.setInt(SlimeProperties.SPAWN_Y, (int) Double.parseDouble(spawn[1]));
-            spm.setInt(SlimeProperties.SPAWN_Z, (int) Double.parseDouble(spawn[2]));
-            spm.setBoolean(SlimeProperties.ALLOW_ANIMALS, false);
-            spm.setBoolean(SlimeProperties.ALLOW_MONSTERS, false);
-            spm.setString(SlimeProperties.DIFFICULTY, "easy");
-            spm.setBoolean(SlimeProperties.PVP, true);
+            SlimePropertyMap spm = this.buildPropertyMap(spawn);
 
             try {
 
@@ -206,7 +205,9 @@ public class SlimeAdapter extends RestoreAdapter {
                     slime.generateWorld(sw);
                     s.teleportPlayer();
                 });
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | WorldAlreadyExistsException | InvalidWorldException | WorldTooBigException | WorldLoadedException ex) {
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
+                     WorldInUseException | WorldAlreadyExistsException | InvalidWorldException | WorldTooBigException |
+                     WorldLoadedException ex) {
                 s.getPlayer().sendMessage(ChatColor.RED + "An error occurred! Please check console.");
                 ex.printStackTrace();
                 s.close();
@@ -215,39 +216,13 @@ public class SlimeAdapter extends RestoreAdapter {
     }
 
     @Override
-    public void onSetupSessionClose(ISetupSession s) {
-        Bukkit.getWorld(s.getWorldName()).save();
-        Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(s.getWorldName(), true));
-    }
-
-    @Override
-    public void onLobbyRemoval(IArena a) {
-        Location loc1 = a.getConfig().getArenaLoc(ConfigPath.ARENA_WAITING_POS1),
-                loc2 = a.getConfig().getArenaLoc(ConfigPath.ARENA_WAITING_POS2);
-        if (loc1 == null || loc2 == null) return;
-        Bukkit.getScheduler().runTask(getOwner(), () -> {
-            int minX, minY, minZ;
-            int maxX, maxY, maxZ;
-            minX = Math.min(loc1.getBlockX(), loc2.getBlockX());
-            maxX = Math.max(loc1.getBlockX(), loc2.getBlockX());
-            minY = Math.min(loc1.getBlockY(), loc2.getBlockY());
-            maxY = Math.max(loc1.getBlockY(), loc2.getBlockY());
-            minZ = Math.min(loc1.getBlockZ(), loc2.getBlockZ());
-            maxZ = Math.max(loc1.getBlockZ(), loc2.getBlockZ());
-
-            for (int x = minX; x < maxX; x++) {
-                for (int y = minY; y < maxY; y++) {
-                    for (int z = minZ; z < maxZ; z++) {
-                        loc1.getWorld().getBlockAt(x, y, z).setType(Material.AIR);
-                    }
-                }
-            }
-
-            Bukkit.getScheduler().runTaskLater(getOwner(), () ->
-                    loc1.getWorld().getEntities().forEach(e -> {
-                        if (e instanceof Item) e.remove();
-                    }), 15L);
-        });
+    public void onSetupSessionClose(@NotNull ISetupSession session) {
+        World world = Bukkit.getWorld(session.getWorldName());
+        if (null == world) {
+            return;
+        }
+        world.save();
+        Bukkit.getScheduler().runTask(getOwner(), () -> Bukkit.unloadWorld(session.getWorldName(), true));
     }
 
     @Override
@@ -274,21 +249,14 @@ public class SlimeAdapter extends RestoreAdapter {
     @Override
     public void cloneArena(String name1, String name2) {
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
-            SlimePropertyMap spm = new SlimePropertyMap();
-            spm.setString(SlimeProperties.WORLD_TYPE, "flat");
-            spm.setInt(SlimeProperties.SPAWN_X, 0);
-            spm.setInt(SlimeProperties.SPAWN_Y, 118);
-            spm.setInt(SlimeProperties.SPAWN_Z, 0);
-            spm.setBoolean(SlimeProperties.ALLOW_ANIMALS, false);
-            spm.setBoolean(SlimeProperties.ALLOW_MONSTERS, false);
-            spm.setString(SlimeProperties.DIFFICULTY, "easy");
-            spm.setBoolean(SlimeProperties.PVP, true);
+            SlimePropertyMap spm = this.buildPropertyMap(new String[]{"0", "118", "0"});
 
             try {
                 // Note that this method should be called asynchronously
                 SlimeWorld world = slime.loadWorld(slime.getLoader("file"), name1, true, spm);
                 world.clone(name2, slime.getLoader("file"));
-            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException | WorldInUseException | WorldAlreadyExistsException ex) {
+            } catch (UnknownWorldException | IOException | CorruptedWorldException | NewerFormatException |
+                     WorldInUseException | WorldAlreadyExistsException ex) {
                 ex.printStackTrace();
             }
         });
@@ -299,6 +267,7 @@ public class SlimeAdapter extends RestoreAdapter {
         try {
             return slime.getLoader("file").listWorlds();
         } catch (IOException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
         return new ArrayList<>();
@@ -331,9 +300,11 @@ public class SlimeAdapter extends RestoreAdapter {
                                         FileUtil.delete(ff);
                                         ZipFileUtil.unzipFileIntoDirectory(bc, new File(Bukkit.getWorldContainer(), name));
                                     }
+                                    // clean up world folder
                                     deleteWorldTrash(name);
+                                    // check if level.dat is missing in world folder
                                     handleLevelDat(name);
-
+                                    // start Slime conversion
                                     convertWorld(name, null);
                                 }
                             } catch (IOException e) {
@@ -367,12 +338,20 @@ public class SlimeAdapter extends RestoreAdapter {
         return "Slime World Manager by Grinderwolf";
     }
 
-    private void convertWorld(String name, Player player) {
+    private void convertWorld(String name, @SuppressWarnings("SameParameterValue") @Nullable Player player) {
+        File worldFolder = new File(Bukkit.getWorldContainer(), name);
+        if (!worldFolder.exists() || !worldFolder.isDirectory()) {
+            getOwner().getLogger().severe("Tried converting arena " + name + " to Slime format, but couldn't find any bukkit world folder.");
+            return;
+        }
+
+        // todo allow data loaders
         SlimeLoader sl = slime.getLoader("file");
         try {
             getOwner().getLogger().log(Level.INFO, "Converting " + name + " to the Slime format.");
             slime.importWorld(new File(Bukkit.getWorldContainer(), name), name, sl);
-        } catch (WorldAlreadyExistsException | InvalidWorldException | WorldLoadedException | WorldTooBigException | IOException e) {
+        } catch (WorldAlreadyExistsException | InvalidWorldException | WorldLoadedException | WorldTooBigException |
+                 IOException e) {
             if (player != null) {
                 player.sendMessage(ChatColor.RED + "Could not convert " + name + " to the Slime format.");
                 player.sendMessage(ChatColor.RED + "Check the console for details.");
@@ -401,42 +380,93 @@ public class SlimeAdapter extends RestoreAdapter {
         }
     }
 
+    /**
+     * Create level.dat in world folder before converting to Slime format.
+     * References:
+     * <a href="https://github.com/cijaaimee/Slime-World-Manager/blob/develop/slimeworldmanager-importer/src/main/java/com/grinderwolf/swm/importer/SWMImporter.java">Slime importer requirements</a>
+     * <a href="https://wiki.vg/Map_Format#level.dat">level.dat NBT TAG</a>
+     *
+     * @param world folder name.
+     */
     private void handleLevelDat(String world) throws IOException {
+        File worldFolder = new File(Bukkit.getWorldContainer(), world);
 
-        File level = new File(Bukkit.getWorldContainer(), world + "/level.dat");
+        if (!worldFolder.exists() || !worldFolder.isDirectory()) {
+            return;
+        }
 
-        if (!level.exists()) {
-            if (level.createNewFile()) {
-                File regions = new File(Bukkit.getWorldContainer(), "world/region");
-                if (regions.exists() && Objects.requireNonNull(regions.list()).length > 0) {
-                    if (Arrays.stream(Objects.requireNonNull(regions.list())).filter(p -> p.endsWith(".mca")).toArray().length > 0) {
-                        File region = new File(Bukkit.getWorldContainer(), world + "/" + Arrays.stream(Objects.requireNonNull(regions.list())).filter(p -> p.endsWith(".mca")).toArray()[0]);
-                        NBTInputStream inputStream = new NBTInputStream(new FileInputStream(region));
-                        Optional<CompoundTag> tag = inputStream.readTag().getAsCompoundTag();
-                        inputStream.close();
-                        if (tag.isPresent()) {
-                            Optional<CompoundTag> dataTag = tag.get().getAsCompoundTag("Chunk");
-                            if (dataTag.isPresent()) {
-                                int dataVersion = dataTag.get().getIntValue("DataVersion").orElse(-1);
+        File levelFile = new File(worldFolder, "level.dat");
+        if (levelFile.exists()) {
+            return;
+        }
 
-                                NBTOutputStream outputStream = new NBTOutputStream(new FileOutputStream(level));
+        // try detecting world version from region files
+        File regionFolder = new File(worldFolder, "region");
+        File[] regionFiles = regionFolder.listFiles();
 
-                                CompoundMap cm = new CompoundMap();
-                                cm.put(new IntTag("SpawnX", 0));
-                                cm.put(new IntTag("SpawnY", 255));
-                                cm.put(new IntTag("SpawnZ", 0));
-                                if (dataVersion != -1) {
-                                    cm.put(new IntTag("DataVersion", dataVersion));
-                                }
-                                CompoundTag root = new CompoundTag("Data", cm);
-                                outputStream.writeTag(root);
-                                outputStream.flush();
-                                outputStream.close();
-                            }
-                        }
+        if (!regionFolder.exists() || null == regionFiles || !regionFolder.isDirectory()) {
+            getOwner().getLogger().severe("Tried detecting world version, but it has no regions! (" + world + ")");
+            return;
+        }
+
+        Optional<File> firstRegion = Arrays.stream(regionFiles).filter(
+                regionFile -> regionFile.isFile() && regionFile.getName().endsWith(".mca")
+        ).findFirst();
+
+        Optional<Integer> dataVersion = Optional.empty();
+
+        // try getting world version from NBT TAG
+        if (firstRegion.isPresent()) {
+            try {
+                NBTInputStream inputStream = new NBTInputStream(new FileInputStream(firstRegion.get()));
+                Optional<CompoundTag> tag = inputStream.readTag().getAsCompoundTag();
+                inputStream.close();
+
+                if (tag.isPresent()) {
+                    Optional<CompoundTag> dataTag = tag.get().getAsCompoundTag("Chunk");
+                    Optional<Integer> version = dataTag.flatMap(tagMap -> tagMap.getIntValue("DataVersion"));
+                    if (version.isPresent()) {
+                        dataVersion = version;
+                        Bukkit.getLogger().info(
+                                "Detected world version from region file for level.dat creation: v" +
+                                        version.get() + " (" + world + ")"
+                        );
                     }
                 }
+            } catch (Exception ignored) {
             }
+        }
+
+        String errorMessage = "Cannot create level.dat in " + worldFolder;
+
+        // if world version was not detected we assume it is 1.8.8 and move on :)
+        // create new level.dat file and write TAG
+        if (!levelFile.createNewFile()) {
+            getOwner().getLogger().severe(errorMessage);
+            return;
+        }
+
+        try (NBTOutputStream outputStream = new NBTOutputStream(new FileOutputStream(levelFile))) {
+            CompoundMap cm = new CompoundMap();
+            cm.put(new IntTag("SpawnX", 0));
+            cm.put(new IntTag("SpawnY", 255));
+            cm.put(new IntTag("SpawnZ", 0));
+            dataVersion.ifPresent(integer -> cm.put(new IntTag("DataVersion", integer)));
+
+            CompoundTag dataTag = new CompoundTag("Data", cm);
+            CompoundMap rootTag = new CompoundMap();
+            rootTag.put(dataTag);
+
+            outputStream.writeTag(new CompoundTag("", rootTag));
+            outputStream.flush();
+        } catch (Exception ignored) {
+            try {
+                // clean up empty file
+                // noinspection ResultOfMethodCallIgnored
+                levelFile.delete();
+            } catch (Exception ignored2) {
+            }
+            getOwner().getLogger().severe(errorMessage);
         }
     }
 }
