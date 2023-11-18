@@ -12,8 +12,8 @@
     <artifactId>versionsupport_v1_19_R2</artifactId>
 
     <properties>
-        <maven.compiler.source>1.19</maven.compiler.source>
-        <maven.compiler.target>1.19</maven.compiler.target>
+        <maven.compiler.source>1.17</maven.compiler.source>
+        <maven.compiler.target>1.17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
