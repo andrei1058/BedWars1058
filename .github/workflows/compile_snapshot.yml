@@ -3,8 +3,8 @@ name: Compile snapshot with Maven
 on:
   push:
     branches-ignore:
+      - develop
       - master
-      - development
   pull_request:
 
 jobs:

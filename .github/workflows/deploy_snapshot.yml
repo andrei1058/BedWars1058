@@ -3,8 +3,7 @@ name: Deploy snapshot with Maven
 on:
   push:
     branches:
-      - master
-      - development
+      - develop
 
 jobs:
   build:
