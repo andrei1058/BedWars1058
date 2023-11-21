@@ -62,10 +62,10 @@ import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.lobbysocket.LoadedUsersCleaner;
 import com.andrei1058.bedwars.lobbysocket.SendTask;
 import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
+import com.andrei1058.bedwars.metrics.MetricsManager;
 import com.andrei1058.bedwars.money.internal.MoneyListeners;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.sidebar.*;
-import com.andrei1058.bedwars.sidebar.thread.*;
 import com.andrei1058.bedwars.stats.StatsManager;
 import com.andrei1058.bedwars.support.citizens.CitizensListener;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
@@ -81,8 +81,6 @@ import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
 import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -105,7 +103,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "CallToPrintStackTrace"})
 public class BedWars extends JavaPlugin {
 
     private static ServerType serverType = ServerType.MULTIARENA;
@@ -238,9 +236,12 @@ public class BedWars extends JavaPlugin {
         /* Setup plugin messaging channel */
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
+        // define logger
+        var out = plugin.getLogger();
+
         /* Check if lobby location is set. Required for non Bungee servers */
         if (config.getLobbyWorldName().isEmpty() && serverType != ServerType.BUNGEE) {
-            plugin.getLogger().log(java.util.logging.Level.WARNING, "Lobby location is not set!");
+            out.log(java.util.logging.Level.WARNING, "Lobby location is not set!");
         }
 
         /* Load lobby world if not main level
@@ -323,19 +324,19 @@ public class BedWars extends JavaPlugin {
             if (config.getYml().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_PARTIES)) {
 
                 if (getServer().getPluginManager().isPluginEnabled("Parties")) {
-                    getLogger().info("Hook into Parties (by AlessioDP) support!");
+                    out.info("Hook into Parties (by AlessioDP) support!");
                     party = new PartiesAdapter();
                 } else if (Bukkit.getServer().getPluginManager().isPluginEnabled("PartyAndFriends")) {
-                    getLogger().info("Hook into Party and Friends for Spigot (by Simonsator) support!");
+                    out.info("Hook into Party and Friends for Spigot (by Simonsator) support!");
                     party = new PAF();
                 } else if (Bukkit.getServer().getPluginManager().isPluginEnabled("Spigot-Party-API-PAF")) {
-                    getLogger().info("Hook into Spigot Party API for Party and Friends Extended (by Simonsator) support!");
+                    out.info("Hook into Spigot Party API for Party and Friends Extended (by Simonsator) support!");
                     party = new PAFBungeecordRedisApi();
                 }
 
                 if (party instanceof NoParty) {
                     party = new com.andrei1058.bedwars.support.party.Internal();
-                    getLogger().info("Loading internal Party system. /party");
+                    out.info("Loading internal Party system. /party");
                 }
             } else {
                 party = new NoParty();
@@ -381,7 +382,7 @@ public class BedWars extends JavaPlugin {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (this.getServer().getPluginManager().getPlugin("Citizens") != null) {
                 JoinNPC.setCitizensSupport(true);
-                getLogger().info("Hook into Citizens support. /bw npc");
+                out.info("Hook into Citizens support. /bw npc");
                 registerEvents(new CitizensListener());
             }
 
@@ -392,20 +393,14 @@ public class BedWars extends JavaPlugin {
                 this.getLogger().severe("Could not spawn CmdJoin NPCs. Make sure you have right version of Citizens for your server!");
                 JoinNPC.setCitizensSupport(false);
             }
-            /*if (getServerType() == ServerType.BUNGEE) {
-                if (Arena.getArenas().size() > 0) {
-                    ArenaSocket.sendMessage(Arena.getArenas().get(0));
-                }
-            }*/
         }, 5L);
 
         /* Save messages for stats gui items if custom items added, for each language */
         Language.setupCustomStatsMessages();
 
-
         /* PlaceholderAPI Support */
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            getLogger().info("Hooked into PlaceholderAPI support!");
+            out.info("Hooked into PlaceholderAPI support!");
             new PAPISupport().register();
             SupportPAPI.setSupportPAPI(new SupportPAPI.withPAPI());
         }
@@ -484,120 +479,54 @@ public class BedWars extends JavaPlugin {
         MoneyConfig.init();
 
         // bStats metrics
-        Metrics metrics = new Metrics(this, 1885);
-        metrics.addCustomChart(new SimplePie("server_type", () -> getServerType().toString()));
-        metrics.addCustomChart(new SimplePie("default_language", () -> Language.getDefaultLanguage().getIso()));
-        metrics.addCustomChart(new SimplePie("auto_scale", () -> String.valueOf(autoscale)));
-        metrics.addCustomChart(new SimplePie("party_adapter", () -> party.getClass().getName()));
-        metrics.addCustomChart(new SimplePie("chat_adapter", () -> chat.getClass().getName()));
-        metrics.addCustomChart(new SimplePie("level_adapter", () -> getLevelSupport().getClass().getName()));
-        metrics.addCustomChart(new SimplePie("db_adapter", () -> getRemoteDatabase().getClass().getName()));
-        metrics.addCustomChart(new SimplePie("map_adapter", () -> String.valueOf(getAPI().getRestoreAdapter().getOwner().getName())));
+        MetricsManager.initService(this);
 
         if (Bukkit.getPluginManager().getPlugin("VipFeatures") != null) {
             try {
                 IVipFeatures vf = Bukkit.getServicesManager().getRegistration(IVipFeatures.class).getProvider();
                 vf.registerMiniGame(new VipFeatures(this));
                 registerEvents(new VipListeners(vf));
-                getLogger().log(java.util.logging.Level.INFO, "Hook into VipFeatures support.");
+                out.log(java.util.logging.Level.INFO, "Hook into VipFeatures support.");
             } catch (Exception e) {
-                getLogger().warning("Could not load support for VipFeatures.");
+                out.warning("Could not load support for VipFeatures.");
             } catch (MiniGameAlreadyRegistered miniGameAlreadyRegistered) {
                 miniGameAlreadyRegistered.printStackTrace();
             }
         }
 
-        Bukkit.getScheduler().runTaskLater(this, () -> getLogger().info("This server is running in " + getServerType().toString() + " with auto-scale " + autoscale), 100L);
+        Bukkit.getScheduler().runTaskLater(this,
+                () -> out.info("This server is running in " + getServerType() + " with auto-scale " + autoscale),
+                100L
+        );
 
         // Initialize team upgrades
         com.andrei1058.bedwars.upgrades.UpgradesManager.init();
 
         // Initialize sidebar manager
-        if (SidebarService.init()) {
-            this.getLogger().info("Initializing SidebarLib by andrei1058");
+        if (SidebarService.init(this)) {
+            out.info("Initializing SidebarLib by andrei1058");
         } else {
             this.getLogger().severe("SidebarLib by andrei1058 does not support your server version");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
 
-        int playerListRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_LIST_REFRESH);
-        if (playerListRefreshInterval < 1) {
-            Bukkit.getLogger().info("Scoreboard names list refresh is disabled. (It is set to " + playerListRefreshInterval + ").");
-        } else {
-            if (playerListRefreshInterval < 20) {
-                Bukkit.getLogger().warning("Scoreboard names list refresh interval is set to: " + playerListRefreshInterval);
-                Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
-                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
-            }
-            Bukkit.getScheduler().runTaskTimer(this, new RefreshPlayerListTask(), 1L, playerListRefreshInterval);
-        }
+        // Halloween Special
+        HalloweenSpecial.init();
 
-        int placeholdersRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL);
-        if (placeholdersRefreshInterval < 1) {
-            Bukkit.getLogger().info("Scoreboard placeholders refresh is disabled. (It is set to " + placeholdersRefreshInterval + ").");
-        } else {
-            if (placeholdersRefreshInterval < 20) {
-                Bukkit.getLogger().warning("Scoreboard placeholders refresh interval is set to: " + placeholdersRefreshInterval);
-                Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
-                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
-            }
-            Bukkit.getScheduler().runTaskTimer(this, new RefreshPlaceholdersTask(), 1L, placeholdersRefreshInterval);
-        }
-
-        int titleRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL);
-        if (titleRefreshInterval < 1) {
-            Bukkit.getLogger().info("Scoreboard title refresh is disabled. (It is set to " + titleRefreshInterval + ").");
-        } else {
-            if (titleRefreshInterval < 4) {
-                Bukkit.getLogger().warning("Scoreboard title refresh interval is set to: " + titleRefreshInterval);
-                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
-            }
-            Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshTitleTask(), 1L, titleRefreshInterval);
-        }
-
-        int healthAnimationInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_REFRESH);
-        if (healthAnimationInterval < 1) {
-            Bukkit.getLogger().info("Scoreboard health animation refresh is disabled. (It is set to " + healthAnimationInterval + ").");
-        } else {
-            if (healthAnimationInterval < 20) {
-                Bukkit.getLogger().warning("Scoreboard health animation refresh interval is set to: " + healthAnimationInterval);
-                Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
-                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
-            }
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new RefreshLifeTask(), 1L, healthAnimationInterval);
-        }
-
-        int tabHeaderFooterRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_TAB_HEADER_FOOTER_REFRESH_INTERVAL);
-        if (tabHeaderFooterRefreshInterval < 1 || !config.getBoolean(ConfigPath.SB_CONFIG_TAB_HEADER_FOOTER_ENABLE)) {
-            Bukkit.getLogger().info("Scoreboard Tab header-footer refresh is disabled.");
-        } else {
-            if (tabHeaderFooterRefreshInterval < 20) {
-                Bukkit.getLogger().warning("Scoreboard tab header-footer refresh interval is set to: " + tabHeaderFooterRefreshInterval);
-                Bukkit.getLogger().warning("It is not recommended to use a value under 20 ticks.");
-                Bukkit.getLogger().warning("If you expect performance issues please increase its timer.");
-            }
-            Bukkit.getScheduler().runTaskTimer(this, new RefreshTabHeaderFooterTask(), 1L, tabHeaderFooterRefreshInterval);
-        }
-
-        registerEvents(new ScoreboardListener());
-
-        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_HALLOWEEN)) {
-            // Halloween Special
-            HalloweenSpecial.init();
-        }
-
+        // TNT Spoil Feature
         SpoilPlayerTNTFeature.init();
     }
 
     /**
      * Try loading custom adapter support.
+     *
      * @return true when custom adapter was registered.
      */
     private boolean handleWorldAdapter() {
         Plugin swmPlugin = Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
 
-        if (null == swmPlugin){
+        if (null == swmPlugin) {
             return false;
         }
         PluginDescriptionFile pluginDescription = swmPlugin.getDescription();
@@ -625,11 +554,11 @@ public class BedWars extends JavaPlugin {
             }
 
             Constructor<?> constructor = Class.forName(adapterPath).getConstructor(Plugin.class);
-            getLogger().info("Loading restore adapter: "+adapterPath+" ...");
+            getLogger().info("Loading restore adapter: " + adapterPath + " ...");
 
             RestoreAdapter candidate = (RestoreAdapter) constructor.newInstance(this);
             api.setRestoreAdapter(candidate);
-            getLogger().info("Hook into "+candidate.getDisplayName()+" as restore adapter.");
+            getLogger().info("Hook into " + candidate.getDisplayName() + " as restore adapter.");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
