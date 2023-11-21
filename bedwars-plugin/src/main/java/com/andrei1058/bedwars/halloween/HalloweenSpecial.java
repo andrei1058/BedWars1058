@@ -21,7 +21,9 @@
 package com.andrei1058.bedwars.halloween;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.halloween.shop.PumpkinContent;
+import com.andrei1058.bedwars.metrics.MetricsManager;
 import com.andrei1058.bedwars.shop.ShopManager;
 import com.andrei1058.bedwars.shop.main.ShopCategory;
 import org.bukkit.Bukkit;
@@ -54,10 +56,14 @@ public class HalloweenSpecial {
      * Initialize Halloween Special.
      */
     public static void init() {
-        if (INSTANCE == null) {
-            if (!checkAvailabilityDate()) return;
-            INSTANCE = new HalloweenSpecial();
+        var enable = BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_HALLOWEEN);
+        if (enable) {
+            if (INSTANCE == null && checkAvailabilityDate()) {
+                //noinspection InstantiationOfUtilityClass
+                INSTANCE = new HalloweenSpecial();
+            }
         }
+        MetricsManager.appendPie("halloween_special_enable", () -> String.valueOf(enable));
     }
 
     protected static boolean checkAvailabilityDate() {
