@@ -163,6 +163,14 @@ public class PAPISupport extends PlaceholderExpansion {
                     response = String.valueOf(a.getPlayers().size());
                 }
                 break;
+            case "player_team_letter":
+                if (a != null && a.isPlayer(player) && a.getStatus() == GameState.playing) {
+                    ITeam team = a.getTeam(player);
+                    if (team != null) {
+                        response = String.valueOf(team.getName().charAt(0));
+                    }
+                }
+                break;
             case "player_team_color":
                 if (a != null && a.isPlayer(player) && a.getStatus() == GameState.playing) {
                     ITeam team = a.getTeam(player);
