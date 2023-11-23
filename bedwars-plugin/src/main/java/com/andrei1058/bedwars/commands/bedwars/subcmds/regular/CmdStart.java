@@ -23,6 +23,7 @@ package com.andrei1058.bedwars.commands.bedwars.subcmds.regular;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.command.ParentCommand;
 import com.andrei1058.bedwars.api.command.SubCommand;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
@@ -34,9 +35,11 @@ import com.andrei1058.bedwars.configuration.Permissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+import static com.andrei1058.bedwars.BedWars.getChatSupport;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class CmdStart extends SubCommand {
@@ -76,9 +79,13 @@ public class CmdStart extends SubCommand {
                 return true;
             }
         }
-        if (a.getStartingTask().getCountdown() < 5) return true;
-        a.getStartingTask().setCountdown(5);
-        p.sendMessage(getMsg(p, Messages.COMMAND_FORCESTART_SUCCESS));
+        int startSeconds = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED);
+        if (a.getStartingTask().getCountdown() < startSeconds) return true;
+        a.getStartingTask().setCountdown(startSeconds);
+        p.sendMessage(getMsg(p, Messages.COMMAND_FORCESTART_SUCCESS)
+                .replace("{player}", p.getName())
+                .replace("{vPrefix}", getChatSupport().getPrefix(p))
+                .replace("{seconds}", Integer.toString(startSeconds)));
         return true;
     }
 
