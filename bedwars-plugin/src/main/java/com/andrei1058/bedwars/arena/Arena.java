@@ -1815,9 +1815,12 @@ public class Arena implements IArena {
      */
     @Override
     public ITeam getTeam(Player p) {
-        for (ITeam t : getTeams()) {
-            if (t.isMember(p)) {
-                return t;
+        List<ITeam> teams = getTeams();
+        if (teams != null) {
+            for (ITeam t : teams) {
+                if (t.isMember(p)) {
+                    return t;
+                }
             }
         }
         return null;
@@ -1829,9 +1832,12 @@ public class Arena implements IArena {
      */
     @Override
     public ITeam getExTeam(UUID p) {
-        for (ITeam t : getTeams()) {
-            if (t.wasMember(p)) {
-                return t;
+        List<ITeam> teams = getTeams();
+        if (teams != null) {
+            for (ITeam t : teams) {
+                if (t != null && t.wasMember(p)) {
+                    return t;
+                }
             }
         }
         return null;
