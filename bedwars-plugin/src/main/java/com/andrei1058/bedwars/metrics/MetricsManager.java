@@ -15,7 +15,7 @@ public class MetricsManager {
     private final Metrics metrics;
 
     private MetricsManager(BedWars plugin) {
-        metrics = new Metrics(plugin, 97320);
+        metrics = new Metrics(plugin, 1885);
 
         // base metrics
         metrics.addCustomChart(new SimplePie("server_type", () -> BedWars.getServerType().toString()));
