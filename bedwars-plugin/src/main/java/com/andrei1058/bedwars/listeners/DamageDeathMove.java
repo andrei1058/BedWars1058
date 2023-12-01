@@ -698,21 +698,35 @@ public class DamageDeathMove implements Listener {
         }
     }
 
-    @EventHandler
-    public void onProjectileHit(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Arrow && e.getEntity() instanceof Player) {
-            Arrow arrow = (Arrow) e.getDamager();
-            Player shooter = (Player) arrow.getShooter();
-            Player victim = (Player) e.getEntity();
-            IArena a = Arena.getArenaByPlayer(shooter);
-            if (a != null) {
-                if (a.isPlayer(shooter)) {
-                    if (shooter != null && victim != null && Objects.equals(shooter.getName(), victim.getName())) {
-                        e.setCancelled(true);
-                    }
-                }
-            }
+    @EventHandler(ignoreCancelled = true)
+    public void onProjectileHit(@NotNull EntityDamageByEntityEvent e) {
+        if (!(e.getEntity() instanceof Player)) {
+            return;
         }
+        if (!(e.getDamager() instanceof Arrow)) {
+            return;
+        }
+        if (!(((Arrow) e.getDamager()).getShooter() instanceof Player)) {
+            return;
+        }
+        if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_BOW_BOOST)) {
+            return;
+        }
+        if (!((Arrow) e.getDamager()).getShooter().equals(e.getEntity())) {
+            return;
+        }
+        IArena arena = Arena.getArenaByPlayer((Player) e.getEntity());
+        if (null == arena) {
+            return;
+        }
+        if (!arena.isPlayer((Player) e.getEntity())) {
+            return;
+        }
+
+        // todo: we still want to give the damage.. just do not apply the new velocity
+        e.setCancelled(true);
+        // todo test this
+        ((Player) e.getEntity()).damage(e.getDamage(), e.getDamager());
     }
 
     @EventHandler
