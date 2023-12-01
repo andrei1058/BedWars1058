@@ -60,6 +60,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -692,6 +693,23 @@ public class DamageDeathMove implements Listener {
             if (BedWars.getServerType() == ServerType.MULTIARENA) {
                 if (BedWars.getLobbyWorld().equals(e.getEntity().getWorld().getName())) {
                     e.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onProjectileHit(EntityDamageByEntityEvent e) {
+        if (e.getDamager() instanceof Arrow && e.getEntity() instanceof Player) {
+            Arrow arrow = (Arrow) e.getDamager();
+            Player shooter = (Player) arrow.getShooter();
+            Player victim = (Player) e.getEntity();
+            IArena a = Arena.getArenaByPlayer(shooter);
+            if (a != null) {
+                if (a.isPlayer(shooter)) {
+                    if (shooter != null && victim != null && Objects.equals(shooter.getName(), victim.getName())) {
+                        e.setCancelled(true);
+                    }
                 }
             }
         }
