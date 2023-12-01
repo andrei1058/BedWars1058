@@ -1,0 +1,7 @@
+name: BedWars1058-Connector
+api-version: '1.13'
+version: ${project.version}
+author: andrei1058
+description: Proxy connector for BedWars1058
+main: dev.andrei1058.bedwars.connector.BedWarsConnector
+softdepend: [Vault,PlaceholderAPI,Citizens,Parties,VipFeatures,PartyAndFriends,Spigot-Party-API-PAF]
