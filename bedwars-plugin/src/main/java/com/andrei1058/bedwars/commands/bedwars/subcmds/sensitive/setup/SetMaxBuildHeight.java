@@ -14,7 +14,7 @@ import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.mainCmd;
 
-public class SetBuildHeight extends SubCommand {
+public class SetMaxBuildHeight extends SubCommand {
     /**
      * Create a sub-command for a bedWars command
      * Make sure you return true or it will say command not found
@@ -22,7 +22,7 @@ public class SetBuildHeight extends SubCommand {
      * @param parent parent command
      * @param name   sub-command name
      */
-    public SetBuildHeight(ParentCommand parent, String name) {
+    public SetMaxBuildHeight(ParentCommand parent, String name) {
         super(parent, name);
         setArenaSetupCommand(true);
         setPermission(Permissions.PERMISSION_SETUP_ARENA);
