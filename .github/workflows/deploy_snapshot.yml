@@ -1,12 +1,9 @@
 name: Deploy snapshot with Maven
 
 on:
-  pull_request:
+  push:
     branches:
       - develop
-    types:
-      - closed
-
 jobs:
   build:
     if: github.event.pull_request.merged == true
