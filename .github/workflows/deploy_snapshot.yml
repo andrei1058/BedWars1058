@@ -1,9 +1,11 @@
 name: Deploy snapshot with Maven
 
 on:
-  push:
+  pull_request:
     branches:
       - develop
+    types:
+      - closed
 
 jobs:
   build:
