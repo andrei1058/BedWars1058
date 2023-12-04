@@ -516,6 +516,9 @@ public class BedWars extends JavaPlugin {
 
         // TNT Spoil Feature
         SpoilPlayerTNTFeature.init();
+
+        // Warn user if current server version support is deprecated
+        this.performDeprecationCheck();
     }
 
     /**
@@ -751,6 +754,15 @@ public class BedWars extends JavaPlugin {
 
     public static void setParty(Party party) {
         BedWars.party = party;
+    }
+
+    public void performDeprecationCheck() {
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            if (Arrays.stream(nms.getClass().getAnnotations()).anyMatch(annotation -> annotation instanceof Deprecated)) {
+                this.getLogger().warning("Support for "+getServerVersion()+" is scheduled for removal. " +
+                        "Please consider upgrading your server software to a newer Minecraft version.");
+            }
+        });
     }
 
     @Override
