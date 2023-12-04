@@ -43,6 +43,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 @SuppressWarnings("ALL")
+@Deprecated
 public class Silverfish extends EntitySilverfish {
 
     private ITeam team;

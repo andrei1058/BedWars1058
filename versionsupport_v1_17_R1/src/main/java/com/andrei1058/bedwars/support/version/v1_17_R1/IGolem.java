@@ -47,6 +47,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import java.util.Objects;
 
 @SuppressWarnings("unchecked")
+@Deprecated
 public class IGolem extends EntityIronGolem {
     private ITeam team;
 
