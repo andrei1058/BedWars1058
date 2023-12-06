@@ -330,6 +330,7 @@ public class BedWars extends JavaPlugin {
                     party = new PAFBungeecordRedisApi();
                 } else if (Bukkit.getServer().getPluginManager().isPluginEnabled("FriendSystem-Spigot-API")) {
                     party = new FAPAdapter();
+                    getLogger().info("Hook into FriendSystem (by sk8ingDuck)!");
                 }
 
                 if (party instanceof NoParty) {

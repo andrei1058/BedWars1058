@@ -31,7 +31,7 @@ public class FAPAdapter implements Party {
 	@Override
 	public boolean isOwner(Player p) {
 		me.sk8ingduck.friendsystem.util.Party party = getParty(p);
-		return party != null && party.getLeaderUUID().equals(p.getUniqueId());
+		return party == null || party.getLeaderUUID().equals(p.getUniqueId());
 	}
 
 	public List<Player> getMembers(Player owner) {
