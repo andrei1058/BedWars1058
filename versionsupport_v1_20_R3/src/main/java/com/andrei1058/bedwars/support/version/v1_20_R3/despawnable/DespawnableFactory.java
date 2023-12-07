@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.support.version.v1_19_R2.despawnable;
+package com.andrei1058.bedwars.support.version.v1_20_R3.despawnable;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.server.VersionSupport;
@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Deprecated
 public class DespawnableFactory {
 
     private final VersionSupport versionSupport;

@@ -1,4 +1,4 @@
-package com.andrei1058.bedwars.support.version.v1_20_R1.despawnable;
+package com.andrei1058.bedwars.support.version.v1_20_R3.despawnable;
 
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.language.Language;
@@ -12,14 +12,13 @@ import net.minecraft.world.entity.ai.goal.target.PathfinderGoalHurtByTarget;
 import net.minecraft.world.entity.animal.EntityIronGolem;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.IronGolem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-@Deprecated
 public class TeamIronGolem extends DespawnableProvider<IronGolem> {
 
     @Override

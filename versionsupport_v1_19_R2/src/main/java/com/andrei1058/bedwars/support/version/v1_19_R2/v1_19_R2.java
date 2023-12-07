@@ -65,6 +65,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
+@Deprecated
 public class v1_19_R2 extends VersionSupport {
 
     private final DespawnableFactory despawnableFactory;
