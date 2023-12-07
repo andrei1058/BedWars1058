@@ -5,7 +5,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>23.10.1-SNAPSHOT</version>
+        <version>23.12.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-plugin</artifactId>
@@ -252,7 +252,7 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-base</artifactId>
-            <version>23.12</version>
+            <version>23.12.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -312,7 +312,7 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_20_R3</artifactId>
-            <version>23.12</version>
+            <version>23.12.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <!--        End of Sidebar LIB-->

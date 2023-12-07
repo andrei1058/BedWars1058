@@ -332,7 +332,7 @@ public class v1_20_R3 extends VersionSupport {
     public void registerTntWhitelist(float endStoneBlast, float glassBlast) {
         try {
             // blast resistance
-            Field field = BlockBase.class.getDeclaredField("aF");
+            Field field = BlockBase.class.getDeclaredField("aH");
             field.setAccessible(true);
             // end stone
             field.set(Blocks.fz, endStoneBlast);
@@ -627,7 +627,9 @@ public class v1_20_R3 extends VersionSupport {
 
     @Override
     public int getVersion() {
-        return 9;
+        // impacts on sidebar
+        // experimental score placeholders
+        return 10;
     }
 
     @Override

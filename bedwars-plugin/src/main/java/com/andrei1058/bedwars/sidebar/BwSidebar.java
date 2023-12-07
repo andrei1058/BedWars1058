@@ -151,11 +151,12 @@ public class BwSidebar implements ISidebar {
                                 .replace("{TeamColor}", team.getColor().chat().toString())
                                 .replace("{TeamName}", teamName);
 
-                        if (line.contains("{TeamStatus}")) {
+                        if (line.contains("{TeamStatus}") && getAPI().getVersionSupport().getVersion() >= 10) {
                             line = line.replace("{TeamStatus}", "");
                             scoreLine = "{Team" + team.getName() + "Status}";
+                        } else {
+                            line = line.replace("{TeamStatus}", "{Team" + team.getName() + "Status}");
                         }
-
                     } else {
                         // skip line
                         continue;
