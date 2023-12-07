@@ -136,6 +136,7 @@ public class BwSidebar implements ISidebar {
         for (String line : lineArray) {
             // convert old placeholders
             line = line.replace("{server_ip}", "{serverIp}");
+            String scoreLine = null;
 
             // generic team placeholder {team}
             if (null != arena) {
@@ -148,8 +149,12 @@ public class BwSidebar implements ISidebar {
                         line = genericTeamFormat
                                 .replace("{TeamLetter}", teamLetter)
                                 .replace("{TeamColor}", team.getColor().chat().toString())
-                                .replace("{TeamName}", teamName)
-                                .replace("{TeamStatus}", "{Team" + team.getName() + "Status}");
+                                .replace("{TeamName}", teamName);
+
+                        if (line.contains("{TeamStatus}")) {
+                            line = line.replace("{TeamStatus}", "");
+                            scoreLine = "{Team" + team.getName() + "Status}";
+                        }
 
                     } else {
                         // skip line
@@ -223,12 +228,7 @@ public class BwSidebar implements ISidebar {
             if (divided.length > 1) {
                 sidebarLine = normalizeTitle(Arrays.asList(divided));
             } else {
-                sidebarLine = new SidebarLine() {
-                    @Override
-                    public @NotNull String getLine() {
-                        return finalTemp;
-                    }
-                };
+                sidebarLine = new BwSidebarLine(finalTemp, scoreLine);
             }
 
             lines.add(sidebarLine);

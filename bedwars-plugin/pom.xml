@@ -194,6 +194,11 @@
         </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
+            <artifactId>versionsupport_v1_20_R3</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>versionsupport-common</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -301,6 +306,12 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_20_R2</artifactId>
+            <version>23.12</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-v1_20_R3</artifactId>
             <version>23.12</version>
             <scope>compile</scope>
         </dependency>
