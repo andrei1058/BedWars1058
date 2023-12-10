@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+@Deprecated
 public abstract class DespawnableProvider<T> {
 
     abstract DespawnableType getType();

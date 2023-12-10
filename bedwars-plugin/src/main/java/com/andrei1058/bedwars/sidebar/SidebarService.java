@@ -62,7 +62,7 @@ public class SidebarService implements ISidebarService {
                 }
                 Bukkit.getScheduler().runTaskTimer(plugin, new RefreshPlaceholdersTask(), 1L, placeholdersRefreshInterval);
             }
-            MetricsManager.appendPie("sb_placeholder_refresh_interval", () -> String.valueOf(playerListRefreshInterval));
+            MetricsManager.appendPie("sb_placeholder_refresh_interval", () -> String.valueOf(placeholdersRefreshInterval));
 
             int titleRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL);
             if (titleRefreshInterval < 1) {

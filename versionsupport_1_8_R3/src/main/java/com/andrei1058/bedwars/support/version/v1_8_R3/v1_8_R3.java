@@ -60,6 +60,7 @@ import java.util.logging.Level;
 
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
+@Deprecated(forRemoval = true)
 @SuppressWarnings("unused")
 public class v1_8_R3 extends VersionSupport {
 
