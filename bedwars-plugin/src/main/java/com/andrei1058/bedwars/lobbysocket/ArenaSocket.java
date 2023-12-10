@@ -40,6 +40,7 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
+@Deprecated
 public class ArenaSocket {
 
     public static List<String> lobbies = new ArrayList<>();

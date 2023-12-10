@@ -30,6 +30,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+@Deprecated
 public class ArenaListeners implements Listener {
 
     @EventHandler

@@ -28,6 +28,7 @@ import org.bukkit.Bukkit;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Deprecated
 public class LoadedUser {
 
     private static final long waitSeconds = BedWars.config.getYml().getLong(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_BWP_TIME_OUT);

@@ -30,6 +30,9 @@ import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.api.tasks.RestartingTask;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
+import dev.andrei1058.bedwars.common.api.arena.DisplayableArena;
+import dev.andrei1058.bedwars.common.api.arena.GameStage;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -42,7 +45,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings("unused")
-public interface IArena {
+public interface IArena extends DisplayableArena {
+
+    UUID getGameId();
 
     /**
      * Check if a player is spectating on this arena.
@@ -104,6 +109,7 @@ public interface IArena {
      *
      * @return A string with - and _ replaced by a space.
      */
+    @Deprecated
     String getDisplayName();
 
     /**
@@ -116,7 +122,13 @@ public interface IArena {
     /**
      * Get arena status.
      */
+    @Deprecated
     GameState getStatus();
+
+    @Override
+    default GameStage getGameState() {
+        return getStatus().toStage(this);
+    }
 
     /**
      * Get players in arena.
@@ -168,13 +180,34 @@ public interface IArena {
      */
     boolean addPlayer(Player p, boolean skipOwnerCheck);
 
+    @Override
+    default boolean joinPlayer(Player player, boolean b) {
+        return addPlayer(player, b);
+    }
+
     /**
      * Add a player as Spectator
      *
      * @param p            Player to be added
      * @param playerBefore True if the player has played in this arena before and he died so now should be a spectator.
      */
-    boolean addSpectator(Player p, boolean playerBefore, Location staffTeleport);
+    boolean addSpectator(Player p, boolean playerBefore, @Nullable Location staffTeleport);
+
+    @Override
+    default boolean joinSpectator(Player player) {
+        return addSpectator(player, false, null);
+    }
+
+    @Override
+    default boolean joinSpectator(Player player, @Nullable String target) {
+        var targetPlayer = null == target ? null : Bukkit.getPlayerExact(target);
+        return addSpectator(player, false, null == targetPlayer ? null : targetPlayer.getLocation());
+    }
+
+    @Override
+    default boolean joinSpectator(Player player, @Nullable String target, boolean b) {
+        return joinSpectator(player, target);
+    }
 
     /**
      * Remove a player from the arena

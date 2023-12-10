@@ -20,6 +20,18 @@
 
 package com.andrei1058.bedwars.api.arena;
 
+import dev.andrei1058.bedwars.common.api.arena.GameStage;
+
 public enum GameState {
-    waiting, starting, playing, restarting
+    waiting, starting, playing, restarting;
+
+
+    public GameStage toStage(IArena arena) {
+        return switch (this) {
+            case playing -> GameStage.IN_GAME;
+            case waiting -> GameStage.WAITING;
+            case starting -> GameStage.STARTING;
+            case restarting -> arena.getRestartingTask().getRestarting() > 7 ? GameStage.CELEBRATING : GameStage.STOPPING;
+        };
+    }
 }

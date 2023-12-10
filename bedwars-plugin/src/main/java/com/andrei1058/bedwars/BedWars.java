@@ -62,6 +62,7 @@ import com.andrei1058.bedwars.lobbysocket.ArenaSocket;
 import com.andrei1058.bedwars.lobbysocket.LoadedUsersCleaner;
 import com.andrei1058.bedwars.lobbysocket.SendTask;
 import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
+import com.andrei1058.bedwars.messaging.SlaveMessagingService;
 import com.andrei1058.bedwars.metrics.MetricsManager;
 import com.andrei1058.bedwars.money.internal.MoneyListeners;
 import com.andrei1058.bedwars.shop.ShopManager;
@@ -81,6 +82,7 @@ import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
 import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
+import dev.andrei1058.bedwars.common.messaging.MessagingCommonManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -168,6 +170,9 @@ public class BedWars extends JavaPlugin {
             this.getLogger().severe("I can't run on your version: " + version);
             return;
         }
+
+        // Init messaging service (BedWarsProxy)
+        MessagingCommonManager.init(this);
 
         api = new API();
         Bukkit.getServicesManager().register(com.andrei1058.bedwars.api.BedWars.class, api, this, ServicePriority.Highest);
@@ -519,6 +524,9 @@ public class BedWars extends JavaPlugin {
 
         // Warn user if current server version support is deprecated
         this.performDeprecationCheck();
+
+        // When everything is ready, start heart beat (BedWarsProxy)
+        SlaveMessagingService.init();
     }
 
     /**

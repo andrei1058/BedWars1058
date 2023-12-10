@@ -29,6 +29,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class SendTask {
 
     /**

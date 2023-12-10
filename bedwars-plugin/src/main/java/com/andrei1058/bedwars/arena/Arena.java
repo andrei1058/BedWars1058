@@ -73,6 +73,7 @@ import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.paper.TeleportManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.support.vault.WithEconomy;
+import lombok.Getter;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -180,6 +181,9 @@ public class Arena implements IArena {
     private boolean allowMapBreak = false;
     private @Nullable ITeam winner;
 
+    @Getter
+    private UUID gameId;
+
     /**
      * Load an arena.
      * This will check if it was set up right.
@@ -277,6 +281,7 @@ public class Arena implements IArena {
             return;
         }
         if (error) return;
+        gameId = UUID.randomUUID();
         yKillHeight = yml.getInt(ConfigPath.ARENA_Y_LEVEL_KILL);
         addToEnableQueue(this);
         Language.saveIfNotExists(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase(), String.valueOf(getGroup().charAt(0)).toUpperCase() + group.substring(1).toLowerCase());
@@ -1337,6 +1342,12 @@ public class Arena implements IArena {
     }
 
     @Override
+    public String getDisplayName(org.intellij.lang.annotations.@Nullable Language language) {
+        // todo make me language supported
+        return getDisplayName();
+    }
+
+    @Override
     public void setWorldName(String name) {
         this.worldName = name;
     }
@@ -1344,6 +1355,18 @@ public class Arena implements IArena {
     @Override
     public String getGroup() {
         return group;
+    }
+
+    @Override
+    public void setGroup() {
+        // todo
+        throw new RuntimeException("NOT IMPLEMENTED YET");
+    }
+
+    @Override
+    public ItemStack getDisplayItem() {
+        // todo
+        throw new RuntimeException("NOT IMPLEMENTED YET");
     }
 
     @Override
@@ -2471,6 +2494,11 @@ public class Arena implements IArena {
     }
 
     @Override
+    public String getTemplate() {
+        return worldName;
+    }
+
+    @Override
     public int getRenderDistance() {
         return renderDistance;
     }
@@ -2703,4 +2731,69 @@ public class Arena implements IArena {
     public GameStatsHolder getStatsHolder() {
         return gameStats;
     }
+
+    @Override
+    public boolean isFull() {
+        return getPlayers().size() >= getMaxPlayers();
+    }
+
+    @Override
+    public String getSpectatePermission() {
+        // todo
+//        throw new RuntimeException("NOT IMPLEMENTED YET");
+        return null;
+    }
+
+    @Override
+    public boolean isPrivateGame() {
+        // todo
+//        throw new RuntimeException("NOT IMPLEMENTED YET!");
+        return false;
+    }
+
+    @Override
+    public void setPrivateGame() {
+        // todo
+        throw new RuntimeException("NOT IMPLEMENTED YET");
+    }
+
+    @Override
+    public void setPlayerHost(UUID uuid) {
+        // todo
+        throw new RuntimeException("NOT IMPLEMENTED YET");
+    }
+
+    @Override
+    public @Nullable UUID getPlayerHost() {
+        // todo
+//        throw new RuntimeException("NOT IMPLEMENTED YET");
+        return null;
+    }
+
+    @Override
+    public boolean isLocal() {
+        return true;
+    }
+
+    @Override
+    public int getCurrentVips() {
+        return (int) getPlayers().stream().filter(Arena::isVip).count();
+    }
+
+    @Override
+    public int getCurrentPlayers() {
+        return getPlayers().size();
+    }
+
+    @Override
+    public int getCurrentSpectators() {
+        return getSpectators().size();
+    }
+
+    @Override
+    public int getMinPlayers() {
+        return minPlayers;
+    }
+
+
 }

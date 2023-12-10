@@ -336,6 +336,32 @@
             <version>1.18-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>dev.andrei1058.bedwars.common</groupId>
+            <artifactId>common-api</artifactId>
+            <version>23.12-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.andrei1058.bedwars.common</groupId>
+            <artifactId>common-impl</artifactId>
+            <version>23.12-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.jalu</groupId>
+            <artifactId>configme</artifactId>
+            <version>1.4.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -374,6 +400,10 @@
                         <relocation>
                             <pattern>com.andrei1058.spigot.sidebarutils</pattern>
                             <shadedPattern>com.andrei1058.bedwars.libs.updater</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>ch.jalu.configme</pattern>
+                            <shadedPattern>com.andrei1058.bedwars.libs.configme</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

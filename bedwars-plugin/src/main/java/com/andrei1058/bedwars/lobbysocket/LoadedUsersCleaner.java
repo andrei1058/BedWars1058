@@ -27,6 +27,7 @@ import org.bukkit.OfflinePlayer;
 import java.util.LinkedList;
 import java.util.List;
 
+@Deprecated
 public class LoadedUsersCleaner implements Runnable {
 
     private final List<LoadedUser> toRemove = new LinkedList<>();

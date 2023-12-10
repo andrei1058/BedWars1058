@@ -50,7 +50,15 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-base</artifactId>
-            <version>23.2</version>
+            <version>23.12</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.andrei1058.bedwars.common</groupId>
+            <artifactId>common-api</artifactId>
+            <version>23.12-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <build>
@@ -71,8 +79,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>14</source>
+                    <target>14</target>
                 </configuration>
             </plugin>
         </plugins>
