@@ -635,6 +635,7 @@ public class Arena implements IArena {
             p.closeInventory();
             spectators.add(p);
             players.remove(p);
+            gameStats.init(p);
 
             updateSpectatorCollideRule(p, false);
 
