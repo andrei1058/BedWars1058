@@ -314,6 +314,8 @@ public class Messages {
     public static String SCOREBOARD_DEFAULT_STARTING_SPEC = "sidebar.Default.starting.spectator";
     public static String SCOREBOARD_DEFAULT_PLAYING = "sidebar.Default.playing.alive";
     public static String SCOREBOARD_DEFAULT_PLAYING_SPEC = "sidebar.Default.playing.spectator";
+    public static String SCOREBOARD_DEFAULT_PLAYING_SPEC_ELIMINATED = "sidebar.Default.playing.eliminated";
+
     public static String SCOREBOARD_DEFAULT_RESTARTING_SPEC = "sidebar.Default.restarting.spectator";
     public static String SCOREBOARD_DEFAULT_RESTARTING_WIN1 = "sidebar.Default.restarting.winner-alive";
     public static String SCOREBOARD_DEFAULT_RESTARTING_WIN2 = "sidebar.Default.restarting.winner-eliminated";

@@ -169,7 +169,12 @@ public class SidebarService implements ISidebarService {
                 }
             } else if (arena.getStatus() == GameState.playing) {
                 if (arena.isSpectator(player)) {
-                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".playing.spectator", Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC);
+                    ITeam holderExTeam = arena.getExTeam(player.getUniqueId());
+                    if (null == holderExTeam) {
+                        lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".playing.spectator", Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC);
+                    } else {
+                        lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".playing.eliminated", Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC_ELIMINATED);
+                    }
                 } else {
                     lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".playing.alive", Messages.SCOREBOARD_DEFAULT_PLAYING);
                 }
