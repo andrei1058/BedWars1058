@@ -301,4 +301,15 @@ public class Interact implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void onItemFrame(PlayerInteractEntityEvent e) {
+        IArena a = Arena.getArenaByPlayer(e.getPlayer());
+        if (a == null) return;
+        if (e.getRightClicked().getType().equals(EntityType.ITEM_FRAME)) {
+            if (a.isSpectator(e.getPlayer())) {
+                e.setCancelled(true);
+            }
+        }
+    }
 }
