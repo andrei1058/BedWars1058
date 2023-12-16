@@ -697,6 +697,37 @@ public class DamageDeathMove implements Listener {
         }
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onProjectileHit(@NotNull EntityDamageByEntityEvent e) {
+        if (!(e.getEntity() instanceof Player)) {
+            return;
+        }
+        if (!(e.getDamager() instanceof Arrow)) {
+            return;
+        }
+        if (!(((Arrow) e.getDamager()).getShooter() instanceof Player)) {
+            return;
+        }
+        if (!config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_DISABLE_BOW_BOOST)) {
+            return;
+        }
+        if (!((Arrow) e.getDamager()).getShooter().equals(e.getEntity())) {
+            return;
+        }
+        IArena arena = Arena.getArenaByPlayer((Player) e.getEntity());
+        if (null == arena) {
+            return;
+        }
+        if (!arena.isPlayer((Player) e.getEntity())) {
+            return;
+        }
+
+        // todo: we still want to give the damage.. just do not apply the new velocity
+        e.setCancelled(true);
+        // todo test this
+        ((Player) e.getEntity()).damage(e.getDamage(), e.getDamager());
+    }
+
     @EventHandler
     public void onEntityDeath(EntityDeathEvent e) {
         if (Arena.getArenaByIdentifier(e.getEntity().getLocation().getWorld().getName()) != null) {
