@@ -307,7 +307,7 @@ public class Interact implements Listener {
         IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
         if (e.getRightClicked().getType().equals(EntityType.ITEM_FRAME)) {
-            if (a.isSpectator(e.getPlayer())) {
+            if (a.isSpectator(e.getPlayer()) || a.getRespawnSessions().containsKey(e.getPlayer())) {
                 e.setCancelled(true);
             }
         }
