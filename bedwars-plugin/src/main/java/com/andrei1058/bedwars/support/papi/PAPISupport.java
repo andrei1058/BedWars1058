@@ -39,6 +39,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
+import static com.andrei1058.bedwars.api.language.Language.getPlayerLanguage;
 
 public class PAPISupport extends PlaceholderExpansion {
 
@@ -167,7 +168,7 @@ public class PAPISupport extends PlaceholderExpansion {
                 if (a != null && a.isPlayer(player) && a.getStatus() == GameState.playing) {
                     ITeam team = a.getTeam(player);
                     if (team != null) {
-                        response = String.valueOf(team.getDisplayName().charAt(0));
+                        response = String.valueOf(team.getDisplayName(getPlayerLanguage(player)).charAt(0));
                     }
                 }
                 break;
