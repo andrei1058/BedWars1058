@@ -93,6 +93,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
+@Deprecated
 public class v1_17_R1 extends VersionSupport {
 
     private static final UUID chatUUID = new UUID(0L, 0L);
