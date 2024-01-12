@@ -60,7 +60,7 @@ public class ChatFormatting implements Listener {
 
         // handle chat color. we would need to work on permission inheritance
         if (Permissions.hasPermission(p, Permissions.PERMISSION_CHAT_COLOR, Permissions.PERMISSION_VIP, Permissions.PERMISSION_ALL)) {
-            e.setMessage(ChatColor.translateAlternateColorCodes('&', e.getMessage()));
+            e.setMessage(ChatColor.translateAlternateColorCodes('&', e.getMessage().replace("%Y", "%tY")));
         }
 
         Language language = getPlayerLanguage(p);
@@ -77,14 +77,14 @@ public class ChatFormatting implements Listener {
             // spectator chat
             if (a.isSpectator(p)) {
                 setRecipients(e, a.getSpectators());
-                e.setFormat(parsePHolders(language.m(Messages.FORMATTING_CHAT_SPECTATOR), p, null));
+                e.setFormat(parsePHolders(language.m(Messages.FORMATTING_CHAT_SPECTATOR), p, null).replace("%Y", "%tY"));
                 return;
             }
 
             // arena lobby chat
             if (a.getStatus() == GameState.waiting || a.getStatus() == GameState.starting) {
                 setRecipients(e, a.getPlayers());
-                e.setFormat(parsePHolders(language.m(Messages.FORMATTING_CHAT_WAITING), p, null));
+                e.setFormat(parsePHolders(language.m(Messages.FORMATTING_CHAT_WAITING), p, null).replace("%Y", "%tY"));
                 return;
             }
 
@@ -113,7 +113,7 @@ public class ChatFormatting implements Listener {
                     return;
                 }
                 e.setMessage(msg);
-                e.setFormat(parsePHolders(language.m(Messages.FORMATTING_CHAT_SHOUT), p, team));
+                e.setFormat(parsePHolders(language.m(Messages.FORMATTING_CHAT_SHOUT), p, team).replace("%Y", "%tY"));
                 return;
             }
 
@@ -123,12 +123,12 @@ public class ChatFormatting implements Listener {
             } else {
                 setRecipients(e, team.getMembers());
             }
-            e.setFormat(parsePHolders(language.m(Messages.FORMATTING_CHAT_TEAM), p, team));
+            e.setFormat(parsePHolders(language.m(Messages.FORMATTING_CHAT_TEAM), p, team).replace("%Y", "%tY"));
             return;
         }
 
         // multi arena lobby chat
-        e.setFormat(parsePHolders(language.m(Messages.FORMATTING_CHAT_LOBBY), p, null));
+        e.setFormat(parsePHolders(language.m(Messages.FORMATTING_CHAT_LOBBY), p, null).replace("%Y", "%tY"));
     }
 
     private static String parsePHolders(String content, Player player, @Nullable ITeam team) {
