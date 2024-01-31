@@ -116,6 +116,9 @@ public class v1_17_R1 extends VersionSupport {
     @Override
     public String getTag(org.bukkit.inventory.ItemStack itemStack, String key) {
         ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        if (i == null) {
+            return null;
+        }
         NBTTagCompound tag = i.getTag();
         return tag == null ? null : tag.hasKey(key) ? tag.getString(key) : null;
     }
