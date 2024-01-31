@@ -391,10 +391,10 @@ public class v1_18_R2 extends VersionSupport {
         NBTTagCompound tag = itemStack.t();
         if (tag == null) {
             tag = new NBTTagCompound();
-            itemStack.c(tag);
         }
 
         tag.a("BedWars1058", data);
+        itemStack.c(tag);
         return CraftItemStack.asBukkitCopy(itemStack);
     }
 
@@ -404,10 +404,10 @@ public class v1_18_R2 extends VersionSupport {
         NBTTagCompound tag = is.t();
         if (tag == null) {
             tag = new NBTTagCompound();
-            is.c(tag);
         }
 
         tag.a(key, value);
+        is.c(tag);
         return CraftItemStack.asBukkitCopy(is);
     }
 
