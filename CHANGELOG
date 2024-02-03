@@ -1,3 +1,19 @@
+# xxxx
+Setup session changes:
+- add cuboid particles for waiting lobby selection
+
+API add:
+- BedWars#getGameManager
+- IGameService
+- ArenaConstraint
+- ConstraintProvider
+- ArenaTemplateLoadExceptionEvent
+
+API deprecations:
+- BedWars#getArenaUtil
+- BedWars#getScoreboardUtil
+
+
 # 19.11.1
 - fixed issue where you can't open the shop after rejoin
 - fixed issue where you are invisible after rejoin

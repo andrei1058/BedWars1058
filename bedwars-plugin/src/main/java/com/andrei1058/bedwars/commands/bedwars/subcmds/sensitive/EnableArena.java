@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.andrei1058.bedwars.BedWars.arenaManager;
 import static com.andrei1058.bedwars.BedWars.plugin;
 
 public class EnableArena extends SubCommand {
@@ -79,7 +80,7 @@ public class EnableArena extends SubCommand {
             return true;
         }
         p.sendMessage("§6 ▪ §7Enabling arena...");
-        new Arena(args[0], p);
+        arenaManager.loadGame(args[0], p);
         return true;
     }
 

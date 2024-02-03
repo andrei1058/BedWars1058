@@ -20,19 +20,21 @@
 
 package com.andrei1058.bedwars.listeners;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 public class AutoscaleListener implements Listener {
 
     @EventHandler
-    public void onPlaying(GameStateChangeEvent e) {
+    public void onPlaying(@NotNull GameStateChangeEvent e) {
         if (e.getNewState() == GameState.playing && Arena.canAutoScale(e.getArena().getArenaName())) {
             if (Arena.getGamesBeforeRestart() > 1){
-                new Arena(e.getArena().getArenaName(), null);
+                BedWars.arenaManager.loadGame(e.getArena().getArenaName(), null);
             }
         }
     }

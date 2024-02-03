@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.api;
 
+import com.andrei1058.bedwars.api.arena.IGameService;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -35,6 +36,7 @@ import com.andrei1058.bedwars.api.sidebar.ISidebarService;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.File;
 import java.sql.Timestamp;
@@ -144,6 +146,7 @@ public interface BedWars {
         int getPlayerTimeAFK(Player player);
     }
 
+    @Deprecated
     ArenaUtil getArenaUtil();
 
     interface ArenaUtil {
@@ -477,6 +480,7 @@ public interface BedWars {
     /**
      * Scoreboard options.
      */
+    @Deprecated(forRemoval = true)
     ScoreboardUtil getScoreboardUtil();
 
     boolean isShuttingDown();
@@ -496,4 +500,12 @@ public interface BedWars {
     }
 
     ISidebarService getScoreboardManager();
+
+    /**
+     * Arena logic is being moved under a manager.
+     *
+     * @return arena manager.
+     */
+    @ApiStatus.Experimental
+    IGameService getGameManager();
 }

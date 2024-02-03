@@ -59,8 +59,9 @@ public class WaitingPos extends SubCommand {
         } else {
             if (args[0].equalsIgnoreCase("1") || args[0].equalsIgnoreCase("2")) {
                 p.sendMessage("§6 ▪ §7Pos " + args[0] + " set!");
-                ss.getConfig().saveArenaLoc("waiting.Pos" + args[0], p.getLocation());
-                ss.getConfig().reload();
+
+                ss.setWaitingPos(p.getLocation(), args[0]);
+
                 if (ss.getConfig().getYml().get("waiting.Pos1") == null){
                     p.sendMessage("§c ▪ §7Set the remaining position:");
                     p.spigot().sendMessage(Misc.msgHoverClick("§c ▪ §7/"+ BedWars.mainCmd+" waitingPos 1", "§dSet pos 1", "/"+getParent().getName()+" waitingPos 1", ClickEvent.Action.RUN_COMMAND));
