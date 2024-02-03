@@ -624,10 +624,10 @@ public class BedWars extends JavaPlugin {
                 Random r = new Random();
                 int x = r.nextInt(files.size());
                 String name = files.get(x).getName().replace(".yml", "");
-                new Arena(name, null);
+                arenaManager.loadGame(name, null);
             } else {
                 for (File file : files) {
-                    new Arena(file.getName().replace(".yml", ""), null);
+                    arenaManager.loadGame(file.getName().replace(".yml", ""), null);
                 }
             }
         }

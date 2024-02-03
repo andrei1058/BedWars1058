@@ -25,6 +25,7 @@ import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.server.SetupSessionCloseEvent;
 import com.andrei1058.bedwars.api.events.server.SetupSessionStartEvent;
+import com.andrei1058.bedwars.api.region.Cuboid;
 import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.server.SetupType;
@@ -43,6 +44,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -62,6 +64,10 @@ public class SetupSession implements ISetupSession {
     private boolean autoCreatedEmerald = false;
     private boolean autoCreatedDiamond = false;
     private List<Location> skipAutoCreateGen = new ArrayList<>();
+
+    private int lobbyAreaParticleTask = -1;
+
+    private Cuboid waitingLobbyCuboid;
 
     public SetupSession(Player player, String worldName) {
         this.player = player;
@@ -126,10 +132,11 @@ public class SetupSession implements ISetupSession {
         getPlayer().sendMessage("§6 ▪ §7Loading " + getWorldName());
         cm = new ArenaConfig(BedWars.plugin, getWorldName(), plugin.getDataFolder().getPath() + "/Arenas");
         BedWars.getAPI().getRestoreAdapter().onSetupSessionStart(this);
+        startWaitingLobbyParticleTask();
         return true;
     }
 
-    private static void openGUI(Player player) {
+    private static void openGUI(@NotNull Player player) {
         Inventory inv = Bukkit.createInventory(null, 9, getInvName());
         ItemStack assisted = new ItemStack(Material.GLOWSTONE_DUST);
         ItemMeta am = assisted.getItemMeta();
@@ -152,6 +159,7 @@ public class SetupSession implements ISetupSession {
      * Cancel setup
      */
     public void cancel() {
+        clearTasks();
         getSetupSessions().remove(this);
         if (isStarted()) {
             player.sendMessage("§6 ▪ §7" + getWorldName() + " setup cancelled!");
@@ -163,6 +171,7 @@ public class SetupSession implements ISetupSession {
      * End setup session
      */
     public void done() {
+        clearTasks();
         BedWars.getAPI().getRestoreAdapter().onSetupSessionClose(this);
         getSetupSessions().remove(this);
         if (BedWars.getServerType() != ServerType.BUNGEE) {
@@ -213,7 +222,7 @@ public class SetupSession implements ISetupSession {
         player.getInventory().clear();
         TeleportManager.teleport(player, Bukkit.getWorld(getWorldName()).getSpawnLocation());
         player.setGameMode(GameMode.CREATIVE);
-        Bukkit.getScheduler().runTaskLater(plugin, ()->{
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
             player.setAllowFlight(true);
             player.setFlying(true);
         }, 5L);
@@ -365,5 +374,49 @@ public class SetupSession implements ISetupSession {
     public List<String> getTeams() {
         if (getConfig().getYml().get("Team") == null) return new ArrayList<>();
         return new ArrayList<>(getConfig().getYml().getConfigurationSection("Team").getKeys(false));
+    }
+
+    private void clearTasks() {
+        if (lobbyAreaParticleTask != -1) {
+            Bukkit.getScheduler().cancelTask(lobbyAreaParticleTask);
+        }
+    }
+
+    private void startWaitingLobbyParticleTask() {
+        loadWaitingPositions();
+        Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            if (null == waitingLobbyCuboid) {
+                return;
+            }
+            for (int x = waitingLobbyCuboid.getMinX(); x <= waitingLobbyCuboid.getMaxX(); x++) {
+                for (int y = waitingLobbyCuboid.getMinY(); y <= waitingLobbyCuboid.getMaxY(); y++) {
+                    for (int z = waitingLobbyCuboid.getMinZ(); z <= waitingLobbyCuboid.getMaxZ(); z++) {
+                        BedWars.nms.playVillagerEffect(getPlayer(), new Location(getPlayer().getWorld(), x, y, z));
+                    }
+                }
+            }
+        }, 20L, 40L);
+    }
+
+    public void setWaitingPos(@NotNull Location location, @NotNull String pos) {
+        if (!(pos.equalsIgnoreCase("1") || pos.equalsIgnoreCase("2"))) {
+            throw new IllegalArgumentException("Bad usage");
+        }
+        getConfig().saveArenaLoc("waiting.Pos" + pos, location);
+        getConfig().reload();
+        loadWaitingPositions();
+    }
+
+    private void loadWaitingPositions() {
+        Location pos1 = getConfig().getArenaLoc("waiting.Pos1");
+        Location pos2 = getConfig().getArenaLoc("waiting.Pos2");
+
+        if (null == pos1 || null == pos2) {
+            return;
+        }
+
+        if (pos1.distance(pos2) < 130) {
+            waitingLobbyCuboid = new Cuboid(pos1, pos2, true);
+        }
     }
 }

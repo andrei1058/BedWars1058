@@ -21,6 +21,7 @@
 package com.andrei1058.bedwars.api.region;
 
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 public class Cuboid implements Region {
 
@@ -30,7 +31,7 @@ public class Cuboid implements Region {
 
     private boolean protect;
 
-    public Cuboid(Location loc, int radius, boolean protect) {
+    public Cuboid(@NotNull Location loc, int radius, boolean protect) {
         Location l1 = loc.clone().subtract(radius, radius, radius);
         Location l2 = loc.clone().add(radius, radius, radius);
 
@@ -46,8 +47,24 @@ public class Cuboid implements Region {
         this.protect = protect;
     }
 
+    public Cuboid(@NotNull Location loc1, @NotNull Location loc2, boolean protect) {
+        Location l1 = loc1.clone();
+        Location l2 = loc2.clone();
+
+        minX = Math.min(l1.getBlockX(), l2.getBlockX());
+        maxX = Math.max(l1.getBlockX(), l2.getBlockX());
+
+        minY = Math.min(l1.getBlockY(), l2.getBlockY());
+        maxY = Math.max(l1.getBlockY(), l2.getBlockY());
+
+        minZ = Math.min(l1.getBlockZ(), l2.getBlockZ());
+        maxZ = Math.max(l1.getBlockZ(), l2.getBlockZ());
+
+        this.protect = protect;
+    }
+
     @Override
-    public boolean isInRegion(Location l) {
+    public boolean isInRegion(@NotNull Location l) {
         return (l.getBlockX() <= maxX && l.getBlockX() >= minX) && (l.getY() <= maxY && l.getY() >= minY) && (l.getBlockZ() <= maxZ && l.getBlockZ() >= minZ);
     }
 
@@ -74,5 +91,21 @@ public class Cuboid implements Region {
 
     public int getMinY() {
         return minY;
+    }
+
+    public int getMaxX() {
+        return maxX;
+    }
+
+    public int getMaxZ() {
+        return maxZ;
+    }
+
+    public int getMinX() {
+        return minX;
+    }
+
+    public int getMinZ() {
+        return minZ;
     }
 }

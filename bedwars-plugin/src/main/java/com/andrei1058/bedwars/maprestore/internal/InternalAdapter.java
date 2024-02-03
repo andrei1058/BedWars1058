@@ -110,12 +110,16 @@ public class InternalAdapter extends RestoreAdapter {
                     }
                     Bukkit.unloadWorld(a.getWorldName(), false);
                     if (Arena.canAutoScale(a.getArenaName())) {
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getArenaName(), null), 80L);
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                            BedWars.arenaManager.loadGame(a.getArenaName(), null);
+                        }, 80L);
                     }
                 }
             } else {
                 Bukkit.unloadWorld(a.getWorldName(), false);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> new Arena(a.getArenaName(), null), 80L);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    BedWars.arenaManager.loadGame(a.getArenaName(), null);
+                }, 80L);
             }
             if (!a.getWorldName().equals(a.getArenaName())) {
                 deleteWorld(a.getWorldName());

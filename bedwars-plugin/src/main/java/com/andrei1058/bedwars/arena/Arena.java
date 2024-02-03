@@ -105,9 +105,13 @@ import static com.andrei1058.bedwars.arena.upgrades.BaseListener.isOnABase;
 @SuppressWarnings("WeakerAccess")
 public class Arena implements IArena {
 
+    @Deprecated(forRemoval = true)
     private static final HashMap<String, IArena> arenaByName = new HashMap<>();
+    @Deprecated(forRemoval = true)
     private static final HashMap<Player, IArena> arenaByPlayer = new HashMap<>();
+    @Deprecated(forRemoval = true)
     private static final HashMap<String, IArena> arenaByIdentifier = new HashMap<>();
+    @Deprecated(forRemoval = true)
     private static final LinkedList<IArena> arenas = new LinkedList<>();
     private static int gamesBeforeRestart = config.getInt(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_MODE_GAMES_BEFORE_RESTART);
     public static HashMap<UUID, Integer> afkCheck = new HashMap<>();
@@ -170,6 +174,7 @@ public class Arena implements IArena {
 
     private MoneyPerMinuteTask moneyperMinuteTask;
 
+    @Deprecated(forRemoval = true)
     private static final LinkedList<IArena> enableQueue = new LinkedList<>();
 
     private Location respawnLocation, spectatorLocation, waitingLocation;
@@ -187,99 +192,33 @@ public class Arena implements IArena {
      * @param name - world name
      * @param p    - This will send messages to the player if something went wrong while loading the arena. Can be NULL.
      */
+    @Deprecated(forRemoval = true)
     public Arena(String name, Player p) {
-        if (!autoscale) {
-            for (IArena mm : enableQueue) {
-                if (mm.getArenaName().equalsIgnoreCase(name)) {
-                    plugin.getLogger().severe("Tried to load arena " + name + " but it is already in the enable queue.");
-                    if (p != null)
-                        p.sendMessage(ChatColor.RED + "Tried to load arena " + name + " but it is already in the enable queue.");
-                    return;
-                }
-            }
-            if (getArenaByName(name) != null) {
-                plugin.getLogger().severe("Tried to load arena " + name + " but it is already enabled.");
-                if (p != null)
-                    p.sendMessage(ChatColor.RED + "Tried to load arena " + name + " but it is already enabled.");
-                return;
-            }
-        }
-        this.arenaName = name;
-        if (autoscale) {
-            this.worldName = BedWars.arenaManager.generateGameID();
-        } else {
-            this.worldName = arenaName;
-        }
+        arenaManager.loadGame(name, p);
+    }
 
-        cm = new ArenaConfig(BedWars.plugin, name, plugin.getDataFolder().getPath() + "/Arenas");
-
-        yml = cm.getYml();
-        if (yml.get("Team") == null) {
-            if (p != null) p.sendMessage("You didn't set any team for arena: " + name);
-            plugin.getLogger().severe("You didn't set any team for arena: " + name);
-            return;
-        }
-        if (yml.getConfigurationSection("Team").getKeys(false).size() < 2) {
-            if (p != null) p.sendMessage("§cYou must set at least 2 teams on: " + name);
-            plugin.getLogger().severe("You must set at least 2 teams on: " + name);
-            return;
-        }
-        maxInTeam = yml.getInt("maxInTeam");
-        maxPlayers = yml.getConfigurationSection("Team").getKeys(false).size() * maxInTeam;
-        minPlayers = yml.getInt("minPlayers");
-        allowSpectate = yml.getBoolean("allowSpectate");
-        islandRadius = yml.getInt(ConfigPath.ARENA_ISLAND_RADIUS);
-        allowMapBreak = yml.getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK);
-        if (config.getYml().get("arenaGroups") != null) {
-            if (config.getYml().getStringList("arenaGroups").contains(yml.getString("group"))) {
-                group = yml.getString("group");
-            }
-        }
-
-
-        if (!BedWars.getAPI().getRestoreAdapter().isWorld(name)) {
-            if (p != null) p.sendMessage(ChatColor.RED + "There isn't any map called " + name);
-            plugin.getLogger().log(Level.WARNING, "There isn't any map called " + name);
-            return;
-        }
-
-        boolean error = false;
-        for (String team : yml.getConfigurationSection("Team").getKeys(false)) {
-            String colorS = yml.getString("Team." + team + ".Color");
-            if (colorS == null) continue;
-            colorS = colorS.toUpperCase();
-            try {
-                TeamColor.valueOf(colorS);
-            } catch (Exception e) {
-                if (p != null) p.sendMessage("§cInvalid color at team: " + team + " in arena: " + name);
-                plugin.getLogger().severe("Invalid color at team: " + team + " in arena: " + name);
-                error = true;
-            }
-            for (String stuff : Arrays.asList("Color", "Spawn", "Bed", "Shop", "Upgrade", "Iron", "Gold")) {
-                if (yml.get("Team." + team + "." + stuff) == null) {
-                    if (p != null) p.sendMessage("§c" + stuff + " not set for " + team + " team on: " + name);
-                    plugin.getLogger().severe(stuff + " not set for " + team + " team on: " + name);
-                    error = true;
-                }
-            }
-        }
-        if (yml.get("generator.Diamond") == null) {
-            if (p != null) p.sendMessage("§cThere isn't set any Diamond generator on: " + name);
-            plugin.getLogger().severe("There isn't set any Diamond generator on: " + name);
-        }
-        if (yml.get("generator.Emerald") == null) {
-            if (p != null) p.sendMessage("§cThere isn't set any Emerald generator on: " + name);
-            plugin.getLogger().severe("There isn't set any Emerald generator on: " + name);
-        }
-        if (yml.get("waiting.Loc") == null) {
-            if (p != null) p.sendMessage("§cWaiting spawn not set on: " + name);
-            plugin.getLogger().severe("Waiting spawn not set on: " + name);
-            return;
-        }
-        if (error) return;
-        yKillHeight = yml.getInt(ConfigPath.ARENA_Y_LEVEL_KILL);
-        addToEnableQueue(this);
-        Language.saveIfNotExists(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase(), String.valueOf(getGroup().charAt(0)).toUpperCase() + group.substring(1).toLowerCase());
+    public Arena(
+            String template,
+            String worldName,
+            String group,
+            int maxInTeam,
+            int maxPlayers,
+            int minPlayers,
+            boolean allowSpectate,
+            int islandRadius,
+            boolean allowMapBreak,
+            int yKillHeight
+    ) {
+        this.arenaName = template;
+        this.worldName = worldName;
+        this.group = group;
+        this.maxInTeam = maxInTeam;
+        this.maxPlayers = maxPlayers;
+        this.minPlayers = minPlayers;
+        this.allowSpectate = allowSpectate;
+        this.islandRadius = islandRadius;
+        this.allowMapBreak = allowMapBreak;
+        this.yKillHeight = yKillHeight;
     }
 
     /**
@@ -1245,6 +1184,7 @@ public class Arena implements IArena {
      *
      * @param arenaName arena name
      */
+    @Deprecated(forRemoval = true)
     public static IArena getArenaByName(String arenaName) {
         return arenaByName.get(arenaName);
     }
@@ -1338,6 +1278,9 @@ public class Arena implements IArena {
 
     @Override
     public void setWorldName(String name) {
+        if (getStatus() != GameState.restarting) {
+            throw new RuntimeException("Cannot change world name when already loaded");
+        }
         this.worldName = name;
     }
 
@@ -2374,6 +2317,7 @@ public class Arena implements IArena {
         return placed;
     }
 
+    @Deprecated(forRemoval = true)
     public static LinkedList<IArena> getEnableQueue() {
         return enableQueue;
     }
@@ -2702,5 +2646,9 @@ public class Arena implements IArena {
     @Override
     public GameStatsHolder getStatsHolder() {
         return gameStats;
+    }
+
+    public void setArenaName(String arenaName) {
+        this.arenaName = arenaName;
     }
 }
