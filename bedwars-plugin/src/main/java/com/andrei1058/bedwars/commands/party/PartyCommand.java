@@ -21,6 +21,7 @@
 package com.andrei1058.bedwars.commands.party;
 
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -43,7 +44,7 @@ public class PartyCommand extends BukkitCommand {
     }
 
     //owner, target
-    private static HashMap<UUID, UUID> partySessionRequest = new HashMap<>();
+    private static final HashMap<UUID, UUID> partySessionRequest = new HashMap<>();
 
     @Override
     public boolean execute(CommandSender s, String c, String[] args) {
@@ -63,19 +64,20 @@ public class PartyCommand extends BukkitCommand {
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INSUFFICIENT_PERMISSIONS));
                     return true;
                 }
-                if (Bukkit.getPlayer(args[1]) != null && Bukkit.getPlayer(args[1]).isOnline()) {
-                    if (p == Bukkit.getPlayer(args[1])) {
+                Player invited = Bukkit.getPlayer(args[1]);
+                if (invited != null && invited.isOnline()) {
+                    if (p == invited) {
                         p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_CANNOT_INVITE_YOURSELF));
                         return true;
                     }
-                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT).replace("{playername}", p.getName()).replace("{player}", args[1]));
+                    p.sendMessage(SupportPAPI.getSupportPAPI().replace(p, getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT).replace("{playername}", p.getName()).replace("{player}", invited.getName())));
                     TextComponent tc = new TextComponent(getMsg(p, Messages.COMMAND_PARTY_INVITE_SENT_TARGET_RECEIVE_MSG).replace("{player}", p.getName()));
                     tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept " + p.getName()));
-                    Bukkit.getPlayer(args[1]).spigot().sendMessage(tc);
+                    invited.spigot().sendMessage(tc);
                     if (partySessionRequest.containsKey(p.getUniqueId())) {
-                        partySessionRequest.replace(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
+                        partySessionRequest.replace(p.getUniqueId(), invited.getUniqueId());
                     } else {
-                        partySessionRequest.put(p.getUniqueId(), Bukkit.getPlayer(args[1]).getUniqueId());
+                        partySessionRequest.put(p.getUniqueId(), invited.getUniqueId());
                     }
                 } else {
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INVITE_DENIED_PLAYER_OFFLINE).replace("{player}", args[1]));
