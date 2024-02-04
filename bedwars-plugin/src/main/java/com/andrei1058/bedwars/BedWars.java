@@ -116,6 +116,7 @@ public class BedWars extends JavaPlugin {
     public static BedWars plugin;
     public static VersionSupport nms;
 
+
     public static boolean isPaper = false;
 
     private static Party party = new NoParty();
@@ -137,6 +138,7 @@ public class BedWars extends JavaPlugin {
 
     @Override
     public void onLoad() {
+
 
         //Spigot support
         try {
@@ -207,6 +209,7 @@ public class BedWars extends JavaPlugin {
         if (getServerType() != ServerType.BUNGEE) {
             signs = new SignsConfig(this, "signs", this.getDataFolder().getPath());
         }
+
     }
 
     @Override

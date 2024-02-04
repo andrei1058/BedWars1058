@@ -344,4 +344,6 @@ public class ConfigPath {
 
     public static final String LOBBY_VOID_TELEPORT_ENABLED = "lobby-settings.void-tp";
     public static final String LOBBY_VOID_TELEPORT_HEIGHT = "lobby-settings.void-height";
+
+    public static final String BUNGEECORD_SERVERS_MESSAGE = "server-changing";
 }
