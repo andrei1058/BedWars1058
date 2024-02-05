@@ -599,9 +599,10 @@ public class v1_8_R3 extends VersionSupport {
         NBTTagCompound tag = i.getTag();
         if (tag == null) {
             tag = new NBTTagCompound();
-            i.setTag(tag);
         }
-        tag.setString("tierIdentifier", identifier);
+
+        tag.setString(VersionSupport.PLUGIN_TAG_TIER_KEY, identifier);
+        i.setTag(tag);
         return CraftItemStack.asBukkitCopy(i);
     }
 
