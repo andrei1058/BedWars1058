@@ -275,7 +275,7 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_16_R3</artifactId>
-            <version>23.12.1-SNAPSHOT</version>
+            <version>24.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
