@@ -282,11 +282,7 @@ public class CategoryContent implements ICategoryContent {
             for (String s : Language.getList(player, itemLorePath)) {
                 if (s.contains("{quick_buy}")) {
                     if (hasQuick) {
-                        if (ShopIndex.getIndexViewers().contains(player.getUniqueId())) {
-                            s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
-                        } else {
-                            continue;
-                        }
+                        s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
                     } else {
                         s = getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
                     }
