@@ -264,9 +264,9 @@ public class CategoryContent implements ICategoryContent {
             String buyStatus;
 
             if (isPermanent() && shopCache.hasCachedItem(this) && shopCache.getCachedItem(this).getTier() == getContentTiers().size()) {
-                if (!(nms.isArmor(i))){
+                if (!(nms.isArmor(i))) {
                     buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);  //ARMOR
-                }else {
+                } else {
                     buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_ARMOR);
                 }
             } else if (!canAfford) {
@@ -282,11 +282,7 @@ public class CategoryContent implements ICategoryContent {
             for (String s : Language.getList(player, itemLorePath)) {
                 if (s.contains("{quick_buy}")) {
                     if (hasQuick) {
-                        if (ShopIndex.getIndexViewers().contains(player.getUniqueId())) {
-                            s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
-                        } else {
-                            continue;
-                        }
+                        s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
                     } else {
                         s = getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
                     }
