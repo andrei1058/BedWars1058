@@ -890,6 +890,8 @@ public class Romanian extends Language {
         yml.addDefault(Messages.SHOP_LORE_STATUS_MAXED, "&aNIVEL MAXIM!");
         yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bShift Click pentru Shop Rapid");
         yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bShift Click pentru a șterge din Shop Rapid!");
+        yml.addDefault(Messages.SHOP_CATEGORY_PUMPKIN_NAME, "{color}Happy Halloween");
+        yml.addDefault(Messages.SHOP_CATEGORY_PUMPKIN_LORE, Arrays.asList("&7Cost: &f{cost} {currency}", "", "{quick_buy}", "{buy_status}"));
 
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Blocuri", "&aBlocuri", Collections.singletonList("&eClick pentru a afișa!"));

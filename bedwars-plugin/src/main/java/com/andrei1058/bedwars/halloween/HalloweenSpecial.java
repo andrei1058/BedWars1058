@@ -33,12 +33,14 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+import static com.andrei1058.bedwars.BedWars.config;
+
 public class HalloweenSpecial {
 
     private static HalloweenSpecial INSTANCE;
 
     private HalloweenSpecial() {
-        BedWars.plugin.getLogger().info(ChatColor.AQUA + "Loaded Halloween Special <3");
+        BedWars.plugin.getLogger().info(ChatColor.AQUA + "Loaded Halloween Special");
         // pumpkin hats
         Bukkit.getPluginManager().registerEvents(new HalloweenListener(), BedWars.plugin);
 
@@ -56,7 +58,7 @@ public class HalloweenSpecial {
      * Initialize Halloween Special.
      */
     public static void init() {
-        var enable = BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_HALLOWEEN);
+        var enable = config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_HALLOWEEN);
         if (enable) {
             if (INSTANCE == null && checkAvailabilityDate()) {
                 //noinspection InstantiationOfUtilityClass
@@ -68,7 +70,7 @@ public class HalloweenSpecial {
 
     protected static boolean checkAvailabilityDate() {
         // check date
-        ZoneId zone = ZoneId.of("Europe/Rome");
+        ZoneId zone = ZoneId.of(config.getString("timeZone"));
         Date date = new Date();
         LocalDate localDate = date.toInstant().atZone(zone).toLocalDate();
         int month = localDate.getMonthValue();
