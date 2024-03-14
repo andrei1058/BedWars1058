@@ -23,16 +23,19 @@ package com.andrei1058.bedwars.halloween.shop;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.IBuyItem;
 import com.andrei1058.bedwars.api.arena.shop.IContentTier;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.main.CategoryContent;
 import com.andrei1058.bedwars.shop.main.ShopCategory;
+import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -102,7 +105,10 @@ public class PumpkinContent extends CategoryContent {
         ItemStack pumpkin = tier.getItemStack();
 
         boolean canAfford = calculateMoney(player, tier.getCurrency()) >= tier.getPrice();
+        String color = getMsg(player, canAfford ? Messages.SHOP_CAN_BUY_COLOR : Messages.SHOP_CANT_BUY_COLOR);
         String translatedCurrency = getMsg(player, getCurrencyMsgPath(tier));
+        PlayerQuickBuyCache qbc = PlayerQuickBuyCache.getQuickBuyCache(player.getUniqueId());
+        boolean hasQuick = qbc != null && hasQuick(qbc);
 
         String buyStatus;
 
@@ -113,10 +119,24 @@ public class PumpkinContent extends CategoryContent {
         }
         ChatColor cColor = getCurrencyColor(tier.getCurrency());
 
+        List<String> lore = new ArrayList<>();
+        for (String s : Language.getList(player, Messages.SHOP_CATEGORY_PUMPKIN_LORE)) {
+            if (s.contains("{quick_buy}")) {
+                if (hasQuick) {
+                    s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
+                } else {
+                    s = getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
+                }
+            }
+            s = s.replace("{color}", color).replace("{cost}", cColor + String.valueOf(tier.getPrice()))
+                    .replace("{currency}", cColor + translatedCurrency).replace("{buy_status}", buyStatus);
+            lore.add(s);
+        }
+
         pumpkin.setAmount(12);
         ItemMeta itemMeta = pumpkin.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Happy Halloween!");
-        itemMeta.setLore(Arrays.asList("", cColor + String.valueOf(tier.getPrice()) + " " + cColor + translatedCurrency, " ", buyStatus));
+        itemMeta.setDisplayName(getMsg(player, Messages.SHOP_CATEGORY_PUMPKIN_NAME).replace("{color}", color));
+        itemMeta.setLore(lore);
         pumpkin.setItemMeta(itemMeta);
         return pumpkin;
     }
@@ -183,6 +203,7 @@ public class PumpkinContent extends CategoryContent {
 
         @Override
         public void give(Player player, IArena arena) {
+            player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", getMsg(player, Messages.SHOP_CATEGORY_PUMPKIN_NAME).replace("{color}", "")));
             player.getInventory().addItem(new ItemStack(Material.PUMPKIN, 12));
         }
 
