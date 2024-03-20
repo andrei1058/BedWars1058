@@ -163,7 +163,7 @@ public class v1_20_R3 extends VersionSupport {
         EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
         EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
         try {
-            Field sourceField = EntityTNTPrimed.class.getDeclaredField("d");
+            Field sourceField = EntityTNTPrimed.class.getDeclaredField("g");
             sourceField.setAccessible(true);
             sourceField.set(nmsTNT, nmsEntityLiving);
         } catch (Exception ex) {
