@@ -125,7 +125,7 @@ If you get disconnected, or if you leave a game (configurable) you can re-join i
 # Contributing
 Any help is appreciated, just give a quick look at [CONTRIBUTING.md](https://github.com/andrei1058/BedWars1058/blob/master/CONTRIBUTING.md) first!
 
-If you are not a programmer you can help answering people in the [Issues](https://github.com/andrei1058/BedWars1058/issues) section or even [translate the plugin in your languae on Crowdin](https://crowdin.com/project/bedwars1058).
+If you are not a programmer you can help answering people in the [Issues](https://github.com/andrei1058/BedWars1058/issues) section or even [translate the plugin in your language on Crowdin](https://crowdin.com/project/bedwars1058).
 
 ### Translation progress
 [Translation Chart](https://badges.awesome-crowdin.com/translation-12780139-594479.png)
