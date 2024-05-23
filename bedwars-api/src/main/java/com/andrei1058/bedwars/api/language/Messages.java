@@ -386,8 +386,8 @@ public class Messages {
     public static String XP_REWARD_FINAL_KILL = "xp-reward-final-kill";
 
     public static String MONEY_REWARD_WIN = "money-reward-game-win";
-    public static String MONEY_REWARD_PER_MINUTE = "money-reward-per-teammate";
-    public static String MONEY_REWARD_PER_TEAMMATE = "money-reward-per-minute";
+    public static String MONEY_REWARD_PER_MINUTE = "money-reward-per-minute";
+    public static String MONEY_REWARD_PER_TEAMMATE = "money-reward-per-teammate";
     public static String MONEY_REWARD_BED_DESTROYED = "money-reward-bed-destroyed";
     public static String MONEY_REWARD_FINAL_KILL = "money-reward-final-kill";
     public static String MONEY_REWARD_REGULAR_KILL = "money-reward-regular-kill";
