@@ -140,7 +140,6 @@ public class v1_20_R2 extends VersionSupport {
     public void hideEntity(@NotNull Entity e, Player p) {
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(e.getEntityId());
         this.sendPacket(p, packet);
-        p.sendMessage(ChatColor.RED+"Sending hide entity: "+e.getEntityId());
     }
 
     @Override
