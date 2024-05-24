@@ -140,6 +140,7 @@ public class v1_20_R2 extends VersionSupport {
     public void hideEntity(@NotNull Entity e, Player p) {
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(e.getEntityId());
         this.sendPacket(p, packet);
+        p.sendMessage(ChatColor.RED+"Sending hide entity: "+e.getEntityId());
     }
 
     @Override
@@ -824,13 +825,13 @@ public class v1_20_R2 extends VersionSupport {
     }
 
     private void sendPacket(Player player, Packet<?> packet) {
-        ((CraftPlayer) player).getHandle().c.a(packet);
+        ((CraftPlayer) player).getHandle().c.b(packet);
     }
 
     private void sendPackets(Player player, Packet<?> @NotNull ... packets) {
         PlayerConnection connection = ((CraftPlayer) player).getHandle().c;
         for (Packet<?> p : packets) {
-            connection.a(p);
+            connection.b(p);
         }
     }
 }
