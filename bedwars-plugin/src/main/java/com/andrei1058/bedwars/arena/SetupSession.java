@@ -28,6 +28,7 @@ import com.andrei1058.bedwars.api.events.server.SetupSessionStartEvent;
 import com.andrei1058.bedwars.api.region.Cuboid;
 import com.andrei1058.bedwars.api.server.ISetupSession;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.api.server.SetupSessionListeners;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
@@ -52,7 +53,7 @@ import static com.andrei1058.bedwars.BedWars.config;
 import static com.andrei1058.bedwars.BedWars.plugin;
 import static com.andrei1058.bedwars.commands.Misc.createArmorStand;
 
-public class SetupSession implements ISetupSession {
+public class SetupSession implements ISetupSession, SetupSessionListeners {
 
     private static List<SetupSession> setupSessions = new ArrayList<>();
 
@@ -74,6 +75,14 @@ public class SetupSession implements ISetupSession {
         this.worldName = worldName;
         getSetupSessions().add(this);
         openGUI(player);
+    }
+
+    public static void onMapLoad(String name) {
+        for (SetupSession setupSession : getSetupSessions()) {
+            if (setupSession instanceof SetupSessionListeners) {
+                ((SetupSessionListeners) setupSession).onWorldLoad(name);
+            }
+        }
     }
 
     public void setSetupType(SetupType setupType) {
@@ -131,8 +140,8 @@ public class SetupSession implements ISetupSession {
     public boolean startSetup() {
         getPlayer().sendMessage("§6 ▪ §7Loading " + getWorldName());
         cm = new ArenaConfig(BedWars.plugin, getWorldName(), plugin.getDataFolder().getPath() + "/Arenas");
+
         BedWars.getAPI().getRestoreAdapter().onSetupSessionStart(this);
-        startWaitingLobbyParticleTask();
         return true;
     }
 
@@ -417,6 +426,13 @@ public class SetupSession implements ISetupSession {
 
         if (pos1.distance(pos2) < 130) {
             waitingLobbyCuboid = new Cuboid(pos1, pos2, true);
+        }
+    }
+
+    @Override
+    public void onWorldLoad(@NotNull String worldName) {
+        if (worldName.equals(this.getWorldName())) {
+            this.startWaitingLobbyParticleTask();
         }
     }
 }

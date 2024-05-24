@@ -20,23 +20,18 @@
 
 package com.andrei1058.bedwars.listeners;
 
-import com.andrei1058.bedwars.api.arena.IArena;
-import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.arena.ArenaManager;
+import com.andrei1058.bedwars.arena.SetupSession;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldLoadEvent;
-
-import java.util.LinkedList;
+import org.jetbrains.annotations.NotNull;
 
 public class WorldLoadListener implements Listener {
 
     @EventHandler
-    public void onLoad(WorldLoadEvent e) {
-        for (IArena a : new LinkedList<>(Arena.getEnableQueue())) {
-            if (a.getWorldName().equalsIgnoreCase(e.getWorld().getName())) {
-                a.init(e.getWorld());
-                return;
-            }
-        }
+    public void onLoad(@NotNull WorldLoadEvent e) {
+        ArenaManager.onMapLoad(e.getWorld());
+        SetupSession.onMapLoad(e.getWorld().getName());
     }
 }

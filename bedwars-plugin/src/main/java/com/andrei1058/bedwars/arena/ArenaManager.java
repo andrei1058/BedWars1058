@@ -21,6 +21,7 @@
 package com.andrei1058.bedwars.arena;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.IGameService;
 import com.andrei1058.bedwars.api.arena.constraints.ArenaConstraintViolation;
 import com.andrei1058.bedwars.api.arena.constraints.ConstraintProvider;
@@ -33,6 +34,7 @@ import com.andrei1058.bedwars.arena.constraints.DefaultConstraintProvider;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
@@ -55,6 +57,15 @@ public class ArenaManager implements IGameService {
 
     public ArenaManager() {
         constraintProviders.add(new DefaultConstraintProvider());
+    }
+
+    public static void onMapLoad(World world) {
+        for (IArena a : new LinkedList<>(Arena.getEnableQueue())) {
+            if (a.getWorldName().equalsIgnoreCase(world.getName())) {
+                a.init(world);
+                break;
+            }
+        }
     }
 
 
