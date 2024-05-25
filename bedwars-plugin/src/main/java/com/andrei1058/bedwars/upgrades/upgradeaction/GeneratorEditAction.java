@@ -24,7 +24,7 @@ import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.upgrades.UpgradeAction;
-import com.andrei1058.bedwars.arena.OreGenerator;
+import com.andrei1058.bedwars.arena.generator.OreGenerator;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

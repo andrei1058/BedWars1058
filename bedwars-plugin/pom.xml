@@ -5,7 +5,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>23.12.1-SNAPSHOT</version>
+        <version>24.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-plugin</artifactId>
@@ -347,6 +347,15 @@
             <version>1.18-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Orbs Core -->
+        <dependency>
+            <groupId>com.andrei1058.handyorbs</groupId>
+            <artifactId>handyorbs-vcommon</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- End of Orb dependency-->
     </dependencies>
 
     <build>

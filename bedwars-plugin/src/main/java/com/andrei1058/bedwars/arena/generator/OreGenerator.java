@@ -18,7 +18,7 @@
  * Contact e-mail: andrew.dascalu@gmail.com
  */
 
-package com.andrei1058.bedwars.arena;
+package com.andrei1058.bedwars.arena.generator;
 
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
@@ -32,6 +32,9 @@ import com.andrei1058.bedwars.api.events.gameplay.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
+import com.andrei1058.handyorbs.core.version.OrbActivity;
+import com.andrei1058.handyorbs.core.version.OrbEntity;
+import com.andrei1058.handyorbs.core.version.OrbEntityFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -65,14 +68,16 @@ public class OreGenerator implements IGenerator {
      */
     private HashMap<String, IGenHolo> armorStands = new HashMap<>();
 
-    private ArmorStand item;
+//    private ArmorStand item;
     public boolean stack = getGeneratorsCfg().getBoolean(ConfigPath.GENERATOR_STACK_ITEMS);
 
     private static final ConcurrentLinkedDeque<OreGenerator> rotation = new ConcurrentLinkedDeque<>();
 
+    private OrbEntity orbEntity;
+
     public OreGenerator(Location location, IArena arena, GeneratorType type, ITeam bwt) {
         if (type == GeneratorType.EMERALD || type == GeneratorType.DIAMOND) {
-            this.location = new Location(location.getWorld(), location.getBlockX() + 0.5, location.getBlockY() + 1.3, location.getBlockZ() + 0.5);
+            this.location = new Location(location.getWorld(), location.getBlockX() + 0.5, location.getBlockY() + 1.9, location.getBlockZ() + 0.5);
         } else {
             this.location = location.add(0, 1.3, 0);
         }
@@ -86,6 +91,20 @@ public class OreGenerator implements IGenerator {
         c.setMaxY(c.getMaxY() + 5);
         c.setMinY(c.getMinY() - 2);
         arena.getRegionsList().add(c);
+
+        if (type == GeneratorType.EMERALD || type == GeneratorType.DIAMOND) {
+            this.orbEntity = OrbEntityFactory.getInstance().spawnOrbEntity(
+                    this.location,
+                    new ItemStack(type == GeneratorType.DIAMOND ? Material.DIAMOND_BLOCK : Material.EMERALD_BLOCK)
+            );
+            orbEntity.setCustomNameVisible(false);
+            OrbActivity floating = orbEntity.getOrbActivity();
+            ((ArmorStand)orbEntity.getBukkitEntity()).setSmall(false);
+            orbEntity.setOrbActivity(() -> {
+                floating.doTick();
+                rotate();
+            });
+        }
     }
 
     @Override
@@ -304,7 +323,7 @@ public class OreGenerator implements IGenerator {
     }
 
     private static ArmorStand createArmorStand(String name, Location l) {
-        ArmorStand a = (ArmorStand) l.getWorld().spawnEntity(l, EntityType.ARMOR_STAND);
+        ArmorStand a = (ArmorStand) l.getWorld().spawnEntity(l.clone().add(0,0.35,0), EntityType.ARMOR_STAND);
         a.setGravity(false);
         if (name != null) {
             a.setCustomName(name);
@@ -321,39 +340,20 @@ public class OreGenerator implements IGenerator {
 
     @Override
     public void rotate() {
-        if (up) {
-            if (rotate >= 540) {
-                up = false;
-            }
-            if (rotate > 500) {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 1), 0));
-            } else if (rotate > 470) {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 2), 0));
-                /*item.teleport(item.getLocation().add(0, 0.005D, 0));*/
-            } else if (rotate > 450) {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 3), 0));
-                /*item.teleport(item.getLocation().add(0, 0.001D, 0));*/
-            } else {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 4), 0));
-                /*item.teleport(item.getLocation().add(0, 0.002D, 0));*/
-            }
-        } else {
-            if (rotate <= 0) {
-                up = true;
-            }
-            if (rotate > 120) {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 4), 0));
-                /*item.teleport(item.getLocation().subtract(0, 0.002D, 0));*/
-            } else if (rotate > 90) {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 3), 0));
-                /*item.teleport(item.getLocation().add(0, 0.001D, 0));*/
-            } else if (rotate > 70) {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 2), 0));
-                /*item.teleport(item.getLocation().add(0, 0.005D, 0));*/
-            } else {
-                item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 1), 0));
-            }
-        }
+        ArmorStand item = (ArmorStand) orbEntity.getBukkitEntity();
+//        if (up) {
+//            if (rotate >= 540) {
+//                up = false;
+//                this.orbEntity.setAnimationUp(false);
+//            }
+            item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate += 5), 0));
+//        } else {
+//            if (rotate <= 0) {
+//                up = true;
+//                this.orbEntity.setAnimationUp(true);
+//            }
+//            item.setHeadPose(new EulerAngle(0, Math.toRadians(rotate -= 8), 0));
+//        }
     }
 
     @Override
@@ -396,8 +396,6 @@ public class OreGenerator implements IGenerator {
 
     @Override
     public void enableRotation() {
-        //loadDefaults(false);
-        //if (getType() == GeneratorType.EMERALD || getType() == GeneratorType.DIAMOND) {
         rotation.add(this);
         for (Language lan : Language.getLanguages()) {
             IGenHolo h = armorStands.get(lan.getIso());
@@ -408,10 +406,6 @@ public class OreGenerator implements IGenerator {
         for (IGenHolo hg : armorStands.values()) {
             hg.updateForAll();
         }
-
-        item = createArmorStand(null, location.clone().add(0, 0.5, 0));
-        item.setHelmet(new ItemStack(type == GeneratorType.DIAMOND ? Material.DIAMOND_BLOCK : Material.EMERALD_BLOCK));
-        //}
     }
 
     @Override
@@ -468,7 +462,8 @@ public class OreGenerator implements IGenerator {
 
     @Override
     public ArmorStand getHologramHolder() {
-        return item;
+        return (ArmorStand) orbEntity.getBukkitEntity();
+//        return item;
     }
 
     @Override
@@ -523,6 +518,6 @@ public class OreGenerator implements IGenerator {
         ore = null;
         bwt = null;
         armorStands = null;
-        item = null;
+//        item = null;
     }
 }
