@@ -11,6 +11,12 @@
     <artifactId>bedwars-api</artifactId>
     <version>${project.parent.version}</version>
 
+    <profiles>
+        <profile>
+            <id>prod</id>
+        </profile>
+    </profiles>
+
     <repositories>
         <repository>
             <id>spigotmc-repo</id>

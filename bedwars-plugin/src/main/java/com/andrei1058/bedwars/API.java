@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars;
 
+import com.andrei1058.bedwars.api.arena.IGameService;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.IContentTier;
 import com.andrei1058.bedwars.api.command.ParentCommand;
@@ -46,9 +47,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public class API implements com.andrei1058.bedwars.api.BedWars {
@@ -112,7 +111,7 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
 
         @Override
         public void loadArena(String worldName, Player sender) {
-            new Arena(worldName, sender);
+            BedWars.arenaManager.loadGame(worldName, sender);
         }
 
         @Override
@@ -440,5 +439,10 @@ public class API implements com.andrei1058.bedwars.api.BedWars {
     @Override
     public ISidebarService getScoreboardManager() {
         return SidebarService.getInstance();
+    }
+
+    @Override
+    public IGameService getGameManager() {
+        return BedWars.arenaManager;
     }
 }
