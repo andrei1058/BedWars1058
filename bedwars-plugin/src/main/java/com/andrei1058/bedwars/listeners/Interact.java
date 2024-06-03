@@ -30,6 +30,8 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.listeners.InventoryListener;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -79,7 +81,17 @@ public class Interact implements Listener {
             if (customData.length >= 2) {
                 if (customData[0].equals("RUNCOMMAND")) {
                     e.setCancelled(true);
-                    Bukkit.getScheduler().runTask(plugin, () -> Bukkit.dispatchCommand(p, customData[1]));
+
+
+                    if(customData[1].startsWith("server:")) {
+                        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                        out.writeUTF("Connect");
+                        out.writeUTF(customData[1].replace("server:", ""));
+                        p.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+                        p.sendMessage(getMsg(p, Messages.BUNGEECORD_SERVERS.replace("&", "§").replace("{server}", customData[1].replace("server:", ""))));
+                    }else {
+                        Bukkit.getScheduler().runTask(plugin, () -> Bukkit.dispatchCommand(p, customData[1]));
+                    }
                 }
             }
         }
