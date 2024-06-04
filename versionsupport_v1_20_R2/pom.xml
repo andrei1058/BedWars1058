@@ -19,6 +19,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.andrei1058.hologramapi</groupId>
+            <artifactId>hologram_v1_20_R2</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.andrei1058.handyorbs</groupId>
             <artifactId>handyorbs-v1_20_R2</artifactId>
             <version>1.0-SNAPSHOT</version>
