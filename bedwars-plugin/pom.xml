@@ -5,7 +5,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>23.12.1-SNAPSHOT</version>
+        <version>24.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-plugin</artifactId>
@@ -359,6 +359,30 @@
             <version>1.18-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Orbs Core -->
+        <dependency>
+            <groupId>com.andrei1058.handyorbs</groupId>
+            <artifactId>handyorbs-vcommon</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- End of Orb dependency-->
+
+        <!-- Hologram API -->
+        <dependency>
+            <groupId>com.andrei1058.hologramapi</groupId>
+            <artifactId>hologram-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.hologramapi</groupId>
+            <artifactId>hologram_common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- End of Hologram API -->
     </dependencies>
 
     <build>
@@ -377,6 +401,8 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
+<!--                    <outputDirectory>/home/andrei/servers/SERVERS/bedwars/1202/plugins</outputDirectory>-->
+                    <outputFile>/home/andrei/servers/SERVERS/bedwars/1202/plugins/bedwars-shaded.jar</outputFile>
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>

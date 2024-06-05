@@ -79,6 +79,8 @@ import com.andrei1058.bedwars.support.preloadedparty.PrePartyListener;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
 import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
+import com.andrei1058.handyorbs.core.version.OrbEntityFactory;
+import com.andrei1058.hologramapi.HologramAPI;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
 import org.bukkit.Bukkit;
@@ -134,6 +136,7 @@ public class BedWars extends JavaPlugin {
     private boolean serverSoftwareSupport = true;
 
     private static com.andrei1058.bedwars.api.BedWars api;
+    private static HologramAPI hologramAPI;
 
     @Override
     public void onLoad() {
@@ -352,7 +355,8 @@ public class BedWars extends JavaPlugin {
 
         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN)) {
             //new OneTick().runTaskTimer(this, 120, 1);
-            Bukkit.getScheduler().runTaskTimer(this, new OneTick(), 120, 1);
+            // todo implement
+//            Bukkit.getScheduler().runTaskTimer(this, new OneTick(), 120, 1);
         }
 
         /* Register NMS entities */
@@ -519,6 +523,15 @@ public class BedWars extends JavaPlugin {
 
         // Warn user if current server version support is deprecated
         this.performDeprecationCheck();
+
+        // init orb factory for generators
+        OrbEntityFactory.init();
+
+        try {
+            hologramAPI = new HologramAPI(this);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

@@ -21,7 +21,7 @@
 package com.andrei1058.bedwars.arena.tasks;
 
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
-import com.andrei1058.bedwars.arena.OreGenerator;
+import com.andrei1058.bedwars.arena.generator.OreGenerator;
 
 public class OneTick implements Runnable {
     @Override
