@@ -141,7 +141,7 @@ public class ShopManager extends ConfigManager {
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "glass", 21, "tier1",
                     BedWars.getForCurrentVersion("GLASS", "GLASS", "GLASS"), 0, 4, false, 12, "iron", false, false);
-            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "glass", "tier1", "glass", BedWars.getForCurrentVersion("GLASS", "GLASS", "GLASS"),
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "glass", "tier1", "glass", BedWars.getForCurrentVersion("LIME_STAINED_GLASS", "LIME_STAINED_GLASS", "LIME_STAINED_GLASS"),
                     0, 4, "", "", "", false);
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "stone", 22, "tier1",
