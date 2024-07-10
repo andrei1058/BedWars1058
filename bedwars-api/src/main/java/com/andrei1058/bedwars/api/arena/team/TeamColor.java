@@ -513,40 +513,7 @@ public enum TeamColor {
      * @return 1.13+ glass material. Return GLASS if this team does not have a custom glass.
      */
     public Material glassMaterial() {
-        String color = "GLASS";
-        switch (this) {
-            case PINK:
-                color = "PINK_STAINED_GLASS";
-                break;
-            case GRAY:
-                color = "LIGHT_GRAY_STAINED_GLASS";
-                break;
-            case BLUE:
-                color = "BLUE_STAINED_GLASS";
-                break;
-            case WHITE:
-                color = "WHITE_STAINED_GLASS";
-                break;
-            case DARK_GREEN:
-                color = "GREEN_STAINED_GLASS";
-                break;
-            case AQUA:
-                color = "LIGHT_BLUE_STAINED_GLASS";
-                break;
-            case GREEN:
-                color = "LIME_STAINED_GLASS";
-                break;
-            case YELLOW:
-                color = "YELLOW_STAINED_GLASS";
-                break;
-            case RED:
-                color = "RED_STAINED_GLASS";
-                break;
-            case DARK_GRAY:
-                color = "GRAY_STAINED_GLASS";
-                break;
-        }
-        return Material.valueOf(color);
+        return Material.valueOf("LIME_STAINED_GLASS");
     }
 
     /**
