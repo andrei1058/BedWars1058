@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 public class BlastProtectionUtil {
 
@@ -75,13 +76,23 @@ public class BlastProtectionUtil {
             }
 
             while (ray.hasNext()) {
+
                 Block nextBlock = ray.next();
+
+                if (nextBlock.equals(block)) {
+                    System.out.println(true);
+                }
 
                 if (nextBlock.getType() == Material.AIR) {
                     continue;
                 }
 
-                if (rayBlockedByGlass && versionSupport.isGlass(nextBlock.getType())) {
+
+                if (
+                        rayBlockedByGlass
+                        && versionSupport.isGlass(nextBlock.getType())
+                        && !nextBlock.equals(block)
+                ) {
                     // If a block is a glass
                     protectedTimes.getAndIncrement();
                     return;
@@ -95,5 +106,6 @@ public class BlastProtectionUtil {
         });
 
         return totalRays - protectedTimes.get() < 6;
+
     }
 }

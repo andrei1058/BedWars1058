@@ -41,9 +41,12 @@ import com.andrei1058.bedwars.popuptower.TowerEast;
 import com.andrei1058.bedwars.popuptower.TowerNorth;
 import com.andrei1058.bedwars.popuptower.TowerSouth;
 import com.andrei1058.bedwars.popuptower.TowerWest;
+import com.andrei1058.bedwars.z_myadditions.EPG_Listener;
+import com.andrei1058.bedwars.z_myadditions.EPG_glassActions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.EntityType;
@@ -60,6 +63,7 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -73,10 +77,12 @@ public class BreakPlace implements Listener {
     private static final List<Player> buildSession = new ArrayList<>();
     private final boolean allowFireBreak;
     private final BlastProtectionUtil blastProtection;
+    private final JavaPlugin plugin;
 
-    public BreakPlace() {
+    public BreakPlace(JavaPlugin plugin) {
         allowFireBreak = config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ALLOW_FIRE_EXTINGUISH);
         blastProtection = new BlastProtectionUtil(nms, BedWars.getAPI());
+        this.plugin = plugin;
     }
 
     @EventHandler
@@ -522,7 +528,12 @@ public class BreakPlace implements Listener {
         IArena a = Arena.getArenaByIdentifier(e.getLocation().getWorld().getName());
         if (a != null) {
             if (a.getStatus() == GameState.playing) {
+                System.out.println("Начинаем фильтровать");
+                System.out.println(e.blockList());
                 e.blockList().removeIf((b) -> blastProtection.isProtected(a, e.getLocation(), b, 0.3));
+                System.out.println(e.blockList());
+                e.blockList().removeIf((b) -> EPG_glassActions.glassExplode(plugin, b));
+                System.out.println(e.blockList());
                 return;
             }
             e.blockList().clear();

@@ -20,6 +20,8 @@
 
 package com.andrei1058.bedwars;
 
+import com.andrei1058.bedwars.z_myadditions.EPG_Main;
+
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
@@ -79,6 +81,8 @@ import com.andrei1058.bedwars.support.preloadedparty.PrePartyListener;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
 import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
+import com.andrei1058.bedwars.z_myadditions.EPG_Main;
+import com.andrei1058.bedwars.z_myadditions.EPG_glassActions;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
 import org.bukkit.Bukkit;
@@ -134,6 +138,8 @@ public class BedWars extends JavaPlugin {
     private boolean serverSoftwareSupport = true;
 
     private static com.andrei1058.bedwars.api.BedWars api;
+
+    public final EPG_Main EPGlass = new EPG_Main(this);
 
     @Override
     public void onLoad() {
@@ -211,6 +217,13 @@ public class BedWars extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        // > My Additions <
+            // >> EPG <<
+                EPGlass.onEnable();
+            //
+        //
+
         if (!serverSoftwareSupport) {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
@@ -273,7 +286,7 @@ public class BedWars extends JavaPlugin {
 
         // Register events
         registerEvents(
-                new EnderPearlLanded(), new QuitAndTeleportListener(), new BreakPlace(), new DamageDeathMove(),
+                new EnderPearlLanded(), new QuitAndTeleportListener(), new BreakPlace(plugin), new DamageDeathMove(),
                 new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
                 new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(),
                 new TargetListener(), new LangListener(), new Warnings(this), new ChatAFK(),

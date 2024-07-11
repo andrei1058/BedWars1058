@@ -118,7 +118,7 @@ public class MainConfig extends ConfigManager {
         // tnd block blast resistance
         // on 1.8.8 it has to be around 69, on 1.20 and 1.18 it works fine with 12 (tested)
         yml.addDefault(ConfigPath.GENERAL_TNT_PROTECTION_END_STONE_BLAST, BedWars.nms.getVersion() == 0 ? 69f : 12f);
-        yml.addDefault(ConfigPath.GENERAL_TNT_PROTECTION_GLASS_BLAST, 300f);
+        yml.addDefault(ConfigPath.GENERAL_TNT_PROTECTION_GLASS_BLAST, 0f);
         yml.addDefault(ConfigPath.GENERAL_TNT_RAY_BLOCKED_BY_GLASS, true);
 
         // tnt prime settings
