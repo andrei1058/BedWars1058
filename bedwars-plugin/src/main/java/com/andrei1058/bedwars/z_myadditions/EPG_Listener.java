@@ -1,19 +1,20 @@
 package com.andrei1058.bedwars.z_myadditions;
 
+import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import org.bukkit.Material;
+import org.bukkit.TreeType;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.List;
 
 public class EPG_Listener implements Listener {
 
@@ -24,27 +25,10 @@ public class EPG_Listener implements Listener {
     }
 
     @EventHandler
-    public void onEntityExplode(EntityExplodeEvent event) {
-        System.out.println("Взрыв!");
-//        event.blockList().removeIf(
-//                (Block block) -> {
-//                    switch (block.getType()) {
-//                        case LIME_STAINED_GLASS:
-//                            transBlock(block);
-//                            return true;
-//                        case YELLOW_STAINED_GLASS:
-//                            return true;
-//                        default:
-//                            return false;
-//                    }
-//                }
-//        );
-    }
-
-    @EventHandler
     public void onPlayerInteract(final PlayerInteractEvent event) {
         if (
             event.getAction() == Action.RIGHT_CLICK_BLOCK
+            && event.getClickedBlock() != null
             && event.getClickedBlock().getType() == Material.RED_STAINED_GLASS
             && event.getItem() != null
             && event.getItem().getType() == Material.LIME_STAINED_GLASS
@@ -60,15 +44,16 @@ public class EPG_Listener implements Listener {
         }
     }
 
-/*
     @EventHandler
     private void onProjectileHit(final ProjectileHitEvent event) {
         if (event.getEntity() instanceof Arrow) {
-            System.out.println("Стрела!");
-            Block block = event.getEntity().getLocation().getBlock();
+
+            Block block = event.getHitBlock();
+            if (block == null) return;
+
             switch (block.getType()) {
                 case LIME_STAINED_GLASS:
-                    transBlock(block);
+                    EPG_glassActions.transBlock(plugin, block);
                     event.getEntity().remove();
                     break;
                 case RED_STAINED_GLASS:
@@ -81,16 +66,20 @@ public class EPG_Listener implements Listener {
             }
         }
     }
-*/
 
-//    private void transBlock(Block block) {
-//        block.getLocation().getBlock().setType(Material.YELLOW_STAINED_GLASS);
-//        new BukkitRunnable() {
-//            @Override
-//            public void run() {
-//                block.setType(Material.RED_STAINED_GLASS);
-//            }
-//        }.runTaskLater(plugin, 60L);
-//    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void onBlockBreak(BlockBreakEvent event) {
+        Block block = event.getBlock();
+        Block block2 = block.getLocation().subtract(0, 1, 0).getBlock();
+        if (
+            block.getType() == Material.SNOW
+            && (
+                block2.getType() == Material.SNOW
+                || block2.getType() == Material.AIR
+            )
+        ) {
+            event.setCancelled(true);
+        }
+    }
 
 }

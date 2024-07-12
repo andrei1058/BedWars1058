@@ -27,7 +27,7 @@ public class EPG_glassActions {
         }
     }
 
-    private static void transBlock(JavaPlugin plugin, Block block) {
+    public static void transBlock(JavaPlugin plugin, Block block) {
         block.getLocation().getBlock().setType(Material.YELLOW_STAINED_GLASS);
         new BukkitRunnable() {
             @Override

@@ -24,6 +24,7 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.configuration.GameMainOverridable;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -70,6 +71,11 @@ public class ArenaConfig extends ConfigManager {
         rules.add("doWeatherCycle:false");
         rules.add("doFireTick:false");
         yml.addDefault(ConfigPath.ARENA_GAME_RULES, rules);
+        yml.addDefault(ConfigPath.ARENA_TEMPORARY_WALL_MOD, false);
+        yml.addDefault(ConfigPath.ARENA_TEMPORARY_WALL_POS, new ArrayList<int[]>());
+        yml.addDefault(ConfigPath.ARENA_TEMPORARY_WALL_TIME_TO_DELETE, 600);
+        yml.addDefault(ConfigPath.ARENA_TEMPORARY_WALL_MATERIAL, "BARRIER");
+        yml.addDefault(ConfigPath.ARENA_TEMPORARY_WALL_WALL_PROTECTION, 3);
         yml.options().copyDefaults(true);
         save();
 

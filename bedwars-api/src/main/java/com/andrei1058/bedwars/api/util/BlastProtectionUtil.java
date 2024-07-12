@@ -79,14 +79,9 @@ public class BlastProtectionUtil {
 
                 Block nextBlock = ray.next();
 
-                if (nextBlock.equals(block)) {
-                    System.out.println(true);
-                }
-
                 if (nextBlock.getType() == Material.AIR) {
                     continue;
                 }
-
 
                 if (
                         rayBlockedByGlass

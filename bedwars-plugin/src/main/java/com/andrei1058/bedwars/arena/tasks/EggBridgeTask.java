@@ -32,11 +32,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Levelled;
+import org.bukkit.block.data.type.Snow;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static com.andrei1058.bedwars.BedWars.nms;
+import static com.andrei1058.bedwars.BedWars.plugin;
 
 @SuppressWarnings("WeakerAccess")
 public class EggBridgeTask implements Runnable {
@@ -89,41 +97,57 @@ public class EggBridgeTask implements Runnable {
         if (getPlayer().getLocation().distance(loc) > 4.0D) {
 
             Block b2 = loc.clone().subtract(0.0D, 2.0D, 0.0D).getBlock();
-            if (!Misc.isBuildProtected(b2.getLocation(), getArena())) {
-                if (b2.getType() == Material.AIR) {
-                    b2.setType(nms.woolMaterial());
-                    nms.setBlockTeamColor(b2, getTeamColor());
-                    getArena().addPlacedBlock(b2);
-                    Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b2));
-                    loc.getWorld().playEffect(b2.getLocation(), nms.eggBridge(), 3);
-                    Sounds.playSound("egg-bridge-block", getPlayer());
-                }
-            }
+            setEggBlock(b2, loc);
 
             Block b3 = loc.clone().subtract(1.0D, 2.0D, 0.0D).getBlock();
-            if (!Misc.isBuildProtected(b3.getLocation(), getArena())) {
-                if (b3.getType() == Material.AIR) {
-                    b3.setType(nms.woolMaterial());
-                    nms.setBlockTeamColor(b3, getTeamColor());
-                    getArena().addPlacedBlock(b3);
-                    Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b3));
-                    loc.getWorld().playEffect(b3.getLocation(), nms.eggBridge(), 3);
-                    Sounds.playSound("egg-bridge-block", getPlayer());
-                }
-            }
+            setEggBlock(b3, loc);
 
             Block b4 = loc.clone().subtract(0.0D, 2.0D, 1.0D).getBlock();
-            if (!Misc.isBuildProtected(b4.getLocation(), getArena())) {
-                if (b4.getType() == Material.AIR) {
-                    b4.setType(nms.woolMaterial());
-                    nms.setBlockTeamColor(b4, getTeamColor());
-                    getArena().addPlacedBlock(b4);
-                    Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b4));
-                    loc.getWorld().playEffect(b4.getLocation(), nms.eggBridge(), 3);
-                    Sounds.playSound("egg-bridge-block", getPlayer());
-                }
+            setEggBlock(b4, loc);
+        }
+    }
+
+    private void setEggBlock(Block block, Location loc) {
+        if (!Misc.isBuildProtected(block.getLocation(), getArena())) {
+            if (block.getType() == Material.AIR) {
+                block.setType(Material.SNOW);
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        BlockData data = block.getBlockData();
+                        if (!(data instanceof Snow)) return;
+
+                        Snow snow = (Snow) data;
+                        snow.setLayers(7);
+                        block.setBlockData(snow);
+                        getArena().addPlacedBlock(block);
+                        Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), block));
+                        loc.getWorld().playEffect(block.getLocation(), nms.eggBridge(), 3);
+                        Sounds.playSound("egg-bridge-block", getPlayer());
+                        removeBlock(block);
+                    }
+                }.runTask(plugin);
             }
         }
+    }
+
+    private void removeBlock(Block block) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+
+                if (block.getType() != Material.SNOW) return;
+
+                Snow snow = (Snow) block.getBlockData();
+
+                if (snow.getLayers() == 1) block.setType(Material.AIR);
+                else if (snow.getLayers() > 1) {
+                    snow.setLayers(snow.getLayers() - 1);
+                    block.setBlockData(snow);
+                }
+            }
+        }.runTaskTimer(plugin, 0L, 40L);
     }
 
     public void cancel(){
