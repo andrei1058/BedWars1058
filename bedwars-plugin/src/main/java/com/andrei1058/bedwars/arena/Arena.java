@@ -131,6 +131,8 @@ public class Arena implements IArena {
     private List<Region> regionsList = new ArrayList<>();
     private int renderDistance;
 
+    public boolean temporaryWallMod;
+
     private final List<Player> leaving = new ArrayList<>();
 
     /**
@@ -230,6 +232,7 @@ public class Arena implements IArena {
         allowSpectate = yml.getBoolean("allowSpectate");
         islandRadius = yml.getInt(ConfigPath.ARENA_ISLAND_RADIUS);
         allowMapBreak = yml.getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK);
+        this.temporaryWallMod = yml.getBoolean(ConfigPath.ARENA_TEMPORARY_WALL_MOD);
         if (config.getYml().get("arenaGroups") != null) {
             if (config.getYml().getStringList("arenaGroups").contains(yml.getString("group"))) {
                 group = yml.getString("group");

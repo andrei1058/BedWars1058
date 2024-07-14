@@ -345,6 +345,11 @@ public class BwSidebar implements ISidebar {
                 }
             }));
 
+            providers.add(new PlaceholderProvider("{time_delete_walls}", () -> {
+                long timeDeleteWalls = arena.getPlayingTask().getTemporaryWallModCountdown() * 1000L;
+                return timeDeleteWalls == 0 ? "§aСтена пала" : "Падение стены in §a" + nextEventDateFormat.format(new Date(timeDeleteWalls));
+            }));
+
             if (null != arena.getStatsHolder()) {
 
                 arena.getStatsHolder().get(player).ifPresent(holder -> {

@@ -40,5 +40,7 @@ public interface PlayingTask {
 
     int getGameEndCountdown();
 
+    int getTemporaryWallModCountdown();
+
     void cancel();
 }

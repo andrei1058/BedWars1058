@@ -48,12 +48,18 @@ public class GamePlayingTask implements Runnable, PlayingTask {
     private Arena arena;
     private BukkitTask task;
     private int beds_destroy_countdown, dragon_spawn_countdown, game_end_countdown;
+    private final boolean temporaryWallMod;
+    private int temporaryWallModCountdown = -1;
 
     public GamePlayingTask(Arena arena) {
         this.arena = arena;
         this.beds_destroy_countdown = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_BEDS_DESTROY_COUNTDOWN);
         this.dragon_spawn_countdown = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_DRAGON_SPAWN_COUNTDOWN);
         this.game_end_countdown = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_GAME_END_COUNTDOWN);
+        this.temporaryWallMod = arena.getConfig().getBoolean(ConfigPath.ARENA_TEMPORARY_WALL_MOD);
+        if (temporaryWallMod) {
+            temporaryWallModCountdown = arena.getConfig().getInt(ConfigPath.ARENA_TEMPORARY_WALL_TIME_TO_DELETE);
+        }
         this.task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, this, 0, 20L);
     }
 
@@ -81,12 +87,26 @@ public class GamePlayingTask implements Runnable, PlayingTask {
         return dragon_spawn_countdown;
     }
 
+    public int getTemporaryWallModCountdown() {
+        return temporaryWallModCountdown;
+    }
+
     public int getGameEndCountdown() {
         return game_end_countdown;
     }
 
     @Override
     public void run() {
+
+        if (temporaryWallMod) {
+            if (temporaryWallModCountdown > 0) {
+                temporaryWallModCountdown--;
+                if (temporaryWallModCountdown == 0) {
+                    System.out.println("Cтена рушится! (По крайней мере должна)");
+                }
+            }
+        }
+
         switch (getArena().getNextEvent()) {
             case EMERALD_GENERATOR_TIER_II:
             case EMERALD_GENERATOR_TIER_III:

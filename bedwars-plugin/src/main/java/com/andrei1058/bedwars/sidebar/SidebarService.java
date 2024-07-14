@@ -173,6 +173,17 @@ public class SidebarService implements ISidebarService {
                 } else {
                     lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".playing.alive", Messages.SCOREBOARD_DEFAULT_PLAYING);
                 }
+
+                // Remove line with '{time_delete_walls}' if not Temporary Wall Mod
+                if (!arena.getConfig().getBoolean(ConfigPath.ARENA_TEMPORARY_WALL_MOD)) {
+                    for (int i = 0; i < lines.size(); i++) {
+                        if (lines.get(i).contains("{time_delete_walls}")) {
+                            lines.remove(i);
+                            break;
+                        }
+                    }
+                }
+
             } else if (arena.getStatus() == GameState.restarting) {
 
                 ITeam holderTeam = arena.getTeam(player);

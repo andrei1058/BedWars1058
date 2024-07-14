@@ -34,15 +34,24 @@ import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.arena.team.LegacyTeamAssigner;
+import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
+import com.andrei1058.bedwars.z_myadditions.Bresenham;
+import org.bukkit.block.Block;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.nms;
+import static com.andrei1058.bedwars.BedWars.plugin;
 import static com.andrei1058.bedwars.api.language.Language.getList;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
@@ -56,8 +65,26 @@ public class GameStartingTask implements Runnable, StartingTask {
         this.arena = arena;
         countdown = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR);
         task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, this, 0, 20L);
+
+        ArenaConfig cm = new ArenaConfig(BedWars.plugin, getArena().getArenaName(), plugin.getDataFolder().getPath() + "/Arenas");
+        YamlConfiguration yml = cm.getYml();
+
+        this.temporaryWallMod = yml.getBoolean(ConfigPath.ARENA_TEMPORARY_WALL_MOD);
+        this.temporaryWallTimeToDelete = yml.getInt(ConfigPath.ARENA_TEMPORARY_WALL_TIME_TO_DELETE);
+        this.temporaryWallMaterial = yml.getString(ConfigPath.ARENA_TEMPORARY_WALL_MATERIAL);
+        this.temporaryWallWallProtect = yml.getInt(ConfigPath.ARENA_TEMPORARY_WALL_WALL_PROTECTION);
+        this.maxBuildY = yml.getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y);
+
+        this.temporaryWallPos = (List<ArrayList<ArrayList<Integer>>>) yml.getList(ConfigPath.ARENA_TEMPORARY_WALL_POS);
     }
 
+    private final boolean temporaryWallMod;
+    private final List<ArrayList<ArrayList<Integer>>> temporaryWallPos;
+    private final int temporaryWallTimeToDelete;
+    private final String temporaryWallMaterial;
+    private final int temporaryWallWallProtect;
+
+    private final int maxBuildY;
 
     /**
      * Get countdown value
@@ -144,6 +171,13 @@ public class GameStartingTask implements Runnable, StartingTask {
             for (ITeam bwt : getArena().getTeams()) {
                 bwt.spawnNPCs();
             }
+
+            if (temporaryWallMod) {
+                System.out.println("Temporary wall mode enabled");
+                System.out.println(temporaryWallPos);
+                this.setWalls(temporaryWallPos);
+            }
+
             return;
         }
 
@@ -162,6 +196,24 @@ public class GameStartingTask implements Runnable, StartingTask {
             }
         }
         countdown--;
+    }
+
+    private void setWalls(@NotNull List<ArrayList<ArrayList<Integer>>> wallsPos) {
+
+        World world = getArena().getWorld();
+        Material wallMaterial = Material.valueOf(temporaryWallMaterial);
+
+        for (ArrayList<ArrayList<Integer>> wallPos : wallsPos) {
+            List<int[]> blocksPosXZ = new Bresenham(wallPos.get(0), wallPos.get(1)).algorithm();
+            for (int y = 0; y < maxBuildY + 30; y++) {
+                for (int[] blockPos : blocksPosXZ) {
+                    Block block = world.getBlockAt(blockPos[0], y, blockPos[1]);
+                    if (block.getType() == Material.AIR) {
+                        block.setType(wallMaterial);
+                    }
+                }
+            }
+        }
     }
 
     //Spawn players

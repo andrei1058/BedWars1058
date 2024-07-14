@@ -200,6 +200,14 @@ public class ConfigPath {
     public static final String ARENA_TEAM_KILL_DROPS_LOC = "kill-drops-loc";
     public static final String ARENA_Y_LEVEL_KILL = "y-kill-height";
 
+    // RubyRed's arena-config
+    public static final String ARENA_TEMPORARY_WALL_MOD = "temporary-wall-mod.existence";
+    public static final String ARENA_TEMPORARY_WALL_POS = "temporary-wall-mod.pos";
+    public static final String ARENA_TEMPORARY_WALL_TIME_TO_DELETE = "temporary-wall-mod.time-to-delete";
+    public static final String ARENA_TEMPORARY_WALL_MATERIAL = "temporary-wall-mod.material";
+    public static final String ARENA_TEMPORARY_WALL_WALL_PROTECTION = "temporary-wall-mod.wall-protection";
+    //
+
     public static final String SOUNDS_COUNTDOWN_TICK = "game-countdown-others";
     public static final String SOUNDS_COUNTDOWN_TICK_X = "game-countdown-s";
     public static final String SOUND_GAME_START = "game-countdown-start";
@@ -344,4 +352,5 @@ public class ConfigPath {
 
     public static final String LOBBY_VOID_TELEPORT_ENABLED = "lobby-settings.void-tp";
     public static final String LOBBY_VOID_TELEPORT_HEIGHT = "lobby-settings.void-height";
+
 }
