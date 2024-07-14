@@ -133,6 +133,8 @@ public class Arena implements IArena {
 
     public boolean temporaryWallMod;
 
+    private int[] regionWallStartEnd = new int[2];
+
     private List<ArrayList<Integer>> wallBlocksPos = new ArrayList<>();
 
     private final List<Player> leaving = new ArrayList<>();
@@ -285,6 +287,14 @@ public class Arena implements IArena {
         yKillHeight = yml.getInt(ConfigPath.ARENA_Y_LEVEL_KILL);
         addToEnableQueue(this);
         Language.saveIfNotExists(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase(), String.valueOf(getGroup().charAt(0)).toUpperCase() + group.substring(1).toLowerCase());
+    }
+
+    public void setRegionWallStartEnd(int[] regionWallStartEnd) {
+        this.regionWallStartEnd = regionWallStartEnd;
+    }
+
+    public int[] getRegionWallStartEnd() {
+        return this.regionWallStartEnd;
     }
 
     public void setWallBlocksPos(List<ArrayList<Integer>> wallBlocksPos) {

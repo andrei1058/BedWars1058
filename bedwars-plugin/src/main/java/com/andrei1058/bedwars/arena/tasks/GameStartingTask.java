@@ -30,6 +30,7 @@ import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.api.region.Cuboid;
 import com.andrei1058.bedwars.api.tasks.StartingTask;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
@@ -38,6 +39,7 @@ import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
 import com.andrei1058.bedwars.z_myadditions.Bresenham;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -49,6 +51,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.nms;
@@ -82,6 +85,8 @@ public class GameStartingTask implements Runnable, StartingTask {
     private final List<ArrayList<ArrayList<Integer>>> temporaryWallPos;
     private final String temporaryWallMaterial;
     private final int temporaryWallWallProtect;
+
+    private final HashSet<int[]> wallBlocksPosXZ = new HashSet<>();
 
     public List<ArrayList<Integer>> wallBlocksPos = new ArrayList<>();
 
@@ -208,11 +213,16 @@ public class GameStartingTask implements Runnable, StartingTask {
         World world = getArena().getWorld();
         Material wallMaterial = Material.valueOf(temporaryWallMaterial);
 
+        int[] regionWallStartEnd = new int[2];
+        regionWallStartEnd[0] = arena.getRegionsList().size();
+
         for (ArrayList<ArrayList<Integer>> wallPos : wallsPos) {
             List<int[]> blocksPosXZ = new Bresenham(wallPos.get(0), wallPos.get(1)).algorithm();
-            for (int y = 0; y < maxBuildY + 30; y++) {
-                for (int[] blockPos : blocksPosXZ) {
+            for (int[] blockPos : blocksPosXZ) {
+                wallBlocksPosXZ.add(blockPos);
+                for (int y = 0; y <= maxBuildY + 30; y++) {
                     Block block = world.getBlockAt(blockPos[0], y, blockPos[1]);
+                    arena.getRegionsList().add(new Cuboid(new Location(world, blockPos[0], y, blockPos[1]), arena.getConfig().getInt(ConfigPath.ARENA_TEMPORARY_WALL_WALL_PROTECTION), true));
                     if (block.getType() == Material.AIR) {
                         block.setType(wallMaterial);
                         wallBlocksPos.add(new ArrayList<>(Arrays.asList(blockPos[0], y, blockPos[1])));
@@ -220,6 +230,11 @@ public class GameStartingTask implements Runnable, StartingTask {
                 }
             }
         }
+//        arena.setWallBlocksPosXZ(wallBlocksPosXZ);
+        regionWallStartEnd[1] = arena.getRegionsList().size() - 1;
+        if (regionWallStartEnd[1] >= regionWallStartEnd[0]) {
+            arena.setRegionWallStartEnd(regionWallStartEnd);
+        };
         arena.setWallBlocksPos(wallBlocksPos);
     }
 

@@ -38,6 +38,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.HashSet;
 import java.util.Map;
 
 import static com.andrei1058.bedwars.BedWars.nms;
@@ -111,6 +112,9 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                         )
                         .setType(Material.AIR);
                     });
+                    if (arena.getRegionWallStartEnd()[1] >= arena.getRegionWallStartEnd()[0]) {
+                        arena.getRegionsList().subList(arena.getRegionWallStartEnd()[0], arena.getRegionWallStartEnd()[1]).clear();
+                    }
                 }
             }
         }

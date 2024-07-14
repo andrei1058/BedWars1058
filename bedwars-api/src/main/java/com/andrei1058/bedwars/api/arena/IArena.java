@@ -44,6 +44,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unused")
 public interface IArena {
 
+    void setRegionWallStartEnd(int[] regionWallStartEnd);
+
+    int[] getRegionWallStartEnd();
+
     void setWallBlocksPos(List<ArrayList<Integer>> wallBlocksPos);
 
     List<ArrayList<Integer>> getWallBlocksPos();
