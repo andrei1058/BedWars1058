@@ -23,6 +23,9 @@ package com.andrei1058.bedwars.api.tasks;
 import com.andrei1058.bedwars.api.arena.IArena;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public interface StartingTask {
 
     int getCountdown();
@@ -32,6 +35,8 @@ public interface StartingTask {
     IArena getArena();
 
     int getTask();
+
+    List<ArrayList<Integer>> getWallBlocksPos();
 
     BukkitTask getBukkitTask();
 

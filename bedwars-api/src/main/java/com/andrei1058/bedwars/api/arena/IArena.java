@@ -44,6 +44,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unused")
 public interface IArena {
 
+    void setWallBlocksPos(List<ArrayList<Integer>> wallBlocksPos);
+
+    List<ArrayList<Integer>> getWallBlocksPos();
+
     /**
      * Check if a player is spectating on this arena.
      */

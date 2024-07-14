@@ -133,6 +133,8 @@ public class Arena implements IArena {
 
     public boolean temporaryWallMod;
 
+    private List<ArrayList<Integer>> wallBlocksPos = new ArrayList<>();
+
     private final List<Player> leaving = new ArrayList<>();
 
     /**
@@ -283,6 +285,14 @@ public class Arena implements IArena {
         yKillHeight = yml.getInt(ConfigPath.ARENA_Y_LEVEL_KILL);
         addToEnableQueue(this);
         Language.saveIfNotExists(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase(), String.valueOf(getGroup().charAt(0)).toUpperCase() + group.substring(1).toLowerCase());
+    }
+
+    public void setWallBlocksPos(List<ArrayList<Integer>> wallBlocksPos) {
+        this.wallBlocksPos = wallBlocksPos;
+    }
+
+    public List<ArrayList<Integer>> getWallBlocksPos() {
+        return this.wallBlocksPos;
     }
 
     /**

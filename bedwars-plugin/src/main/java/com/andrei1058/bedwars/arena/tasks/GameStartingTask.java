@@ -48,6 +48,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.nms;
@@ -70,7 +71,6 @@ public class GameStartingTask implements Runnable, StartingTask {
         YamlConfiguration yml = cm.getYml();
 
         this.temporaryWallMod = yml.getBoolean(ConfigPath.ARENA_TEMPORARY_WALL_MOD);
-        this.temporaryWallTimeToDelete = yml.getInt(ConfigPath.ARENA_TEMPORARY_WALL_TIME_TO_DELETE);
         this.temporaryWallMaterial = yml.getString(ConfigPath.ARENA_TEMPORARY_WALL_MATERIAL);
         this.temporaryWallWallProtect = yml.getInt(ConfigPath.ARENA_TEMPORARY_WALL_WALL_PROTECTION);
         this.maxBuildY = yml.getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y);
@@ -80,9 +80,10 @@ public class GameStartingTask implements Runnable, StartingTask {
 
     private final boolean temporaryWallMod;
     private final List<ArrayList<ArrayList<Integer>>> temporaryWallPos;
-    private final int temporaryWallTimeToDelete;
     private final String temporaryWallMaterial;
     private final int temporaryWallWallProtect;
+
+    public List<ArrayList<Integer>> wallBlocksPos = new ArrayList<>();
 
     private final int maxBuildY;
 
@@ -102,6 +103,10 @@ public class GameStartingTask implements Runnable, StartingTask {
      */
     public IArena getArena() {
         return arena;
+    }
+
+    public List<ArrayList<Integer>> getWallBlocksPos() {
+        return wallBlocksPos;
     }
 
     /**
@@ -210,10 +215,12 @@ public class GameStartingTask implements Runnable, StartingTask {
                     Block block = world.getBlockAt(blockPos[0], y, blockPos[1]);
                     if (block.getType() == Material.AIR) {
                         block.setType(wallMaterial);
+                        wallBlocksPos.add(new ArrayList<>(Arrays.asList(blockPos[0], y, blockPos[1])));
                     }
                 }
             }
         }
+        arena.setWallBlocksPos(wallBlocksPos);
     }
 
     //Spawn players

@@ -103,6 +103,14 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                 temporaryWallModCountdown--;
                 if (temporaryWallModCountdown == 0) {
                     System.out.println("Cтена рушится! (По крайней мере должна)");
+                    arena.getWallBlocksPos().forEach(blockPos -> {
+                        arena.getWorld().getBlockAt(
+                                blockPos.get(0),
+                                blockPos.get(1),
+                                blockPos.get(2)
+                        )
+                        .setType(Material.AIR);
+                    });
                 }
             }
         }
