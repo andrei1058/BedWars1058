@@ -790,7 +790,7 @@ public class v1_20_R3 extends VersionSupport {
 
     @Override
     public void placeTowerBlocks(@NotNull Block b, @NotNull IArena a, @NotNull TeamColor color, int x, int y, int z) {
-        b.getRelative(x, y, z).setType(color.woolMaterial());
+        b.getRelative(x, y, z).setType(Material.CUT_SANDSTONE);
         a.addPlacedBlock(b.getRelative(x, y, z));
     }
 
