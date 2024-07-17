@@ -110,15 +110,21 @@ public class PlayerDrops {
                     if (i == null) continue;
                     if (i.getType() == Material.AIR) continue;
                     if (i.getType() == Material.DIAMOND || i.getType() == Material.EMERALD || i.getType() == Material.IRON_INGOT || i.getType() == Material.GOLD_INGOT) {
-
-                        // add to killer inventory
-                        killer.getInventory().addItem(i);
-
-                        // count items
-                        if (materialDrops.containsKey(i.getType())) {
-                            materialDrops.replace(i.getType(), materialDrops.get(i.getType()) + i.getAmount());
-                        } else {
-                            materialDrops.put(i.getType(), i.getAmount());
+                        if (cause == PlayerKillEvent.PlayerKillCause.UNKNOWN) {
+                            arena.getWorld().dropItem(arena.getLastStandBlock(victim.getName()), i);
+                        }
+                        else {
+                            dropItems(victim, inventory);
+                            return true;
+//                            // add to killer inventory
+//                            killer.getInventory().addItem(i);
+//
+//                            // count items
+//                            if (materialDrops.containsKey(i.getType())) {
+//                                materialDrops.replace(i.getType(), materialDrops.get(i.getType()) + i.getAmount());
+//                            } else {
+//                                materialDrops.put(i.getType(), i.getAmount());
+//                            }
                         }
                     }
                 }
@@ -146,7 +152,7 @@ public class PlayerDrops {
                     }
                     killer.sendMessage(msg.replace("{amount}", String.valueOf(amount)));
                 }
-                materialDrops.clear();
+//                materialDrops.clear();
             }
 
         }

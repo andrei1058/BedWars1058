@@ -56,6 +56,8 @@ public class GameRestartingTask implements Runnable, RestartingTask {
         Sounds.playSound("game-end", arena.getPlayers());
         Sounds.playSound("game-end", arena.getSpectators());
 
+        arena.clearLastStandBlock();
+
         // teleport to alive players
         if (arena.getConfig().getGameOverridableBoolean(ConfigPath.GENERAL_GAME_END_TELEPORT_ELIMINATED)) {
             if (!arena.getPlayers().isEmpty()) {

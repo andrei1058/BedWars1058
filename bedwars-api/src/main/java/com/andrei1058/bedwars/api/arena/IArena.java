@@ -44,6 +44,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unused")
 public interface IArena {
 
+    void setLastStandBlock(String playerName, Location locationBlock);
+
+    Location getLastStandBlock(String PlayerName);
+
+    void clearLastStandBlock();
+
     void setRegionWallStartEnd(int[] regionWallStartEnd);
 
     int[] getRegionWallStartEnd();

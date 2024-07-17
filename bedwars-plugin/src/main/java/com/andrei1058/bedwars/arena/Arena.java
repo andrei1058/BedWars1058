@@ -137,6 +137,8 @@ public class Arena implements IArena {
 
     private List<ArrayList<Integer>> wallBlocksPos = new ArrayList<>();
 
+    private final HashMap<String, Location> lastStandBlock = new HashMap<>();
+
     private final List<Player> leaving = new ArrayList<>();
 
     /**
@@ -287,6 +289,18 @@ public class Arena implements IArena {
         yKillHeight = yml.getInt(ConfigPath.ARENA_Y_LEVEL_KILL);
         addToEnableQueue(this);
         Language.saveIfNotExists(Messages.ARENA_DISPLAY_GROUP_PATH + getGroup().toLowerCase(), String.valueOf(getGroup().charAt(0)).toUpperCase() + group.substring(1).toLowerCase());
+    }
+
+    public void setLastStandBlock(String playerName, Location locationBlock) {
+        lastStandBlock.put(playerName, locationBlock);
+    }
+
+    public Location getLastStandBlock(String PlayerName) {
+        return lastStandBlock.get(PlayerName);
+    }
+
+    public void clearLastStandBlock() {
+        lastStandBlock.clear();
     }
 
     public void setRegionWallStartEnd(int[] regionWallStartEnd) {

@@ -34,6 +34,8 @@ import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
@@ -115,9 +117,24 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                     if (arena.getRegionWallStartEnd()[1] >= arena.getRegionWallStartEnd()[0]) {
                         arena.getRegionsList().subList(arena.getRegionWallStartEnd()[0], arena.getRegionWallStartEnd()[1]).clear();
                     }
+                    arena.getPlayers().forEach(
+                            player -> {player.sendTitle("", "§aСТЕНА ПАЛА", 10, 60, 20);}
+                    );
                 }
             }
         }
+
+        World world = arena.getWorld();
+
+        arena.getPlayers().forEach(player -> {
+            Location playerLocation = player.getLocation();
+            playerLocation.add(0, -1, 0);
+            Block block = world.getBlockAt(playerLocation);
+            playerLocation.add(0, 1, 0);
+            if (block.getType() != Material.AIR) {
+                arena.setLastStandBlock(player.getName(), playerLocation);
+            }
+        });
 
         switch (getArena().getNextEvent()) {
             case EMERALD_GENERATOR_TIER_II:

@@ -748,11 +748,15 @@ public class Russian extends Language{
         addContentMessages(yml, "wool", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Шерсть", Arrays.asList("&7Цена: &f{cost} {currency}", "", "&7Great for bridging across", "&7islands. Turns into your team's",
                 "&7color.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "clay", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Глина", Arrays.asList("&7Цена: {cost} {currency}", "", "&7Стандартный блок для защиты кровати.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Взрывоустойчивое стекло", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Имеет имунитет к взрывам.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "glass", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Взрывоустойчивое стекло", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Защищает от взрыва, но повреждается от него и .", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "stone", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Эндерняк", Arrays.asList("&7Цена: {cost} {currency}", "", "&7Солидный блок для защиты кровати.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "ladder", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Лестницы", Arrays.asList("&7Цена: {cost} {currency}", "", "&7Полезно когда кошки застревают", "&7на деревьях.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "obsidian", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Обсидиан", Arrays.asList("&7Цена: {cost} {currency}", "", "&7Лучший блок для защиты кровати.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "wood", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}Дерево", Arrays.asList("&7Цена: {cost} {currency}", "", "&7Хороший блок для защиты кровати.", "", "{quick_buy}", "{buy_status}"));
+
+        addContentMessages(yml, "iron-ingot-3", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}3 железных слитка", Arrays.asList("&7Цена: {cost} {currency}", "", "&7Конвертирование золота в железо.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "iron-ingot-18", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}18 железных слитков", Arrays.asList("&7Цена: {cost} {currency}", "", "&7Конвертирование золота в железо.", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "iron-ingot-27", ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "{color}27 железных слитков", Arrays.asList("&7Цена: {cost} {currency}", "", "&7Конвертирование золота в железо.", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_MELEE, "&8Оружие", "&aОружие", Collections.singletonList("&eНажмите для просмотра!"));
 
@@ -760,6 +764,7 @@ public class Russian extends Language{
         addContentMessages(yml, "iron-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Железный меч", Arrays.asList("&7Цена: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "diamond-sword", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Алмазный меч", Arrays.asList("&7Цена: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "stick", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Палка (Отдача I)", Arrays.asList("&7Цена: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "fishing-rod", ConfigPath.SHOP_PATH_CATEGORY_MELEE, "{color}Удочка", Arrays.asList("&7Цена: {cost} {currency}", "", "{quick_buy}", "{buy_status}"));
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_ARMOR, "&8Броня", "&aБроня", Collections.singletonList("&eНажмите для просмотра!"));
 
@@ -812,6 +817,8 @@ public class Russian extends Language{
         addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Магическое Молоко", Arrays.asList("&7Цена: {cost} {currency}", "", "&7Снимает эффекты всех ловушек,",
                 "&7поставленных на базу противника, в течении 60 секунд.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "sponge", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Губка", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Вжимает в себя воду.",
+                "", "{quick_buy}", "{buy_status}"));
+        addContentMessages(yml, "tower", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Башня", Arrays.asList("&7Cost: {cost} {currency}", "", "&7Автоматическая постройка башни.",
                 "", "{quick_buy}", "{buy_status}"));
 
 
@@ -1016,8 +1023,7 @@ public class Russian extends Language{
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge"),
                 Arrays.asList("&7Делает быстрее спавнер", "&7ресурсов вашего острова.", "", "{tier_1_color}Фаза 1: +50% К ресурсам, &b{tier_1_cost} {tier_1_currency}",
                         "{tier_2_color}Фаза 2: +100% К ресурсам, &b{tier_2_cost} {tier_2_currency}",
-                        "{tier_3_color}Фаза 3: Спавнит изумруды, &b{tier_3_cost} {tier_3_currency}",
-                        "{tier_4_color}Фаза 4: +200% К ресурсам, &b{tier_4_cost} {tier_4_currency}", ""));
+                        "{tier_3_color}Фаза 3: Спавнит изумруды, &b{tier_3_cost} {tier_3_currency}", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-2"), "{color}Золотая Печь");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-3"), "{color}Изумрудная Печь");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-4"), "{color}Алмазная Печь");
