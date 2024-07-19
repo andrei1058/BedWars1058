@@ -40,8 +40,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.BedWars.plugin;
@@ -54,6 +53,9 @@ public class EggBridgeTask implements Runnable {
     private Player player;
     private IArena arena;
     private BukkitTask task;
+
+//    private final List<Block> eggBlocks = new ArrayList<>();
+    private final HashMap<Block, Integer> eggBlocks = new HashMap<>();
 
     public EggBridgeTask(Player player, Egg projectile, TeamColor teamColor) {
         IArena a = Arena.getArenaByPlayer(player);
@@ -110,24 +112,13 @@ public class EggBridgeTask implements Runnable {
     private void setEggBlock(Block block, Location loc) {
         if (!Misc.isBuildProtected(block.getLocation(), getArena())) {
             if (block.getType() == Material.AIR) {
-                block.setType(Material.SNOW);
-
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        BlockData data = block.getBlockData();
-                        if (!(data instanceof Snow)) return;
-
-                        Snow snow = (Snow) data;
-                        snow.setLayers(7);
-                        block.setBlockData(snow);
-                        getArena().addPlacedBlock(block);
-                        Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), block));
-                        loc.getWorld().playEffect(block.getLocation(), nms.eggBridge(), 3);
-                        Sounds.playSound("egg-bridge-block", getPlayer());
-                        removeBlock(block);
-                    }
-                }.runTask(plugin);
+                block.setType(Material.SNOW_BLOCK);
+                eggBlocks.put(block, 0);
+                getArena().addPlacedBlock(block);
+                Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), block));
+                loc.getWorld().playEffect(block.getLocation(), nms.eggBridge(), 3);
+                Sounds.playSound("egg-bridge-block", getPlayer());
+                removeBlock(block);
             }
         }
     }
@@ -136,18 +127,19 @@ public class EggBridgeTask implements Runnable {
         new BukkitRunnable() {
             @Override
             public void run() {
-
-                if (block.getType() != Material.SNOW) return;
-
-                Snow snow = (Snow) block.getBlockData();
-
-                if (snow.getLayers() == 1) block.setType(Material.AIR);
-                else if (snow.getLayers() > 1) {
-                    snow.setLayers(snow.getLayers() - 1);
-                    block.setBlockData(snow);
+                if (block.getType() != Material.SNOW_BLOCK) {
+                    eggBlocks.remove(block);
+                    this.cancel();
+                    return;
+                } else if (eggBlocks.get(block) == 10) {
+                    block.setType(Material.AIR);
+                    eggBlocks.remove(block);
+                    this.cancel();
+                    return;
                 }
+                eggBlocks.put(block, eggBlocks.get(block) + 1);
             }
-        }.runTaskTimer(plugin, 0L, 40L);
+        }.runTaskTimer(plugin, 0L, 10L);
     }
 
     public void cancel(){

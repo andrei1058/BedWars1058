@@ -812,7 +812,7 @@ public class Russian extends Language{
                 "&7до базы вашего врага.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "water-bucket", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Ведро Воды", Arrays.asList("&7Цена: {cost} {currency}", "", "&7Отличный метод замедлить ваших",
                 "&7противников. Также может", "&7защитить от взрыва динамита.", "", "{quick_buy}", "{buy_status}"));
-        addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Яйцо", Arrays.asList("&7Цена: {cost} {currency}", "", "&7Создаёт мост, по заданной",
+        addContentMessages(yml, "bridge-egg", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Яйцо", Arrays.asList("&7Цена: {cost} {currency}", "", "&7Создаёт снежный мост, по заданной, разрушающийся через 5 секунд",
                 "&7траектории после броска.", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "magic-milk", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}Магическое Молоко", Arrays.asList("&7Цена: {cost} {currency}", "", "&7Снимает эффекты всех ловушек,",
                 "&7поставленных на базу противника, в течении 60 секунд.", "", "{quick_buy}", "{buy_status}"));

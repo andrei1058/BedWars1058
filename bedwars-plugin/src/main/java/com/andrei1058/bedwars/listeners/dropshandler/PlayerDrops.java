@@ -27,6 +27,9 @@ import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.language.Messages;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.libs.org.eclipse.aether.spi.log.Logger;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -111,7 +114,14 @@ public class PlayerDrops {
                     if (i.getType() == Material.AIR) continue;
                     if (i.getType() == Material.DIAMOND || i.getType() == Material.EMERALD || i.getType() == Material.IRON_INGOT || i.getType() == Material.GOLD_INGOT) {
                         if (cause == PlayerKillEvent.PlayerKillCause.UNKNOWN) {
-                            arena.getWorld().dropItem(arena.getLastStandBlock(victim.getName()), i);
+                            Location locDropItem = arena.getLastStandBlock(victim.getName());
+                            if (checkBlocksAround(locDropItem.add(0, 0, 0))) {
+                                arena.getWorld().dropItemNaturally(locDropItem, i);
+                            }
+                            else {
+                                System.out.println("Не натуарльный дроп");
+                                arena.getWorld().dropItem(locDropItem.add(0, 1.5, 0), i);
+                            }
                         }
                         else {
                             dropItems(victim, inventory);
@@ -157,6 +167,29 @@ public class PlayerDrops {
 
         }
         return true;
+    }
+
+    private static boolean checkBlocksAround(Location blockLocation) {
+        int y_block = blockLocation.getBlockY();
+        int value = 0;
+        World world = blockLocation.getWorld();
+        Block blockShift;
+
+        for (int x_shift = -1; x_shift <= 1; x_shift++) {
+            for (int z_shift = -1; z_shift <= 1; z_shift++) {
+                for (int y_shift = 0; y_shift >= -y_block; y_shift--) {
+                    blockShift = world.getBlockAt(blockLocation.clone().add(x_shift, y_shift, z_shift));
+                    if (blockShift.getType() != Material.AIR) {
+                        value++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        System.out.println("value: " + value);
+
+        return value == 9;
     }
 
     private static void dropItems(Player player, List<ItemStack> inventory) {

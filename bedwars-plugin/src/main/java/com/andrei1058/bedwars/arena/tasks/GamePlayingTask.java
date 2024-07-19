@@ -130,9 +130,9 @@ public class GamePlayingTask implements Runnable, PlayingTask {
             Location playerLocation = player.getLocation();
             playerLocation.add(0, -1, 0);
             Block block = world.getBlockAt(playerLocation);
-            playerLocation.add(0, 1, 0);
             if (block.getType() != Material.AIR) {
-                arena.setLastStandBlock(player.getName(), playerLocation);
+                arena.setLastStandBlock(player.getName(), block.getLocation().add(0.5, 1, 0.5));
+//                System.out.println("X: " + (block.getLocation().getX()+0.5) + " Y: " + (block.getLocation().getY()+1) + " Z: " + (block.getLocation().getZ()+0.5));
             }
         });
 
