@@ -36,14 +36,21 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import static com.andrei1058.bedwars.BedWars.nms;
+import static com.andrei1058.bedwars.BedWars.plugin;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 
 public class GamePlayingTask implements Runnable, PlayingTask {
@@ -53,6 +60,9 @@ public class GamePlayingTask implements Runnable, PlayingTask {
     private int beds_destroy_countdown, dragon_spawn_countdown, game_end_countdown;
     private final boolean temporaryWallMod;
     private int temporaryWallModCountdown = -1;
+    private boolean shootersEnabled;
+    private int shootersCooldwan = 0;
+    private int shootersRad = 0;
 
     public GamePlayingTask(Arena arena) {
         this.arena = arena;
@@ -63,6 +73,11 @@ public class GamePlayingTask implements Runnable, PlayingTask {
         if (temporaryWallMod) {
             temporaryWallModCountdown = arena.getConfig().getInt(ConfigPath.ARENA_TEMPORARY_WALL_TIME_TO_DELETE);
         }
+        this.shootersEnabled = arena.getConfig().getBoolean(ConfigPath.ARENA_SHOOTERS_ENABLED);
+//        if (shootersEnabled) {
+//            shootersCooldwan = arena.getConfig().getInt(ConfigPath.ARENA_SHOOTERS_COOLDAWN);
+//        }
+
         this.task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, this, 0, 20L);
     }
 
@@ -121,6 +136,16 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                             player -> {player.sendTitle("", "§aСТЕНА ПАЛА", 10, 60, 20);}
                     );
                 }
+            }
+        }
+
+        if (shootersEnabled) {
+            if (shootersCooldwan == 0) {
+                shooterFunc();
+                shootersCooldwan = arena.getConfig().getInt(ConfigPath.ARENA_SHOOTERS_COOLDAWN);
+            }
+            else {
+                shootersCooldwan--;
             }
         }
 
@@ -302,6 +327,54 @@ public class GamePlayingTask implements Runnable, PlayingTask {
             o.spawn();
         }
     }
+
+    private void shooterFunc() {
+        arena.getPlayers().forEach(
+                player -> {
+           Location playerLocation = player.getLocation();
+           arena.getShootersPos().forEach(
+               shooterPos -> {
+                   shooterPos = shooterPos.clone().add(0.5, 0, 0.5);
+                   Vector vectorSP = playerLocation.toVector().subtract(shooterPos.toVector());
+                   System.out.println(vectorSP.length());
+                   if (vectorSP.length() <= arena.getConfig().getInt(ConfigPath.ARENA_SHOOTERS_RAD)) {
+//                       spawnArrowShooter(vectorSP, shooterPos);
+                       Vector arrowVector = vectorSP.normalize();
+                       double arrowSpeed = 2;
+                       Location spawnArrowLocation = shooterPos.clone().add(arrowVector.clone().multiply(1.1));
+                       System.out.println(spawnArrowLocation);
+                       Arrow arrow = (Arrow) arena.getWorld().spawnEntity(spawnArrowLocation, EntityType.ARROW);
+                       arrow.setGravity(false);
+                       arrow.setVelocity(arrowVector.clone().multiply(arrowSpeed));
+                       removeArrowFunc(arrow, shooterPos);
+                   }
+               }
+           );
+        });
+    };
+
+    private void removeArrowFunc(Arrow arrow, Location startPos) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (
+                    arrow.isDead()
+                    || arrow.getLocation().toVector().subtract(startPos.toVector()).length() > arena.getConfig().getInt(ConfigPath.ARENA_SHOOTERS_RAD)) {
+                    arrow.remove();
+                    this.cancel();
+                    System.out.println("Стрела сдохла");
+                }
+            }
+        }.runTaskTimer(plugin, 0, 1);
+    }
+
+//    private void spawnArrowShooter(Vector arrowVector, Location shooterPos) {
+//        arrowVector = arrowVector.normalize();
+//        double arrowSpeed = 2;
+//        Location spawnArrowLocation = shooterPos.add(arrowVector.clone().multiply(1.1));
+//        Arrow arrow = (Arrow) arena.getWorld().spawnEntity(spawnArrowLocation, EntityType.ARROW);
+//        arrow.setVelocity(arrowVector.clone().multiply(arrowSpeed));
+//    }
 
     public void cancel() {
         task.cancel();

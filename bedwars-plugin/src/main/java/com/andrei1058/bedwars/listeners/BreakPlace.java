@@ -100,7 +100,7 @@ public class BreakPlace implements Listener {
 
     @EventHandler
     public void onCactus(BlockPhysicsEvent e) {
-        System.out.println("Физика!!!");
+//        System.out.println(e.getBlock().getType());
         if (e.getBlock().getType() == Material.CACTUS) {
             if (Arena.getArenaByIdentifier(e.getBlock().getWorld().getName()) != null) e.setCancelled(true);
         }

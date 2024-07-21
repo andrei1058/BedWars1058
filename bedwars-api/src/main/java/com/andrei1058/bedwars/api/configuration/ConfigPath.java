@@ -206,6 +206,11 @@ public class ConfigPath {
     public static final String ARENA_TEMPORARY_WALL_TIME_TO_DELETE = "temporary-wall-mod.time-to-delete";
     public static final String ARENA_TEMPORARY_WALL_MATERIAL = "temporary-wall-mod.material";
     public static final String ARENA_TEMPORARY_WALL_WALL_PROTECTION = "temporary-wall-mod.wall-protection";
+
+    public static final String ARENA_SHOOTERS_ENABLED = "shooters.enabled";
+    public static final String ARENA_SHOOTERS_ARRAY = "shooters.shooters-array";
+    public static final String ARENA_SHOOTERS_RAD = "shooters.shooters-rad";
+    public static final String ARENA_SHOOTERS_COOLDAWN = "shooters.shooters-cooldawn";
     //
 
     public static final String SOUNDS_COUNTDOWN_TICK = "game-countdown-others";
