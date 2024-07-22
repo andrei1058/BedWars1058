@@ -44,10 +44,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unused")
 public interface IArena {
 
-    void setShootersPos(List<Location> shootersPos);
-
-    List<Location> getShootersPos();
-
     void setLastStandBlock(String playerName, Location locationBlock);
 
     Location getLastStandBlock(String PlayerName);

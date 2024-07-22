@@ -73,15 +73,9 @@ public class ArenaConfig extends ConfigManager {
         yml.addDefault(ConfigPath.ARENA_GAME_RULES, rules);
         yml.addDefault(ConfigPath.ARENA_TEMPORARY_WALL_MOD, false);
         yml.addDefault(ConfigPath.ARENA_TEMPORARY_WALL_POS, new ArrayList<int[]>());
-        yml.addDefault(ConfigPath.ARENA_TEMPORARY_WALL_TIME_TO_DELETE, 540);
+        yml.addDefault(ConfigPath.ARENA_TEMPORARY_WALL_TIME_TO_DELETE, 600);
         yml.addDefault(ConfigPath.ARENA_TEMPORARY_WALL_MATERIAL, "BARRIER");
         yml.addDefault(ConfigPath.ARENA_TEMPORARY_WALL_WALL_PROTECTION, 3);
-
-        yml.addDefault(ConfigPath.ARENA_SHOOTERS_ENABLED, false);
-        yml.addDefault(ConfigPath.ARENA_SHOOTERS_ARRAY, new ArrayList<int[]>());
-        yml.addDefault(ConfigPath.ARENA_SHOOTERS_RAD, 30);
-        yml.addDefault(ConfigPath.ARENA_SHOOTERS_COOLDAWN, 15);
-
         yml.options().copyDefaults(true);
         save();
 

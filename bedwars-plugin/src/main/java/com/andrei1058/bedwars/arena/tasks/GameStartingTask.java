@@ -73,30 +73,18 @@ public class GameStartingTask implements Runnable, StartingTask {
         ArenaConfig cm = new ArenaConfig(BedWars.plugin, getArena().getArenaName(), plugin.getDataFolder().getPath() + "/Arenas");
         YamlConfiguration yml = cm.getYml();
 
-        this.shootersEnable = yml.getBoolean(ConfigPath.ARENA_SHOOTERS_ENABLED);
-
         this.temporaryWallMod = yml.getBoolean(ConfigPath.ARENA_TEMPORARY_WALL_MOD);
         this.temporaryWallMaterial = yml.getString(ConfigPath.ARENA_TEMPORARY_WALL_MATERIAL);
-//        int temporaryWallWallProtect = yml.getInt(ConfigPath.ARENA_TEMPORARY_WALL_WALL_PROTECTION);
+        this.temporaryWallWallProtect = yml.getInt(ConfigPath.ARENA_TEMPORARY_WALL_WALL_PROTECTION);
         this.maxBuildY = yml.getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y);
 
         this.temporaryWallPos = (List<ArrayList<ArrayList<Integer>>>) yml.getList(ConfigPath.ARENA_TEMPORARY_WALL_POS);
-
-        List<ArrayList<Integer>> shootersArrayInt = (List<ArrayList<Integer>>) yml.getList(ConfigPath.ARENA_SHOOTERS_ARRAY);
-        this.shootersArray.clear();
-        for (ArrayList<Integer> shooterPosInt : shootersArrayInt) {
-            this.shootersArray.add(
-                    new Location(arena.getWorld(), shooterPosInt.get(0), shooterPosInt.get(1), shooterPosInt.get(2))
-            );
-        }
-        arena.setShootersPos(this.shootersArray);
     }
 
     private final boolean temporaryWallMod;
     private final List<ArrayList<ArrayList<Integer>>> temporaryWallPos;
     private final String temporaryWallMaterial;
-    private final boolean shootersEnable;
-    private final List<Location> shootersArray = new ArrayList<>();
+    private final int temporaryWallWallProtect;
 
     private final HashSet<int[]> wallBlocksPosXZ = new HashSet<>();
 
@@ -200,8 +188,6 @@ public class GameStartingTask implements Runnable, StartingTask {
                 this.setWalls(temporaryWallPos);
             }
 
-            if (shootersEnable) { setShooters(); }
-
             return;
         }
 
@@ -220,17 +206,6 @@ public class GameStartingTask implements Runnable, StartingTask {
             }
         }
         countdown--;
-    }
-
-    private void setShooters() {
-        World world = arena.getWorld();
-        System.out.println(shootersArray);
-        shootersArray.forEach(
-                shooterPos -> {
-//                    world.getBlockAt(shooterPos.clone().add(0, -1, 0)).setType(Material.SOUL_SAND);
-                    world.getBlockAt(shooterPos).setType(Material.SKELETON_SKULL);
-                }
-        );
     }
 
     private void setWalls(@NotNull List<ArrayList<ArrayList<Integer>>> wallsPos) {
@@ -255,6 +230,7 @@ public class GameStartingTask implements Runnable, StartingTask {
                 }
             }
         }
+//        arena.setWallBlocksPosXZ(wallBlocksPosXZ);
         regionWallStartEnd[1] = arena.getRegionsList().size() - 1;
         if (regionWallStartEnd[1] >= regionWallStartEnd[0]) {
             arena.setRegionWallStartEnd(regionWallStartEnd);
