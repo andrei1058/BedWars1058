@@ -115,6 +115,8 @@
         <module>versionsupport_v1_20_R2</module>
         <module>versionsupport_v1_20_R3</module>
         <module>versionsupport_v1_20_R4</module>
+        <module>versionsupport_v1_21_R1</module>
+        <module>versionsupport_nms_cmn1</module>
     </modules>
 
     <distributionManagement>

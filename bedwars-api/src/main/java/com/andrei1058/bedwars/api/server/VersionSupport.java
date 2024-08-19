@@ -54,6 +54,10 @@ public abstract class VersionSupport {
     private static final ConcurrentHashMap<UUID, Despawnable> despawnables = new ConcurrentHashMap<>();
     private final Plugin plugin;
 
+    /**
+     * @param plugin bed-wars instance.
+     * @param versionName version name.
+     */
     public VersionSupport(Plugin plugin, String versionName) {
         name2 = versionName;
         this.plugin = plugin;
