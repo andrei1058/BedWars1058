@@ -38,6 +38,8 @@ import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -48,6 +50,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 
 /**
@@ -73,11 +76,15 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
 
     @Override
     public String getTag(org.bukkit.inventory.ItemStack itemStack, String key) {
-        var tag = getTag(itemStack);
-        return tag == null ? null : tag.e(key) ? tag.l(key) : null;
+        var tag = getDataContainer(itemStack);
+        if (null == tag) {
+            return null;
+        }
+        return tag.get(
+                Objects.requireNonNull(NamespacedKey.fromString(key)),
+                PersistentDataType.STRING
+        );
     }
-
-    public abstract @Nullable NBTTagCompound getTag(@NotNull org.bukkit.inventory.ItemStack itemStack);
 
     @Override
     public void sendTitle(@NotNull Player p, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
@@ -195,11 +202,17 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
 
     @Override
     public double getDamage(org.bukkit.inventory.ItemStack i) {
-        var tag = getTag(i);
+        var tag = getDataContainer(i);
         if (null == tag) {
             throw new RuntimeException("Provided item has no Tag");
         }
-        return tag.k("generic.attackDamage");
+        // todo experimental
+        var dmg = getDataContainer(i);
+        if (null == dmg) {
+            return -1;
+        }
+        var dmg2 = dmg.get(NamespacedKey.minecraft("generic.attackDamage"), PersistentDataType.DOUBLE);
+        return null == dmg2 ? -1 : dmg2;
     }
 
     private static ArmorStand createArmorStand(String name, Location loc) {
@@ -304,26 +317,65 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
 
     @Override
     public org.bukkit.inventory.ItemStack addCustomData(org.bukkit.inventory.ItemStack i, String data) {
-        var tag = getCreateTag(i);
-        tag.a(VersionSupport.PLUGIN_TAG_GENERIC_KEY, data);
-        return applyTag(i, tag);
+        var tag = getDataContainer(i);
+        if (null == tag) {
+            return i;
+        }
+        tag.set(
+                Objects.requireNonNull(NamespacedKey.fromString(VersionSupport.PLUGIN_TAG_GENERIC_KEY, getPlugin())),
+                PersistentDataType.STRING,
+                data
+        );
+        return i;
+    }
+
+    public org.bukkit.inventory.ItemStack addCustomData(org.bukkit.inventory.ItemStack i, String key, String data) {
+        var tag = getDataContainer(i);
+        if (null == tag) {
+            return i;
+        }
+        tag.set(
+                Objects.requireNonNull(NamespacedKey.fromString(key, getPlugin())),
+                PersistentDataType.STRING,
+                data
+        );
+        return i;
     }
 
     @Override
     public org.bukkit.inventory.ItemStack setTag(org.bukkit.inventory.ItemStack itemStack, String key, String value) {
-        var tag = getCreateTag(itemStack);
-        tag.a(key, value);
-        return applyTag(itemStack, tag);
+        var tag = getDataContainer(itemStack);
+        if (null == tag) {
+            return itemStack;
+        }
+        key = key.replaceFirst("minecraft:", "");
+        tag.set(
+                Objects.requireNonNull(NamespacedKey.minecraft(key)),
+                PersistentDataType.STRING,
+                value
+        );
+        return itemStack;
     }
 
     @Override
     public boolean isCustomBedWarsItem(org.bukkit.inventory.ItemStack i) {
-        return getCreateTag(i).e(VersionSupport.PLUGIN_TAG_GENERIC_KEY);
+        var tag = getDataContainer(i);
+        if (null == tag) {
+            return false;
+        }
+        return tag.has(Objects.requireNonNull(NamespacedKey.fromString(VersionSupport.PLUGIN_TAG_GENERIC_KEY)));
     }
 
     @Override
     public String getCustomData(org.bukkit.inventory.ItemStack i) {
-        return getCreateTag(i).l(VersionSupport.PLUGIN_TAG_GENERIC_KEY);
+        var tag = getDataContainer(i);
+        if (null == tag) {
+            return null;
+        }
+        return tag.get(
+                Objects.requireNonNull(NamespacedKey.fromString(VersionSupport.PLUGIN_TAG_GENERIC_KEY)),
+                PersistentDataType.STRING
+        );
     }
 
     @Override
@@ -428,36 +480,35 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
     }
 
 
-    @Override
+    @Override @Nullable
     public String getShopUpgradeIdentifier(org.bukkit.inventory.ItemStack itemStack) {
-        var tag = getCreateTag(itemStack);
-        return tag.e(VersionSupport.PLUGIN_TAG_TIER_KEY) ? tag.l(VersionSupport.PLUGIN_TAG_TIER_KEY) : "null";
+        return getTag(itemStack, VersionSupport.PLUGIN_TAG_TIER_KEY);
     }
 
     @Override
     public org.bukkit.inventory.ItemStack setShopUpgradeIdentifier(org.bukkit.inventory.ItemStack itemStack, String identifier) {
-        var tag = getCreateTag(itemStack);
-        tag.a(VersionSupport.PLUGIN_TAG_TIER_KEY, identifier);
-        return applyTag(itemStack, tag);
+        return addCustomData(itemStack, VersionSupport.PLUGIN_TAG_TIER_KEY, identifier);
     }
 
     @Override
     public org.bukkit.inventory.ItemStack getPlayerHead(Player player, org.bukkit.inventory.ItemStack copyTagFrom) {
-        org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(materialPlayerHead());
-
-        if (copyTagFrom != null) {
-            var tag = getTag(copyTagFrom);
-            head = applyTag(head, tag);
-        }
-
-        var meta = head.getItemMeta();
-        if (meta instanceof SkullMeta) {
-            ((SkullMeta) meta).setOwnerProfile(player.getPlayerProfile());
-        }
-        head.setItemMeta(meta);
-        return head;
+        // todo
+//        org.bukkit.inventory.ItemStack head = new org.bukkit.inventory.ItemStack(materialPlayerHead());
+//
+//        if (copyTagFrom != null) {
+//            var tag = getTag(copyTagFrom);
+//            head = applyTag(head, tag);
+//        }
+//
+//        var meta = head.getItemMeta();
+//        if (meta instanceof SkullMeta) {
+//            ((SkullMeta) meta).setOwnerProfile(player.getPlayerProfile());
+//        }
+//        head.setItemMeta(meta);
+        return copyTagFrom;
     }
 
+    public abstract ClientboundPlayerInfoUpdatePacket getAddPlayer(EntityPlayer player);
 
     @Override
     public void sendPlayerSpawnPackets(Player respawned, IArena arena) {
@@ -469,7 +520,7 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
         if (arena.getRespawnSessions().containsKey(respawned)) return;
 
         EntityPlayer entityPlayer = getPlayer(respawned);
-        PacketPlayOutSpawnEntity show = new PacketPlayOutSpawnEntity(entityPlayer);
+        ClientboundPlayerInfoUpdatePacket show = getAddPlayer(entityPlayer);
         PacketPlayOutEntityVelocity playerVelocity = new PacketPlayOutEntityVelocity(entityPlayer);
         // we send head rotation packet because sometimes on respawn others see him with bad rotation
         PacketPlayOutEntityHeadRotation head = new PacketPlayOutEntityHeadRotation(entityPlayer, getCompressedAngle(entityPlayer.getBukkitYaw()));
@@ -501,7 +552,7 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
                         hideArmor(p, respawned);
                     } else {
 
-                        PacketPlayOutSpawnEntity show2 = new PacketPlayOutSpawnEntity(boundTo);
+                        ClientboundPlayerInfoUpdatePacket show2 = getAddPlayer(boundTo);
                         PacketPlayOutEntityVelocity playerVelocity2 = new PacketPlayOutEntityVelocity(boundTo);
                         PacketPlayOutEntityHeadRotation head2 = new PacketPlayOutEntityHeadRotation(boundTo, getCompressedAngle(boundTo.getBukkitYaw()));
                         this.sendPackets(respawned, show2, playerVelocity2, head2);
@@ -515,7 +566,7 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
         for (Player spectator : arena.getSpectators()) {
             if (spectator == null) continue;
             if (spectator.equals(respawned)) continue;
-            EntityPlayer boundTo = ((CraftPlayer) spectator).getHandle();
+//            EntityPlayer boundTo = ((CraftPlayer) spectator).getHandle();
             respawned.hidePlayer(getPlugin(), spectator);
             if (spectator.getWorld().equals(respawned.getWorld())) {
                 if (respawned.getLocation().distance(spectator.getLocation()) <= arena.getRenderDistance()) {
@@ -543,6 +594,7 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
 
     @Override
     public abstract String getMainLevel();
+
     @Override
     abstract public int getVersion();
 
@@ -591,19 +643,15 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
         // minecraft clears them on death on newer version
     }
 
-    private @Nullable NBTTagCompound getTag(@NotNull ItemStack itemStack) {
-        // todo WIP
-        return new NBTTagCompound();
+    @Nullable
+    public PersistentDataContainer getDataContainer(org.bukkit.inventory.@NotNull ItemStack itemStack) {
+        if (null == itemStack.getItemMeta()) {
+            return null;
+        }
+        return itemStack.getItemMeta().getPersistentDataContainer();
     }
 
-    public NBTTagCompound getCreateTag(ItemStack itemStack) {
-        var tag = getTag(itemStack);
-        return null == tag ? initializeTag(itemStack) : tag;
-    }
-
-    abstract @NotNull NBTTagCompound initializeTag(ItemStack itemStack);
-
-    abstract EntityPlayer getPlayer(Player player);
+    public abstract EntityPlayer getPlayer(Player player);
 
     public List<Pair<EnumItemSlot, ItemStack>> getPlayerEquipment(@NotNull Player player) {
         return getPlayerEquipment(getPlayer(player));
@@ -658,7 +706,7 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
         player.spawnParticle(Particle.HAPPY_VILLAGER, location, 1);
     }
 
-    abstract void sendPacket(Player player, Packet<?> packet) ;
+    public abstract void sendPacket(Player player, Packet<?> packet);
 
-    abstract void sendPackets(Player player, Packet<?> @NotNull ... packets);
+    public abstract void sendPackets(Player player, Packet<?> @NotNull ... packets);
 }

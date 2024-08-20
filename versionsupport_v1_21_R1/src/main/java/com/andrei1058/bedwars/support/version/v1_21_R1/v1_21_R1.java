@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import dev.andrei1058.mc.bedwars.AbstractVerImplCmn1;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.network.protocol.game.PacketPlayOutEntityEquipment;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.item.EntityTNTPrimed;
 import net.minecraft.world.entity.projectile.EntityFireball;
 import net.minecraft.world.entity.projectile.IProjectile;
 import net.minecraft.world.item.*;
+import net.minecraft.world.phys.Vec3D;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_21_R1.entity.CraftFireball;
@@ -31,10 +33,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.bukkit.craftbukkit.v1_21_R1.util.CraftMagicNumbers.getItem;
 
 @SuppressWarnings("unused")
 public class v1_21_R1 extends AbstractVerImplCmn1 {
@@ -46,15 +48,6 @@ public class v1_21_R1 extends AbstractVerImplCmn1 {
     @Override
     public void registerCommand(String name, Command cmd) {
         ((CraftServer) getPlugin().getServer()).getCommandMap().register(name, cmd);
-    }
-
-    public @Nullable NBTTagCompound getTag(@NotNull org.bukkit.inventory.ItemStack itemStack) {
-        var i = CraftItemStack.asNMSCopy(itemStack);
-        if (null == i) {
-            return null;
-        }
-        // TODO WIP
-       return  new NBTTagCompound();
     }
 
     @Override
@@ -73,6 +66,13 @@ public class v1_21_R1 extends AbstractVerImplCmn1 {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public ClientboundPlayerInfoUpdatePacket getAddPlayer(EntityPlayer player) {
+        // todo cache this in production
+        ClientboundPlayerInfoUpdatePacket.a action = (ClientboundPlayerInfoUpdatePacket.a) getPlayerSpawnAction("a");
+        return new ClientboundPlayerInfoUpdatePacket(action, player);
     }
 
     @Override
@@ -119,8 +119,9 @@ public class v1_21_R1 extends AbstractVerImplCmn1 {
 
     @Override
     public void voidKill(Player p) {
-        EntityPlayer player = getPlayer(p);
-        player.a(player.dM().m(), 1000);
+        //todo
+//        EntityPlayer player = getPlayer(p);
+//        player.a(player.dM().m(), 1000);
     }
     @Override
     public void showArmor(@NotNull Player victim, Player receiver) {
@@ -139,13 +140,20 @@ public class v1_21_R1 extends AbstractVerImplCmn1 {
         return ((DedicatedServer) MinecraftServer.getServer()).a().n;
     }
 
+    @Override
+    public int getVersion() {
+        return 21;
+    }
+
 
     @Override
     public Fireball setFireballDirection(Fireball fireball, @NotNull Vector vector) {
         EntityFireball fb = ((CraftFireball) fireball).getHandle();
-        fb.b = vector.getX() * 0.1D;
-        fb.c = vector.getY() * 0.1D;
-        fb.d = vector.getZ() * 0.1D;
+//        fb.b = vector.getX() * 0.1D;
+//        fb.c = vector.getY() * 0.1D;
+//        fb.d = vector.getZ() * 0.1D;
+        // todo experimental
+        fb.a(new Vec3D(vector.getX(), vector.getY(), vector.getZ()), 0.1D);
         return (Fireball) fb.getBukkitEntity();
     }
 
@@ -170,61 +178,14 @@ public class v1_21_R1 extends AbstractVerImplCmn1 {
         if (null == i) {
             return null;
         }
-        return i.H();
-    }
-
-    @Nullable
-    public NBTTagCompound getTag(@NotNull org.bukkit.inventory.ItemStack itemStack) {
-        var i = CraftItemStack.asNMSCopy(itemStack);
-        if (null == i) {
-            return null;
-        }
-        return i.v();
-    }
-
-    private @NotNull NBTTagCompound initializeTag(org.bukkit.inventory.ItemStack itemStack) {
-        var i = CraftItemStack.asNMSCopy(itemStack);
-        if (null == i) {
-            throw new RuntimeException("Cannot convert given item to a NMS item");
-        }
-        return initializeTag(i);
-    }
-
-    private @NotNull NBTTagCompound initializeTag(ItemStack itemStack) {
-
-        var tag = getTag(itemStack);
-        if (null != tag) {
-            throw new RuntimeException("Provided item already has a Tag");
-        }
-        tag = new NBTTagCompound();
-        itemStack.c(tag);
-
-        return tag;
-    }
-
-    public NBTTagCompound getCreateTag(org.bukkit.inventory.ItemStack itemStack) {
-        var i = CraftItemStack.asNMSCopy(itemStack);
-        if (null == i) {
-            throw new RuntimeException("Cannot convert given item to a NMS item");
-        }
-        return getCreateTag(i);
-    }
-
-    public org.bukkit.inventory.ItemStack applyTag(org.bukkit.inventory.ItemStack itemStack, NBTTagCompound tag) {
-        return CraftItemStack.asBukkitCopy(applyTag(getNmsItemCopy(itemStack), tag));
+        // todo experimental
+        return i.E();
     }
 
     public ItemStack applyTag(@NotNull ItemStack itemStack, NBTTagCompound tag) {
-        itemStack.(tag);
+        // todo re-apply container?
+//        itemStack.(tag);
         return itemStack;
-    }
-
-    public ItemStack getNmsItemCopy(org.bukkit.inventory.ItemStack itemStack) {
-        ItemStack i = CraftItemStack.asNMSCopy(itemStack);
-        if (null == i) {
-            throw new RuntimeException("Cannot convert given item to a NMS item");
-        }
-        return i;
     }
 
     public EntityPlayer getPlayer(Player player) {
@@ -240,5 +201,25 @@ public class v1_21_R1 extends AbstractVerImplCmn1 {
         for (Packet<?> p : packets) {
             connection.a(p);
         }
+    }
+
+    private static Object getPlayerSpawnAction(String action) {
+        try {
+            Class<?> cls = Class.forName("net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket$a");
+            for (Object obj : cls.getEnumConstants()) {
+                try {
+                    Method m = cls.getMethod("name");
+                    String name = (String) m.invoke(obj);
+                    if (action.equals(name)) {
+                        return obj;
+                    }
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+                    System.out.println("could not find enum");
+                }
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        throw new RuntimeException("Something went wrong... please report this to BedWars1058 by andrei1058");
     }
 }
