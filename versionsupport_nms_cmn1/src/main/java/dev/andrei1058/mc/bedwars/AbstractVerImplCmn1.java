@@ -334,11 +334,20 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
         if (null == tag) {
             return i;
         }
-        tag.set(
-                Objects.requireNonNull(NamespacedKey.fromString(key, getPlugin())),
-                PersistentDataType.STRING,
-                data
-        );
+        try {
+            tag.set(
+                    Objects.requireNonNull(NamespacedKey.fromString(key.toLowerCase(), getPlugin())),
+                    PersistentDataType.STRING,
+                    data
+            );
+        } catch (IllegalArgumentException e) {
+            if (!e.getMessage().contains("Invalid Key. Must be")) {
+                getPlugin().getLogger().severe("Cannot append item custom tag with key -> " + key);
+                getPlugin().getLogger().severe("Reason:" + e.getMessage());
+            }
+            e.printStackTrace();
+
+        }
         return i;
     }
 
@@ -348,12 +357,20 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
         if (null == tag) {
             return itemStack;
         }
-        key = key.replaceFirst("minecraft:", "");
-        tag.set(
-                Objects.requireNonNull(NamespacedKey.minecraft(key)),
-                PersistentDataType.STRING,
-                value
-        );
+        try {
+            key = key.replaceFirst("minecraft:", "");
+            tag.set(
+                    Objects.requireNonNull(NamespacedKey.minecraft(key.toLowerCase())),
+                    PersistentDataType.STRING,
+                    value
+            );
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage().contains("Invalid Key. Must be")) {
+                getPlugin().getLogger().severe("Cannot append item custom tag with key -> " + key);
+                getPlugin().getLogger().severe("Reason:" + e.getMessage());
+            }
+            e.printStackTrace();
+        }
         return itemStack;
     }
 
@@ -480,7 +497,8 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
     }
 
 
-    @Override @Nullable
+    @Override
+    @Nullable
     public String getShopUpgradeIdentifier(org.bukkit.inventory.ItemStack itemStack) {
         return getTag(itemStack, VersionSupport.PLUGIN_TAG_TIER_KEY);
     }
