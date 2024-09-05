@@ -1,5 +1,6 @@
 package dev.andrei1058.mc.bedwars;
 
+import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
@@ -17,7 +18,6 @@ import dev.andrei1058.mc.bedwars.despawnable.DespawnableType;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.core.particles.ParticleParamRedstone;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.EntityPlayer;
@@ -37,7 +37,6 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
@@ -78,6 +77,8 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
     public String getTag(org.bukkit.inventory.ItemStack itemStack, String key) {
         var tag = getDataContainer(itemStack);
         if (null == tag) {
+            // todo testing only
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Container is null for: "+itemStack.toString());
             return null;
         }
         return tag.get(
@@ -260,13 +261,14 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
         }
     }
 
+    // tested by andrei 05-09-2024 h18:40 CET
     @Override
     public void registerTntWhitelist(float endStoneBlast, float glassBlast) {
         try {
             // blast resistance
             Field field = BlockBase.class.getDeclaredField("aH");
             field.setAccessible(true);
-            // end stone
+            // end stone - on 1.21 it breaks the first level of end stones
             field.set(Blocks.fz, endStoneBlast);
             // obsidian
 //            field.set(Blocks.co, glassBlast);
@@ -358,9 +360,9 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
             return itemStack;
         }
         try {
-            key = key.replaceFirst("minecraft:", "");
+//            key = key.replaceFirst("minecraft:", "");
             tag.set(
-                    Objects.requireNonNull(NamespacedKey.minecraft(key.toLowerCase())),
+                    Objects.requireNonNull(NamespacedKey.fromString(key)),
                     PersistentDataType.STRING,
                     value
             );

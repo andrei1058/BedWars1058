@@ -57,6 +57,7 @@ public class v1_21_R1 extends AbstractVerImplCmn1 {
 
     @Override
     public void setSource(TNTPrimed tnt, Player owner) {
+        //todo tested does not work 05-09-2024 https://github.com/andrei1058/BedWars1058/issues/1040
         EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
         EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
         try {
