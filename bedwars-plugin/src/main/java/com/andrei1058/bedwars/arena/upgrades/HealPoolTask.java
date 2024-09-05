@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 import java.util.Random;
 
 import static com.andrei1058.bedwars.BedWars.config;
@@ -85,35 +86,41 @@ public class HealPoolTask extends BukkitRunnable {
         }
         return false;
     }
-    public static void removeForArena(IArena a){
-        if (healPoolTasks.isEmpty() || a == null) return;
-        for (HealPoolTask hpt: healPoolTasks) {
+    public static void removeForArena(IArena arena) {
+        if (healPoolTasks.isEmpty() || arena == null) return;
+        Iterator<HealPoolTask> healPoolTasksIterator = healPoolTasks.iterator();
+        while (healPoolTasksIterator.hasNext()) {
+            HealPoolTask hpt = healPoolTasksIterator.next();
             if (hpt == null) continue;
-            if (hpt.getArena().equals(a)){
+            if (hpt.getArena().equals(arena)){
                 hpt.cancel();
-                healPoolTasks.remove(hpt);
+                healPoolTasksIterator.remove();
             }
         }
     }
 
-    public  static void removeForArena(String a){
-        if (healPoolTasks == null || healPoolTasks.isEmpty()  || (a == null)) return;
-        for (HealPoolTask hpt: healPoolTasks) {
+    public  static void removeForArena(String arena) {
+        if (healPoolTasks == null || healPoolTasks.isEmpty() || (arena == null)) return;
+        Iterator<HealPoolTask> healPoolTasksIterator = healPoolTasks.iterator();
+        while (healPoolTasksIterator.hasNext()) {
+            HealPoolTask hpt = healPoolTasksIterator.next();
             if (hpt == null) continue;
-            if (hpt.getArena().getWorldName().equals(a)){
+            if (hpt.getArena().getWorldName().equals(arena)){
                 hpt.cancel();
-                healPoolTasks.remove(hpt);
+                healPoolTasksIterator.remove();
             }
         }
     }
 
     public  static void removeForTeam(ITeam team){
         if (healPoolTasks == null || healPoolTasks.isEmpty()  || (team == null)) return;
-        for (HealPoolTask hpt:healPoolTasks) {
+        Iterator<HealPoolTask> healPoolTasksIterator = healPoolTasks.iterator();
+        while (healPoolTasksIterator.hasNext()) {
+            HealPoolTask hpt = healPoolTasksIterator.next();
             if (hpt == null) continue;
             if (hpt.getBwt().equals(team)){
                 hpt.cancel();
-                healPoolTasks.remove(hpt);
+                healPoolTasksIterator.remove();
             }
         }
     }
