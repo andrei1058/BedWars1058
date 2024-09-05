@@ -106,6 +106,9 @@ public class v1_18_R2 extends VersionSupport {
     @Override
     public String getTag(org.bukkit.inventory.ItemStack itemStack, String key) {
         ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        if (i == null) {
+            return null;
+        }
         NBTTagCompound tag = i.t();
         return tag == null ? null : tag.e(key) ? tag.l(key) : null;
     }
@@ -391,10 +394,10 @@ public class v1_18_R2 extends VersionSupport {
         NBTTagCompound tag = itemStack.t();
         if (tag == null) {
             tag = new NBTTagCompound();
-            itemStack.c(tag);
         }
 
         tag.a("BedWars1058", data);
+        itemStack.c(tag);
         return CraftItemStack.asBukkitCopy(itemStack);
     }
 
@@ -404,10 +407,10 @@ public class v1_18_R2 extends VersionSupport {
         NBTTagCompound tag = is.t();
         if (tag == null) {
             tag = new NBTTagCompound();
-            is.c(tag);
         }
 
         tag.a(key, value);
+        is.c(tag);
         return CraftItemStack.asBukkitCopy(is);
     }
 
@@ -540,9 +543,10 @@ public class v1_18_R2 extends VersionSupport {
         NBTTagCompound tag = i.t();
         if (tag == null) {
             tag = new NBTTagCompound();
-            i.c(tag);
         }
-        tag.a("tierIdentifier", identifier);
+
+        tag.a(VersionSupport.PLUGIN_TAG_TIER_KEY, identifier);
+        i.c(tag);
         return CraftItemStack.asBukkitCopy(i);
     }
 
