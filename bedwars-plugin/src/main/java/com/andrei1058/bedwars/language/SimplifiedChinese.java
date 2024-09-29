@@ -112,9 +112,9 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_USAGE, "{prefix}&7用法：&e/party remove <玩家>");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_SUCCESS, "{prefix}&7{player}&e被移出了组队。");
         yml.addDefault(Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER, "{prefix}&7{player}&e不在你的组队中！");
-        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&e你成功将{player}提升为队长");
-        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "{prefix}&e你已被提升为队长");
-        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "{prefix}&7&e{player}已被提升为队长");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&e你成功将{player}提升为队长！");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "{prefix}&e你已被提升为队长！");
+        yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "{prefix}&7&e{player}已被提升为队长！");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&e队长为：&7{owner}");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix}&e成员有：");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7{player}");
@@ -1039,10 +1039,10 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.UPGRADES_UPGRADE_BOUGHT_CHAT, "&a{player}购买了&6{upgradeName}");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-1"), "{color}铁锭熔炉");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "forge"),
-                Arrays.asList("&7增加岛上资源的生成速度", "", "{tier_1_color}等级 1：+50% 生成速率, &b{tier_1_cost} {tier_1_currency}",
-                        "{tier_2_color}等级 2：+100% 生成速率，&b{tier_2_cost} {tier_2_currency}",
-                        "{tier_3_color}等级 3：生成绿宝石，&b{tier_3_cost} {tier_3_currency}",
-                        "{tier_4_color}等级 4：+200% 生成速率，&b{tier_4_cost} {tier_4_currency}", ""));
+                Arrays.asList("&7增加岛上资源的生成速度", "", "{tier_1_color}等级1：+50% 生成速率, &b{tier_1_cost} {tier_1_currency}",
+                        "{tier_2_color}等级2：+100% 生成速率，&b{tier_2_cost} {tier_2_currency}",
+                        "{tier_3_color}等级3：生成绿宝石，&b{tier_3_cost} {tier_3_currency}",
+                        "{tier_4_color}等级4：+200% 生成速率，&b{tier_4_cost} {tier_4_currency}", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-2"), "{color}金锭熔炉");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-3"), "{color}绿宝石熔炉");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "forge").replace("{tier}", "tier-4"), "{color}无尽熔炉");
@@ -1051,19 +1051,19 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "swords").replace("{tier}", "tier-1"), "{color}锋利附魔");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "swords"),
                 Arrays.asList("&7队伍的所有剑和斧获得锋利I！", "", "{tier_1_color}花费：&b{tier_1_cost} {tier_1_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-1"), "{color}护甲强化I");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-1"), "{color}装备强化I");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "armor"),
                 Arrays.asList("&7队伍的所有护甲获得保护附魔！", "", "{tier_1_color}等级 1：保护I， &b{tier_1_cost} {tier_1_currency}",
-                        "{tier_2_color}等级 2：保护II，&b{tier_2_cost} {tier_2_currency}",
-                        "{tier_3_color}等级 3：保护III，&b{tier_3_cost} {tier_3_currency}",
-                        "{tier_4_color}等级 4：保护IV，&b{tier_4_cost} {tier_4_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-2"), "{color}护甲强化II");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-3"), "{color}护甲强化III");
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-4"), "{color}护甲强化IV");
+                        "{tier_2_color}等级2：保护II，&b{tier_2_cost} {tier_2_currency}",
+                        "{tier_3_color}等级3：保护III，&b{tier_3_cost} {tier_3_currency}",
+                        "{tier_4_color}等级4：保护IV，&b{tier_4_cost} {tier_4_currency}", ""));
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-2"), "{color}装备强化II");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-3"), "{color}装备强化III");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "armor").replace("{tier}", "tier-4"), "{color}装备强化IV");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "miner").replace("{tier}", "tier-1"), "{color}疯狂矿工I");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "miner"),
-                Arrays.asList("&7队伍获得急迫效果。", "", "{tier_1_color}等级 1：急迫I, &b{tier_1_cost} {tier_1_currency}",
-                        "{tier_2_color}等级 2：急迫II, &b{tier_2_cost} {tier_2_currency}", ""));
+                Arrays.asList("&7队伍获得急迫效果。", "", "{tier_1_color}等级1：急迫I, &b{tier_1_cost} {tier_1_currency}",
+                        "{tier_2_color}等级2：急迫II, &b{tier_2_cost} {tier_2_currency}", ""));
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "miner").replace("{tier}", "tier-2"), "{color}疯狂矿工II");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "heal-pool").replace("{tier}", "tier-1"), "{color}治愈池");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "heal-pool"),
@@ -1073,18 +1073,18 @@ public class SimplifiedChinese extends Language {
                 Arrays.asList("&7在绝杀模式时你的队伍会有2条而不是1条龙！", "", "{tier_1_color}花费：&b{tier_1_cost} {tier_1_currency}", ""));
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_NAME_PATH + "glass", "&8⬆&7可购买");
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_LORE_PATH + "glass", Collections.singletonList("&8⬇&7陷阱队列"));
-        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "first", "{color}陷阱 #1：{name}");
+        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "first", "{color}陷阱#1：{name}");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "first", Collections.singletonList("&7第一个进入你基地的敌人将触发该陷阱！"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "first",
-                Arrays.asList("", "&7下个购买的陷阱将进入此队列", "&7陷阱的价格将会随着陷阱数量增加", "", "&7下个陷阱花费：&b{cost} {currency}"));
-        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "second", "{color}陷阱 #2：{name}");
+                Arrays.asList("", "&7下个购买的陷阱将进入此队列", "&7陷阱的价格将会随着其数量增加", "", "&7下个陷阱花费：&b{cost} {currency}"));
+        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "second", "{color}陷阱#2：{name}");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "second", Collections.singletonList("&7第二个进入你基地的敌人将触发该陷阱！"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "second",
-                Arrays.asList("", "&7下个购买的陷阱将进入此队列", "&7陷阱的价格将会随着陷阱数量增加", "", "&7下个陷阱花费：&b{cost} {currency}"));
-        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "third", "{color}陷阱 #3：{name}");
+                Arrays.asList("", "&7下个购买的陷阱将进入此队列", "&7陷阱的价格将会随着其数量增加", "", "&7下个陷阱花费：&b{cost} {currency}"));
+        yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_NAME_PATH + "third", "{color}陷阱#3：{name}");
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE1_PATH + "third", Collections.singletonList("&7第三个进入你基地的敌人将触发该陷阱！"));
         yml.addDefault(Messages.UPGRADES_TRAP_SLOT_ITEM_LORE2_PATH + "third",
-                Arrays.asList("", "&7下个购买的陷阱将进入此队列", "&7陷阱的价格将会随着陷阱数量增加", "", "&7下个陷阱花费：&b{cost} {currency}"));
+                Arrays.asList("", "&7下个购买的陷阱将进入此队列", "&7陷阱的价格将会随着其数量增加", "", "&7下个陷阱花费：&b{cost} {currency}"));
         yml.addDefault(Messages.UPGRADES_BASE_TRAP_ITEM_NAME_PATH + "1", "{color}这是个陷阱！");
         yml.addDefault(Messages.UPGRADES_BASE_TRAP_ITEM_LORE_PATH + "1", Arrays.asList("&7造成5秒失明和缓慢", ""));
         yml.addDefault(Messages.UPGRADES_BASE_TRAP_ITEM_NAME_PATH + "2", "{color}反击陷阱");
