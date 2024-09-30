@@ -70,7 +70,7 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.COMMAND_JOIN_DENIED_NOT_PARTY_LEADER, "{prefix}&c只有队长才能选择游戏。");
         yml.addDefault(Messages.COMMAND_JOIN_PLAYER_JOIN_MSG, "{prefix}&7{player}&e加入了游戏(&b{on}&e/&b{max}&e)！");
         yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_MSG, "{prefix}&6你正在观战&9{arena}&6。\n{prefix}&e输入&c/leave&e离开。");
-        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&c该游戏不允许旁观！");
+        yml.addDefault(Messages.COMMAND_JOIN_SPECTATOR_DENIED_MSG, "&c该游戏不允许观战！");
         yml.addDefault(Messages.COMMAND_TP_PLAYER_NOT_FOUND, "{prefix}&c无法找到这位玩家！");
         yml.addDefault(Messages.COMMAND_TP_NOT_IN_ARENA, "{prefix}&c该玩家不在任何一场起床战争游戏中！");
         yml.addDefault(Messages.COMMAND_TP_NOT_STARTED, "{prefix}&c该玩家所在的游戏还没开始！");
@@ -115,14 +115,14 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_SUCCESS, "{prefix}&e你成功将{player}提升为队长！");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_OWNER, "{prefix}&e你已被提升为队长！");
         yml.addDefault(Messages.COMMAND_PARTY_PROMOTE_NEW_OWNER, "{prefix}&7&e{player}已被提升为队长！");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&e队长为：&7{owner}");
-        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix}&e成员有：");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&e队长：&7{owner}");
+        yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix}&e成员：");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7{player}");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "&c▪ &7你不在游戏中！");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "&c▪ &7游戏开始倒计时缩短！");
         yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "{prefix}&7你不可以强制开始游戏！\n&7请考虑赞助以得到对应权限！");
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&c你不能这么做！ 请等待{seconds}秒！");
-        yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&c抱歉，由于有一位赞助者加入该游戏，因此你被移出了该游戏。\n&a请考虑赞助以支持我们！ &7&o(点击查看)");
+        yml.addDefault(Messages.ARENA_JOIN_VIP_KICK, "{prefix}&c抱歉，由于有一位赞助者加入该游戏，因此你被移出了该游戏。\n&a请考虑赞助以支持我们！ &7&o(点此查看)");
         yml.addDefault(Messages.ARENA_START_COUNTDOWN_STOPPED_INSUFF_PLAYERS_CHAT, "{prefix}&c玩家不足！ 倒计时取消！");
         yml.addDefault(Messages.ARENA_RESTART_PLAYER_KICK, "{prefix}&e当前游戏正在重启。");
         yml.addDefault(Messages.ARENA_STATUS_PLAYING_NAME, "&c游戏中");
@@ -159,7 +159,7 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME, "{vPrefix}{player}");
         yml.addDefault(Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE, Arrays.asList("&7生命值：&f{health}%", "&7饱食度：&f{food}", "", "&7左键传送"));
         yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_NAME, "&c&l回到大厅");
-        yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_LORE, Collections.singletonList("&7右键离开起床战争大厅！"));
+        yml.addDefault(Messages.ARENA_SPECTATOR_LEAVE_ITEM_LORE, Collections.singletonList("&7右键传送至起床战争大厅！"));
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_TITLE, "&a正在旁观&7{player}");
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_ENTER_SUBTITLE, "&c潜行以退出！");
         yml.addDefault(Messages.ARENA_SPECTATOR_FIRST_PERSON_LEAVE_TITLE, "&e退出旁观者模式");
@@ -168,7 +168,7 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIER, "&e等级&c{tier}");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND, "&b&l钻石");
         yml.addDefault(Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD, "&2&l绿宝石");
-        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&c{seconds}&e 秒后生成");
+        yml.addDefault(Messages.GENERATOR_HOLOGRAM_TIMER, "&c{seconds}&e秒后生成");
         yml.addDefault(Messages.GENERATOR_UPGRADE_CHAT_ANNOUNCEMENT, "{prefix}{generatorType}资源点&e升级到&c{tier}级。");
         yml.addDefault(Messages.FORMATTING_CHAT_LOBBY, "{level}{vPrefix}&7{player}{vSuffix}：{message}");
         yml.addDefault(Messages.FORMATTING_CHAT_WAITING, "{level}{vPrefix}&7{player}{vSuffix}：{message}");
@@ -213,11 +213,11 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_BLOCK, "{prefix}&c你只能破坏由玩家放置的方块！");
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_OWN_BED, "&c你不能破坏自己的床！");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT, "\n&f&l床被破坏 > {TeamColor}{TeamName}的床&7被{PlayerColor}{PlayerName}&7破坏了！\n");
-        yml.addDefault(Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT, "&c床被破坏！");
+        yml.addDefault(Messages.INTERACT_BED_DESTROY_TITLE_ANNOUNCEMENT, "&c床已被破坏！");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_SUBTITLE_ANNOUNCEMENT, "&f你不能再重生！");
         yml.addDefault(Messages.INTERACT_BED_DESTROY_CHAT_ANNOUNCEMENT_TO_VICTIM, "&f&l床被破坏 > &7你的床被{PlayerColor}{PlayerName}&7破坏了！\n");
         yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&c此队伍还未被团灭，因此你不能打开该团队箱子！");
-        yml.addDefault(Messages.INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN, "&c你因受到伤害而被迫退出隐身！");
+        yml.addDefault(Messages.INTERACT_INVISIBILITY_REMOVED_DAMGE_TAKEN, "&c你因受到伤害而被迫现形！");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL, "{PlayerColor}{PlayerName}&7掉进了虚空。");
         yml.addDefault(Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL, "{PlayerColor}{PlayerName}&7掉进了虚空。 &b&l最终击杀！");
         yml.addDefault(Messages.PLAYER_DIE_KNOCKED_IN_VOID_REGULAR_KILL, "{PlayerColor}{PlayerName}&7被{KillerColor}{KillerName}&7丢进了虚空。");
@@ -245,8 +245,8 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.PLAYER_DIE_REWARD_IRON, "{prefix}&f+{amount}{meaning}");
         yml.addDefault(Messages.PLAYER_DIE_REWARD_GOLD, "{prefix}&6+{amount}{meaning}");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWN_TITLE, "&c你死了！");
-        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&e你将在&e{time}&e秒后重生！");
-        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "{prefix}&e你将在&a{time}&e秒后重生！");
+        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_SUBTITLE, "&e你将在&c{time}&e秒后重生！");
+        yml.addDefault(Messages.PLAYER_DIE_RESPAWN_CHAT, "{prefix}&e你将在&c{time}&e秒后重生！");
         yml.addDefault(Messages.PLAYER_DIE_RESPAWNED_TITLE, "&a已重生！");
         yml.addDefault(Messages.PLAYER_DIE_ELIMINATED_CHAT, "{prefix}&c你已被淘汰！");
         yml.addDefault(Messages.PLAYER_HIT_BOW, "{prefix}{TeamColor}{PlayerName}&7还有&e{amount}&c生命值！");
@@ -266,14 +266,14 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.NPC_NAME_TEAM_SHOP, "&b队伍商店,&e&l右键点击");
         yml.addDefault(Messages.NPC_NAME_SOLO_SHOP, "&b单挑商店,&e&l右键点击");
         yml.addDefault(Messages.TEAM_ELIMINATED_CHAT, "\n&f&l队伍团灭 > {TeamColor}{TeamName}&c已被团灭！\n");
-        yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&c床被破坏");
+        yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&f床自毁");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_II, "&f钻石生成点II级");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_III, "&f钻石生成点III级");
         yml.addDefault(Messages.NEXT_EVENT_DRAGON_SPAWN, "&f绝杀模式");
         yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_II, "&f绿宝石生成点II级");
         yml.addDefault(Messages.NEXT_EVENT_EMERALD_UPGRADE_III, "&f绿宝石生成点III级");
         yml.addDefault(Messages.NEXT_EVENT_GAME_END, "&4游戏结束！");
-        yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED, "&c床被破坏！");
+        yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED, "&c床已被破坏！");
         yml.addDefault(Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED, "&f所有床已被破坏！");
         yml.addDefault(Messages.NEXT_EVENT_CHAT_ANNOUNCE_BEDS_DESTROYED, "&c&l所有床已被破坏！");
         yml.addDefault(Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH, "&c绝杀模式");
@@ -286,12 +286,12 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.XP_REWARD_REGULAR_KILL, "{prefix}&6+{xp}起床战争经验(击杀)");
         yml.addDefault(Messages.XP_REWARD_FINAL_KILL, "{prefix}&6+{xp}起床战争经验(最终击杀)");
 
-        yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money}金币(游戏时间)");
-        yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money}金币(游戏胜利)");
-        yml.addDefault(Messages.MONEY_REWARD_PER_TEAMMATE, "{prefix}&6+{money}金币(团队协作)");
-        yml.addDefault(Messages.MONEY_REWARD_BED_DESTROYED, "{prefix}&6+{money}金币(破坏床)");
-        yml.addDefault(Messages.MONEY_REWARD_FINAL_KILL, "{prefix}&6+{money}金币(最终击杀)");
-        yml.addDefault(Messages.MONEY_REWARD_REGULAR_KILL, "{prefix}&6+{money}金币(击杀)");
+        yml.addDefault(Messages.MONEY_REWARD_PER_MINUTE, "{prefix}&6+{money}硬币(游戏时间)");
+        yml.addDefault(Messages.MONEY_REWARD_WIN, "{prefix}&6+{money}硬币(游戏胜利)");
+        yml.addDefault(Messages.MONEY_REWARD_PER_TEAMMATE, "{prefix}&6+{money}硬币(团队协作)");
+        yml.addDefault(Messages.MONEY_REWARD_BED_DESTROYED, "{prefix}&6+{money}硬币(破坏床)");
+        yml.addDefault(Messages.MONEY_REWARD_FINAL_KILL, "{prefix}&6+{money}硬币(最终击杀)");
+        yml.addDefault(Messages.MONEY_REWARD_REGULAR_KILL, "{prefix}&6+{money}硬币(击杀)");
 
         /* Lobby Command Items */
         yml.addDefault(Messages.GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME.replace("%path%", "stats"), "&e战绩");
@@ -308,7 +308,7 @@ public class SimplifiedChinese extends Language {
         /* Spectator Command Items */
         yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "teleporter"), "&e传送");
         yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&e回到大厅");
-        yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&f右键离开游戏！"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&f右键传送至起床战争大厅！"));
 
         /* save default items messages for stats gui */
         yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8{player}的战绩");
@@ -333,7 +333,7 @@ public class SimplifiedChinese extends Language {
                 "",
                 "&7{player}",
                 "",
-                "&f金币：&a{money}",
+                "&f硬币：&a{money}",
                 "",
                 "&f总胜场：&a{wins}",
                 "&f总击杀：&a{kills}",
@@ -930,7 +930,7 @@ public class SimplifiedChinese extends Language {
 
         yml.addDefault(Messages.SHOP_INDEX_NAME, "&8快速购买");
         yml.addDefault(Messages.SHOP_QUICK_ADD_NAME, "&8添加到快速购买...");
-        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&c你没有足够的{currency}！ 还需要{amount}x{currency}！");
+        yml.addDefault(Messages.SHOP_INSUFFICIENT_MONEY, "{prefix}&c你没有足够的{currency}！ 还需要{currency}x{amount}！");
         yml.addDefault(Messages.SHOP_NEW_PURCHASE, "{prefix}&a你购买了&6{item}");
         yml.addDefault(Messages.SHOP_ALREADY_BOUGHT, "{prefix}&c你已经购买过了！");
         yml.addDefault(Messages.SHOP_UTILITY_NPC_SILVERFISH_NAME, "{TeamColor}&l{TeamName} &r{TeamColor}蠹虫");
@@ -940,15 +940,15 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.SHOP_QUICK_BUY_NAME, "&b快速购买");
         yml.addDefault(Messages.SHOP_QUICK_BUY_LORE, new ArrayList<>());
         yml.addDefault(Messages.SHOP_QUICK_EMPTY_NAME, "&c空槽位！");
-        yml.addDefault(Messages.SHOP_QUICK_EMPTY_LORE, Arrays.asList("&7这是快速购买槽位！", "&bShift+点击 &7商店中的物品", "&7来加到这里。"));
+        yml.addDefault(Messages.SHOP_QUICK_EMPTY_LORE, Arrays.asList("&7这是一个快速购买槽位！", "&bShift+左键 &7商店中的物品", "&7来添加到这里。"));
         yml.addDefault(Messages.SHOP_CAN_BUY_COLOR, "&a");
         yml.addDefault(Messages.SHOP_CANT_BUY_COLOR, "&c");
         yml.addDefault(Messages.SHOP_LORE_STATUS_CAN_BUY, "&e点击购买！");
         yml.addDefault(Messages.SHOP_LORE_STATUS_CANT_AFFORD, "&c你没有足够的{currency}！");
         yml.addDefault(Messages.SHOP_LORE_STATUS_MAXED, "&a满级！");
         yml.addDefault(Messages.SHOP_LORE_STATUS_ARMOR, "&a已装备！");
-        yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bShift+点击 来添加快速购买");
-        yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bShift+点击 来从快速购买中移除！");
+        yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bShift+左键 来添加快速购买");
+        yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bShift+左键 来从快速购买中移除！");
 
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8方块", "&a方块", Collections.singletonList("&e点击查看！"));
@@ -1006,7 +1006,7 @@ public class SimplifiedChinese extends Language {
         addContentMessages(yml, "bedbug", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}蠹虫", Arrays.asList("&7花费：{cost} {currency}", "",
                 "&7在雪球落下的地方召唤蠹虫", "&7来干扰敌人", "&7持续15秒。", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "dream-defender", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}梦境守卫者", Arrays.asList("&7花费：{cost} {currency}", "",
-                "&7召唤铁傀儡来保护基地", "&7持续 4 分钟", "", "{quick_buy}", "{buy_status}"));
+                "&7召唤铁傀儡来保护基地", "&7持续4分钟", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "fireball", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}火球", Arrays.asList("&7花费：{cost} {currency}", "", "&7右键发射！",
                 "&7把在窄桥上的敌人打下去！", "", "{quick_buy}", "{buy_status}"));
         addContentMessages(yml, "tnt", ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "{color}TNT", Arrays.asList("&7花费：{cost} {currency}", "",
@@ -1068,7 +1068,7 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "heal-pool").replace("{tier}", "tier-1"), "{color}治愈池");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "heal-pool"),
                 Arrays.asList("&7在基地附近生成治愈池！", "", "{tier_1_color}花费：&b{tier_1_cost} {tier_1_currency}", ""));
-        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "dragon").replace("{tier}", "tier-1"), "{color}末影龙升级");
+        yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_NAME.replace("{name}", "dragon").replace("{tier}", "tier-1"), "{color}龙增益");
         yml.addDefault(Messages.UPGRADES_UPGRADE_TIER_ITEM_LORE.replace("{name}", "dragon").replace("{tier}", "tier-1"),
                 Arrays.asList("&7在绝杀模式时你的队伍会有2条而不是1条龙！", "", "{tier_1_color}花费：&b{tier_1_cost} {tier_1_currency}", ""));
         yml.addDefault(Messages.UPGRADES_SEPARATOR_ITEM_NAME_PATH + "glass", "&8⬆&7可购买");
