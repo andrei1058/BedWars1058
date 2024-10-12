@@ -27,6 +27,7 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.tasks.EggBridgeTask;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

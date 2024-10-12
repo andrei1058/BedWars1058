@@ -95,7 +95,6 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_SLOT = GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + ".%path%.slot";
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_ENCHANTED = GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + ".%path%.enchanted";
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_COMMAND = GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + ".%path%.command";
-
     public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH = "spectator-items";
     // Replace %path% with name
     public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_MATERIAL = GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH + ".%path%.material";
@@ -206,6 +205,10 @@ public class ConfigPath {
     public static final String ARENA_TEMPORARY_WALL_TIME_TO_DELETE = "temporary-wall-mod.time-to-delete";
     public static final String ARENA_TEMPORARY_WALL_MATERIAL = "temporary-wall-mod.material";
     public static final String ARENA_TEMPORARY_WALL_WALL_PROTECTION = "temporary-wall-mod.wall-protection";
+    //
+
+    // RubyRed's arena-config
+    public static final String _TEMPORARY_WALL_MOD = "temporary-wall-mod.existence";
     //
 
     public static final String SOUNDS_COUNTDOWN_TICK = "game-countdown-others";
