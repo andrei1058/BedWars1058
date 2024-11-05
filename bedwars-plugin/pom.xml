@@ -352,6 +352,19 @@
             <version>1.18-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>dev.andrei1058.bedwars.platform.master</groupId>
+            <artifactId>server_platform_master</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--        <dependency>-->
+<!--            <groupId>dev.andrei1058.bedwars.platform.master</groupId>-->
+<!--            <artifactId>server_platform_master</artifactId>-->
+<!--            <version>24.8-SNAPSHOT</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>

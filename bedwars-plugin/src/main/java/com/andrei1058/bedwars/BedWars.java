@@ -81,6 +81,7 @@ import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
 import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
+import dev.andrei1058.bedwars.platform.master.ServerPlatformManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -676,7 +677,8 @@ public class BedWars extends JavaPlugin {
     }
 
     public static String getForCurrentVersion(String v18, String v12, String v13) {
-        switch (getServerVersion()) {
+//        switch (getServerVersion()) {
+        switch (ServerPlatformManager.getServerVersion()) {
             case "v1_8_R3":
                 return v18;
             case "v1_12_R1":
@@ -744,13 +746,13 @@ public class BedWars extends JavaPlugin {
      *
      * @since v0.6.5beta
      */
+    @Deprecated(forRemoval = true)
     public static String getServerVersion() {
         if (null == version) {
             version = Bukkit.getServer().getClass().getName().split("\\.")[3];
             if (version.equals("CraftServer")) {
                 // todo it is probably PAPER, find out how to get nms version
             }
-
         }
         return version;
     }
