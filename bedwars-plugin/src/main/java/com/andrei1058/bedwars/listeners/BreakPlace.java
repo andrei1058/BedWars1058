@@ -472,7 +472,7 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (e.getBlockClicked().getLocation().getBlockY() >= a.getConfig().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y)) {
+            if (e.getBlockClicked().getY() + 1 >= a.getConfig().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y)) {
                 e.setCancelled(true);
                 return;
             }
