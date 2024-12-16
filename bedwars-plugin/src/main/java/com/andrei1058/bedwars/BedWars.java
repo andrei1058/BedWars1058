@@ -81,6 +81,7 @@ import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
 import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
+import dev.andrei1058.bedwars.platform.common.ServerPlatform;
 import dev.andrei1058.bedwars.platform.master.ServerPlatformManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -136,8 +137,22 @@ public class BedWars extends JavaPlugin {
 
     private static com.andrei1058.bedwars.api.BedWars api;
 
+    private static ServerPlatform serverPlatform;
+
     @Override
     public void onLoad() {
+
+        Optional<ServerPlatform> loader = ServerPlatformManager.loadPlatformSupport();
+
+        // todo platform not supported
+        if (loader.isEmpty()){
+            return;
+        }
+
+        serverPlatform = loader.get();
+        serverPlatform.onLoad();
+        nms = serverPlatform.getOldWrapper();
+
 
         //Spigot support
         try {
@@ -221,6 +236,12 @@ public class BedWars extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        if (null == serverPlatform) {
+            return;
+        }
+        serverPlatform.onEnable();
+
+
         getLogger().severe(Bukkit.getServer().getClass().getName());
         getLogger().severe(Bukkit.getServer().getClass().getName());
         getLogger().severe(Bukkit.getServer().getClass().getName());
@@ -606,6 +627,11 @@ public class BedWars extends JavaPlugin {
 
     public void onDisable() {
         shuttingDown = true;
+
+        if (null != serverPlatform) {
+            serverPlatform.onDisable();
+        }
+
         if (!serverSoftwareSupport) return;
         if (getServerType() == ServerType.BUNGEE) {
             ArenaSocket.disable();
@@ -748,13 +774,14 @@ public class BedWars extends JavaPlugin {
      */
     @Deprecated(forRemoval = true)
     public static String getServerVersion() {
-        if (null == version) {
-            version = Bukkit.getServer().getClass().getName().split("\\.")[3];
-            if (version.equals("CraftServer")) {
-                // todo it is probably PAPER, find out how to get nms version
-            }
-        }
-        return version;
+        return ServerPlatformManager.getServerVersion();
+//        if (null == version) {
+//            version = Bukkit.getServer().getClass().getName().split("\\.")[3];
+//            if (version.equals("CraftServer")) {
+//                // todo it is probably PAPER, find out how to get nms version
+//            }
+//        }
+//        return version;
     }
 
     public static String getLobbyWorld() {

@@ -4,13 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>dev.andrei1058.bedwars.platform</groupId>
-        <artifactId>server_platform</artifactId>
+        <groupId>dev.andrei1058.bedwars.platform.spigot</groupId>
+        <artifactId>server_platform_spigot</artifactId>
         <version>24.8-SNAPSHOT</version>
     </parent>
 
-    <groupId>dev.andrei1058.bedwars.platform.master</groupId>
-    <artifactId>server_platform_master</artifactId>
+    <artifactId>server_platform_spigot_v1_8_R3</artifactId>
 
     <properties>
         <maven.compiler.source>22</maven.compiler.source>
@@ -20,16 +19,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>dev.andrei1058.bedwars.platform.common</groupId>
-            <artifactId>server_platform_common</artifactId>
+            <groupId>dev.andrei1058.bedwars.platform.spigot</groupId>
+            <artifactId>server_platform_spigot_common</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

@@ -14,7 +14,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>server_platform_spigot_common</module>
-        <module>server_platform_sever_v1_8_R3</module>
+        <module>server_platform_spigot_v1_8_R3</module>
     </modules>
 
     <properties>

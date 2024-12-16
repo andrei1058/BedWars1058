@@ -358,6 +358,24 @@
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>dev.andrei1058.bedwars.platform.common</groupId>
+            <artifactId>server_platform_common</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.andrei1058.bedwars.platform.paper</groupId>
+            <artifactId>server_platform_paper_common</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.andrei1058.bedwars.platform.paper</groupId>
+            <artifactId>server_platform_paper_v1_21_R1</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
         <!--        <dependency>-->
 <!--            <groupId>dev.andrei1058.bedwars.platform.master</groupId>-->

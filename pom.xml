@@ -118,9 +118,6 @@
         <module>versionsupport_v1_21_R1</module>
         <module>versionsupport_nms_cmn1</module>
         <module>server_platform</module>
-        <module>server_platform/server_platform_master</module>
-        <module>server_platform/server_platform_common</module>
-        <module>server_platform/server_platform_spigot</module>
     </modules>
 
     <distributionManagement>

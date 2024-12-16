@@ -9,28 +9,19 @@
         <version>24.8-SNAPSHOT</version>
     </parent>
 
-    <groupId>dev.andrei1058.bedwars.platform.master</groupId>
-    <artifactId>server_platform_master</artifactId>
+    <groupId>dev.andrei1058.bedwars.platform.paper</groupId>
+    <artifactId>server_platform_paper</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>server_platform_paper_common</module>
+        <module>server_platform_paper_v1_21_R1</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>22</maven.compiler.source>
         <maven.compiler.target>22</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>dev.andrei1058.bedwars.platform.common</groupId>
-            <artifactId>server_platform_common</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 
 </project>

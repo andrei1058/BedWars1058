@@ -20,4 +20,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <modules>
+        <module>server_platform_common</module>
+        <module>server_platform_master</module>
+        <module>server_platform_spigot</module>
+        <module>server_platform_paper</module>
+    </modules>
+
 </project>
