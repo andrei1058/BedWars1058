@@ -47,6 +47,7 @@ public class ShopBuyEvent extends Event implements Cancellable {
         this.categoryContent = categoryContent;
         this.buyer = buyer;
         this.arena = null;
+        this.slot = -1;
     }
 
     /**
@@ -59,6 +60,7 @@ public class ShopBuyEvent extends Event implements Cancellable {
         this.categoryContent = categoryContent;
         this.buyer = buyer;
         this.arena = arena;
+        this.slot = -1;
     }
 
     /**
