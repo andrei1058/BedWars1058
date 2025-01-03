@@ -441,6 +441,9 @@ public class v1_8_R3 extends VersionSupport {
     @Override
     public String getTag(ItemStack itemStack, String key) {
         net.minecraft.server.v1_8_R3.ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        if (i == null) {
+            return null;
+        }
         NBTTagCompound tag = i.getTag();
         return tag == null ? null : tag.hasKey(key) ? tag.getString(key) : null;
     }
