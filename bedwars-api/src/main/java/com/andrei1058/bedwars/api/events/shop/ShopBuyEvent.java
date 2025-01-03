@@ -34,6 +34,7 @@ public class ShopBuyEvent extends Event implements Cancellable {
     private final Player buyer;
     private final IArena arena;
     private final ICategoryContent categoryContent;
+    private final int slot;
     private boolean cancelled = false;
 
     /**
@@ -46,17 +47,35 @@ public class ShopBuyEvent extends Event implements Cancellable {
         this.categoryContent = categoryContent;
         this.buyer = buyer;
         this.arena = null;
+        this.slot = -1;
+    }
+
+    /**
+     * Triggered when a player buys from the shop
+     *
+     * @deprecated Use {@link #ShopBuyEvent(Player, IArena, ICategoryContent, int)}
+     */
+    @Deprecated
+    public ShopBuyEvent(Player buyer, IArena arena, ICategoryContent categoryContent) {
+        this.categoryContent = categoryContent;
+        this.buyer = buyer;
+        this.arena = arena;
+        this.slot = -1;
     }
 
     /**
      * Triggered when a player buys from the shop
      */
-    public ShopBuyEvent(Player buyer, IArena arena, ICategoryContent categoryContent) {
+    public ShopBuyEvent(Player buyer, IArena arena, ICategoryContent categoryContent, int slot) {
         this.categoryContent = categoryContent;
         this.buyer = buyer;
         this.arena = arena;
+        this.slot = slot;
     }
 
+    /**
+     * Get the arena
+     */
     public IArena getArena() {
         return arena;
     }
@@ -73,6 +92,13 @@ public class ShopBuyEvent extends Event implements Cancellable {
      */
     public ICategoryContent getCategoryContent() {
         return categoryContent;
+    }
+
+    /**
+     * Get the slot
+     */
+    public int getSlot() {
+        return slot;
     }
 
     @Override
