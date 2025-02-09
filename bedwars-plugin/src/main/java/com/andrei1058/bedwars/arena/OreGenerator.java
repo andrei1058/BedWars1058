@@ -263,10 +263,7 @@ public class OreGenerator implements IGenerator {
         @Override
         public void updateForAll() {
             for (Player p2 : timer.getWorld().getPlayers()) {
-                if (Language.getPlayerLanguage(p2).getIso().equalsIgnoreCase(iso)) continue;
-                nms.hideEntity(tier, p2);
-                nms.hideEntity(timer, p2);
-                nms.hideEntity(name, p2);
+                updateForPlayer(p2, Language.getPlayerLanguage(p2).getIso());
             }
         }
 

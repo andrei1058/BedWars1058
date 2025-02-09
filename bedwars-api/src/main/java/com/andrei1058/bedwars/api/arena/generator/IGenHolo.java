@@ -22,6 +22,7 @@ package com.andrei1058.bedwars.api.arena.generator;
 
 import org.bukkit.entity.Player;
 
+@Deprecated
 public interface IGenHolo {
 
     /**

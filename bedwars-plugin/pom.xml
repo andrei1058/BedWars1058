@@ -5,31 +5,14 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>23.12.1-SNAPSHOT</version>
+        <version>25.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-plugin</artifactId>
     <packaging>jar</packaging>
     <version>${project.parent.version}</version>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <!-- This is a temporary reference as the Maven Shade plugin
-                that supports Java 17 is not released yet -->
-            <id>maven-snapshots</id>
-            <url>https://repository.apache.org/content/repositories/snapshots/</url>
-        </pluginRepository>
-    </pluginRepositories>
-
     <repositories>
-        <repository>
-            <id>simonsators-repo</id>
-            <url>https://simonsator.de/repo/</url>
-        </repository>
-        <repository>
-            <id>citizens</id>
-            <url>https://maven.citizensnpcs.co/repo</url>
-        </repository>
         <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
@@ -51,6 +34,15 @@
             <url>https://repo.codemc.io/repository/nms/</url>
         </repository>
         <repository>
+            <id>simonsators-repo</id>
+            <url>https://simonsator.de/repo/</url>
+        </repository>
+        <repository>
+            <id>citizens</id>
+            <url>https://maven.citizensnpcs.co/repo</url>
+        </repository>
+
+        <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
@@ -68,7 +60,7 @@
         </repository>
         <repository>
             <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
     </repositories>
 
@@ -216,7 +208,7 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.11.3</version>
+            <version>2.11.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
