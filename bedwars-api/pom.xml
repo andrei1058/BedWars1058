@@ -5,7 +5,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>23.12.1-SNAPSHOT</version>
+        <version>25.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-api</artifactId>
