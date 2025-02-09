@@ -7,7 +7,7 @@
     <groupId>com.andrei1058.bedwars</groupId>
     <artifactId>BedWars1058</artifactId>
     <packaging>pom</packaging>
-    <version>23.10.1-SNAPSHOT</version>
+    <version>25.2</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,14 +21,14 @@
             <id>bungeecord-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
-<!--        <repository>-->
-<!--            <id>gitlab-maven</id>-->
-<!--            <url>https://gitlab.com/api/v4/groups/4800570/-/packages/maven</url>-->
-<!--        </repository>-->
-<!--        <repository>-->
-<!--            <id>vipfeatures-maven</id>-->
-<!--            <url>https://gitlab.com/api/v4/projects/6491858/packages/maven</url>-->
-<!--        </repository>-->
+        <!--        <repository>-->
+        <!--            <id>gitlab-maven</id>-->
+        <!--            <url>https://gitlab.com/api/v4/groups/4800570/-/packages/maven</url>-->
+        <!--        </repository>-->
+        <!--        <repository>-->
+        <!--            <id>vipfeatures-maven</id>-->
+        <!--            <url>https://gitlab.com/api/v4/projects/6491858/packages/maven</url>-->
+        <!--        </repository>-->
         <repository>
             <id>codemc-nms</id>
             <url>https://repo.codemc.io/repository/nms/</url>
@@ -53,6 +53,13 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>24.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.36</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -113,6 +120,8 @@
         <module>versionsupport_v1_19_R3</module>
         <module>versionsupport_v1_20_R1</module>
         <module>versionsupport_v1_20_R2</module>
+        <module>versionsupport_v1_20_R3</module>
+        <module>versionsupport_v1_20_R4</module>
     </modules>
 
     <distributionManagement>

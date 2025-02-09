@@ -11,9 +11,12 @@ import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.sidebar.ISidebar;
 import com.andrei1058.bedwars.api.sidebar.ISidebarService;
+import com.andrei1058.bedwars.metrics.MetricsManager;
+import com.andrei1058.bedwars.sidebar.thread.*;
 import com.andrei1058.spigot.sidebar.SidebarManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,10 +32,83 @@ public class SidebarService implements ISidebarService {
     private final SidebarManager sidebarHandler;
     private final HashMap<UUID, BwSidebar> sidebars = new HashMap<>();
 
-
-    public static boolean init() {
+    public static boolean init(JavaPlugin plugin) {
         if (null == instance) {
             instance = new SidebarService();
+
+            var log = Bukkit.getLogger();
+
+            int playerListRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_LIST_REFRESH);
+            if (playerListRefreshInterval < 1) {
+                Bukkit.getLogger().info("Scoreboard names list refresh is disabled. (It is set to " + playerListRefreshInterval + ").");
+            } else {
+                if (playerListRefreshInterval < 20) {
+                    log.warning("Scoreboard names list refresh interval is set to: " + playerListRefreshInterval);
+                    log.warning("It is not recommended to use a value under 20 ticks.");
+                    log.warning("If you expect performance issues please increase its timer.");
+                }
+                Bukkit.getScheduler().runTaskTimer(plugin, new RefreshPlayerListTask(), 1L, playerListRefreshInterval);
+            }
+            MetricsManager.appendPie("sb_list_refresh_interval", () -> String.valueOf(playerListRefreshInterval));
+
+            int placeholdersRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_PLACEHOLDERS_REFRESH_INTERVAL);
+            if (placeholdersRefreshInterval < 1) {
+                log.info("Scoreboard placeholders refresh is disabled. (It is set to " + placeholdersRefreshInterval + ").");
+            } else {
+                if (placeholdersRefreshInterval < 20) {
+                    log.warning("Scoreboard placeholders refresh interval is set to: " + placeholdersRefreshInterval);
+                    log.warning("It is not recommended to use a value under 20 ticks.");
+                    log.warning("If you expect performance issues please increase its timer.");
+                }
+                Bukkit.getScheduler().runTaskTimer(plugin, new RefreshPlaceholdersTask(), 1L, placeholdersRefreshInterval);
+            }
+            MetricsManager.appendPie("sb_placeholder_refresh_interval", () -> String.valueOf(placeholdersRefreshInterval));
+
+            int titleRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_TITLE_REFRESH_INTERVAL);
+            if (titleRefreshInterval < 1) {
+                log.info("Scoreboard title refresh is disabled. (It is set to " + titleRefreshInterval + ").");
+            } else {
+                if (titleRefreshInterval < 4) {
+                    log.warning("Scoreboard title refresh interval is set to: " + titleRefreshInterval);
+                    log.warning("If you expect performance issues please increase its timer.");
+                }
+                Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new RefreshTitleTask(), 1L, titleRefreshInterval);
+            }
+            MetricsManager.appendPie("sb_title_refresh_interval", () -> String.valueOf(titleRefreshInterval));
+
+            int healthAnimationInterval = config.getInt(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_REFRESH);
+            if (healthAnimationInterval < 1) {
+                log.info("Scoreboard health animation refresh is disabled. (It is set to " + healthAnimationInterval + ").");
+            } else {
+                if (healthAnimationInterval < 20) {
+                    log.warning("Scoreboard health animation refresh interval is set to: " + healthAnimationInterval);
+                    log.warning("It is not recommended to use a value under 20 ticks.");
+                    log.warning("If you expect performance issues please increase its timer.");
+                }
+                Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new RefreshLifeTask(), 1L, healthAnimationInterval);
+            }
+            MetricsManager.appendPie("sb_health_refresh_interval", () -> String.valueOf(healthAnimationInterval));
+
+            int tabHeaderFooterRefreshInterval = config.getInt(ConfigPath.SB_CONFIG_TAB_HEADER_FOOTER_REFRESH_INTERVAL);
+            if (tabHeaderFooterRefreshInterval < 1 || !config.getBoolean(ConfigPath.SB_CONFIG_TAB_HEADER_FOOTER_ENABLE)) {
+                log.info("Scoreboard Tab header-footer refresh is disabled.");
+            } else {
+                if (tabHeaderFooterRefreshInterval < 20) {
+                    log.warning("Scoreboard tab header-footer refresh interval is set to: " + tabHeaderFooterRefreshInterval);
+                    log.warning("It is not recommended to use a value under 20 ticks.");
+                    log.warning("If you expect performance issues please increase its timer.");
+                }
+                Bukkit.getScheduler().runTaskTimer(plugin, new RefreshTabHeaderFooterTask(), 1L, tabHeaderFooterRefreshInterval);
+            }
+            MetricsManager.appendPie("sb_header_footer_refresh_interval", () -> String.valueOf(tabHeaderFooterRefreshInterval));
+
+            var lobbySidebar = config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR) &&
+                    BedWars.getServerType() == ServerType.MULTIARENA;
+            MetricsManager.appendPie("sb_lobby_enable", () -> String.valueOf(lobbySidebar));
+            var gameSidebar = config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_GAME_SIDEBAR);
+            MetricsManager.appendPie("sb_game_enable", () -> String.valueOf(gameSidebar));
+
+            BedWars.registerEvents(new ScoreboardListener());
         }
         return instance.sidebarHandler != null;
     }
@@ -93,7 +169,12 @@ public class SidebarService implements ISidebarService {
                 }
             } else if (arena.getStatus() == GameState.playing) {
                 if (arena.isSpectator(player)) {
-                    lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".playing.spectator", Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC);
+                    ITeam holderExTeam = arena.getExTeam(player.getUniqueId());
+                    if (null == holderExTeam) {
+                        lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".playing.spectator", Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC);
+                    } else {
+                        lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".playing.eliminated", Messages.SCOREBOARD_DEFAULT_PLAYING_SPEC_ELIMINATED);
+                    }
                 } else {
                     lines = getScoreboard(player, "sidebar." + arena.getGroup() + ".playing.alive", Messages.SCOREBOARD_DEFAULT_PLAYING);
                 }

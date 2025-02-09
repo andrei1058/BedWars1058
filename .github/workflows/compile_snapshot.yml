@@ -3,23 +3,23 @@ name: Compile snapshot with Maven
 on:
   push:
     branches-ignore:
+      - develop
       - master
-      - development
   pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment:
-      name: development
-      url: https://repo.andrei1058.dev
+#    environment:
+#      name: development
+#      url: https://repo.andrei1058.dev
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '19.0.2+7'
-          distribution: 'adopt'
+          java-version: '21'
+          distribution: 'temurin'
       - name: Deploy snapshot with Maven
         env:
           MVN_REPO_USER: ${{ secrets.MVN_REPO_USER }}

@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+@Deprecated
 public class TeamSilverfish extends DespawnableProvider<Silverfish> {
     @Override
     public DespawnableType getType() {

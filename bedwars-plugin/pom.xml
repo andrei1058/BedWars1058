@@ -5,31 +5,14 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>23.10.1-SNAPSHOT</version>
+        <version>25.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-plugin</artifactId>
     <packaging>jar</packaging>
     <version>${project.parent.version}</version>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <!-- This is a temporary reference as the Maven Shade plugin
-                that supports Java 17 is not released yet -->
-            <id>maven-snapshots</id>
-            <url>https://repository.apache.org/content/repositories/snapshots/</url>
-        </pluginRepository>
-    </pluginRepositories>
-
     <repositories>
-        <repository>
-            <id>simonsators-repo</id>
-            <url>https://simonsator.de/repo/</url>
-        </repository>
-        <repository>
-            <id>citizens</id>
-            <url>https://maven.citizensnpcs.co/repo</url>
-        </repository>
         <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
@@ -51,6 +34,15 @@
             <url>https://repo.codemc.io/repository/nms/</url>
         </repository>
         <repository>
+            <id>simonsators-repo</id>
+            <url>https://simonsator.de/repo/</url>
+        </repository>
+        <repository>
+            <id>citizens</id>
+            <url>https://maven.citizensnpcs.co/repo</url>
+        </repository>
+
+        <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
@@ -68,7 +60,7 @@
         </repository>
         <repository>
             <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
     </repositories>
 
@@ -194,6 +186,16 @@
         </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
+            <artifactId>versionsupport_v1_20_R3</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars</groupId>
+            <artifactId>versionsupport_v1_20_R4</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>versionsupport-common</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -206,7 +208,7 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.11.3</version>
+            <version>2.11.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -247,61 +249,85 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-base</artifactId>
-            <version>23.10</version>
+            <version>24.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_8_R3</artifactId>
-            <version>23.10</version>
+            <version>24.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_12_R1</artifactId>
-            <version>23.10</version>
+            <version>24.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-v1_16_R1</artifactId>
-            <version>23.10</version>
+            <artifactId>sidebar-v1_16_R3</artifactId>
+            <version>24.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_17_R1</artifactId>
-            <version>23.10</version>
+            <version>24.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_18_R2</artifactId>
-            <version>23.10</version>
+            <version>24.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_19_R2</artifactId>
-            <version>23.10</version>
+            <version>24.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_19_R3</artifactId>
-            <version>23.10</version>
+            <version>24.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_20_R1</artifactId>
-            <version>23.10</version>
+            <version>24.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_20_R2</artifactId>
-            <version>23.10</version>
+            <version>24.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-v1_20_R3</artifactId>
+            <version>24.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-v1_20_R4</artifactId>
+            <version>24.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-v1_20_R4</artifactId>
+            <version>23.12</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-v1_20_R4</artifactId>
+            <version>23.12</version>
             <scope>compile</scope>
         </dependency>
         <!--        End of Sidebar LIB-->

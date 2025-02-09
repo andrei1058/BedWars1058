@@ -26,6 +26,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerKillEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.metrics.MetricsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -51,11 +52,13 @@ public class SpoilPlayerTNTFeature {
     }
 
     public static void init() {
-        if (BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_SPOIL_TNT_PLAYERS)) {
+        var enable = BedWars.config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_SPOIL_TNT_PLAYERS);
+        if (enable) {
             if (instance == null) {
                 instance = new SpoilPlayerTNTFeature();
             }
         }
+        MetricsManager.appendPie("tnt_spoil_enable", () -> String.valueOf(enable));
     }
 
     private static class ParticleTask implements Runnable {
@@ -109,12 +112,11 @@ public class SpoilPlayerTNTFeature {
             if (arena == null || !arena.isPlayer(event.getPlayer()) || arena.isSpectator(event.getPlayer())) return;
             if (inHand.getType() == Material.TNT) {
                 if (!instance.playersWithTnt.contains(event.getPlayer())) return;
-                Bukkit.getScheduler().runTaskLater(BedWars.plugin,
-                        () -> {
-                            if (!event.getPlayer().getInventory().contains(Material.TNT)) {
-                                instance.playersWithTnt.remove(event.getPlayer());
-                            }
-                        }, 1L);
+                Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+                    if (!event.getPlayer().getInventory().contains(Material.TNT)) {
+                        instance.playersWithTnt.remove(event.getPlayer());
+                    }
+                }, 1L);
             }
         }
 
