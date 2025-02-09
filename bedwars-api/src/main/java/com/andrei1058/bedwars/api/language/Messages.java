@@ -462,6 +462,9 @@ public class Messages {
     public static final String SHOP_CONTENT_TIER_ITEM_LORE = SHOP_PATH + ".%category%.content-item-%content%-lore";
     public static final String SHOP_CAN_BUY_COLOR = SHOP_PATH + ".can-buy-color";
     public static final String SHOP_CANT_BUY_COLOR = SHOP_PATH + ".cant-buy-color";
+    public static final String SHOP_CATEGORY_PUMPKIN_NAME = SHOP_PATH + ".blocks-category.content-item-pumpkin-name";
+
+    public static final String SHOP_CATEGORY_PUMPKIN_LORE = SHOP_PATH + ".blocks-category.content-item-pumpkin-lore";
 
     /* MultiArena Lobby Item Messages */
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + "-%path%-name";

@@ -47,6 +47,7 @@ public class MainConfig extends ConfigManager {
 
         yml.options().header(plugin.getDescription().getName() + " by andrei1058. https://www.spigotmc.org/members/39904/\n" +
                 "Documentation here: https://gitlab.com/andrei1058/BedWars1058/wikis/home\n");
+        yml.addDefault("timeZone", "Europe/Rome");
         yml.addDefault("serverType", "MULTIARENA");
         yml.addDefault("language", "en");
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_DISABLED_LANGUAGES, Collections.singletonList("your language iso here"));

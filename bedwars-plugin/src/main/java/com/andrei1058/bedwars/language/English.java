@@ -955,6 +955,8 @@ public class English extends Language {
         yml.addDefault(Messages.SHOP_LORE_STATUS_ARMOR, "&aEQUIPPED!");
         yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bSneak Click to add to Quick Buy");
         yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bSneak Click to remove from Quick Buy!");
+        yml.addDefault(Messages.SHOP_CATEGORY_PUMPKIN_NAME, "{color}Happy Halloween");
+        yml.addDefault(Messages.SHOP_CATEGORY_PUMPKIN_LORE, Arrays.asList("&7Cost: &f{cost} {currency}", "", "{quick_buy}", "{buy_status}"));
 
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Blocks", "&aBlocks", Collections.singletonList("&eClick to view!"));

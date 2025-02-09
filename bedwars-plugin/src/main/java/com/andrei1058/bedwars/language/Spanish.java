@@ -956,6 +956,8 @@ public class Spanish extends Language {
         yml.addDefault(Messages.SHOP_LORE_STATUS_MAXED, "&aMAXIMIZADO!");
         yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bHaga shift + click para agregar a la compra rapida!");
         yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bHaga shift + click para remover de la compra rapida!");
+        yml.addDefault(Messages.SHOP_CATEGORY_PUMPKIN_NAME, "{color}Happy Halloween");
+        yml.addDefault(Messages.SHOP_CATEGORY_PUMPKIN_LORE, Arrays.asList("&7Cost: &f{cost} {currency}", "", "{quick_buy}", "{buy_status}"));
 
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Bloques", "&aBloques", Collections.singletonList("&eClick para ver!"));
