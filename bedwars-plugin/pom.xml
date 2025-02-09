@@ -73,12 +73,12 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>io.papermc</groupId>
-            <artifactId>paperlib</artifactId>
-            <version>1.0.8</version>
-            <scope>compile</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.papermc</groupId>-->
+<!--            <artifactId>paperlib</artifactId>-->
+<!--            <version>1.0.8</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>de.simonsator</groupId>
             <artifactId>Party-and-Friends-MySQL-Edition-Spigot-API</artifactId>
