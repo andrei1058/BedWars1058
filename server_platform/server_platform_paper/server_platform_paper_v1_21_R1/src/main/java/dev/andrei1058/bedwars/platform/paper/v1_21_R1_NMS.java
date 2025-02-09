@@ -14,21 +14,28 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.inventory.InventoryEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Vector;
 
-public class v1_21_R1_NMS extends VersionSupport {
+public class v1_21_R1_NMS extends VersionSupport
+{
 
-    public v1_21_R1_NMS(Plugin plugin, String name) {
-        super(plugin, name);
+    /**
+     * @param plugin      bed-wars instance.
+     * @param versionName version name.
+     */
+    public v1_21_R1_NMS(Plugin plugin, String versionName) {
+        super(plugin, versionName);
     }
 
     @Override
     public void registerCommand(String name, Command clasa) {
-
+        ((CraftServer) getPlugin().getServer()).getCommandMap().register(name, cmd);
     }
 
     @Override
@@ -287,7 +294,7 @@ public class v1_21_R1_NMS extends VersionSupport {
     }
 
     @Override
-    public ItemStack getPlayerHead(Player player, ItemStack copyTagFrom) {
+    public ItemStack getPlayerHead(Player player, @Nullable ItemStack copyTagFrom) {
         return null;
     }
 

@@ -9,5 +9,5 @@ public interface ServerPlatform {
     void onEnable();
     void onDisable();
 
-    VersionSupport getOldWrapper(JavaPlugin plugin, String name);
+    VersionSupport getOldWrapper(JavaPlugin plugin);
 }

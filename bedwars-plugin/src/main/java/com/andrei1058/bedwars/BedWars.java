@@ -151,7 +151,7 @@ public class BedWars extends JavaPlugin {
 
         serverPlatform = loader.get();
         serverPlatform.onLoad();
-        nms = serverPlatform.getOldWrapper();
+        nms = serverPlatform.getOldWrapper(this);
 
 
         //Spigot support

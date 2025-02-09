@@ -21,7 +21,7 @@ public class PaperPlatform implements ServerPlatform {
     }
 
     @Override
-    public VersionSupport getOldWrapper(JavaPlugin plugin, String name) {
+    public VersionSupport getOldWrapper(JavaPlugin plugin) {
         return null;
     }
 }

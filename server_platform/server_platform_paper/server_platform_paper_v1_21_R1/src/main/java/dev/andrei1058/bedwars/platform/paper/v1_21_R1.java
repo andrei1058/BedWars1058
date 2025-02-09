@@ -12,8 +12,8 @@ public class v1_21_R1 extends PaperPlatform {
 
         var brandId = build.brandId().asString().equals("papermc:paper"); // example: "papermc:paper"
         var brandName = build.brandName().equals("Paper"); // example: "Paper"
-        var minecraftVersionId = build.minecraftVersionId().equals("1.21.1"); // example: "1.20.6"
-        var minecraftVersionName = build.minecraftVersionName().equals("1.21.1"); // example: "1.20.6" (some versions return a more "friendly" value)
+        var minecraftVersionId = build.minecraftVersionId().equals("1.21.4"); // example: "1.20.6"
+        var minecraftVersionName = build.minecraftVersionName().equals("1.21.4"); // example: "1.20.6" (some versions return a more "friendly" value)
 
         if (!(brandId && brandName && minecraftVersionId && minecraftVersionName)) {
             throw new IllegalStateException("Invalid server build info!");
@@ -21,7 +21,7 @@ public class v1_21_R1 extends PaperPlatform {
     }
 
     @Override
-    public VersionSupport getOldWrapper(JavaPlugin plugin, String name) {
-        return new v1_21_R1_NMS(plugin, name);
+    public VersionSupport getOldWrapper(JavaPlugin plugin) {
+        return new v1_21_R1_NMS(plugin, "v1.21.4");
     }
 }

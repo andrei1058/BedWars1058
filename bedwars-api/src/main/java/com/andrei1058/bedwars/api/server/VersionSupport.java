@@ -43,6 +43,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Deprecated
 public abstract class VersionSupport {
 
     private static String name2;
