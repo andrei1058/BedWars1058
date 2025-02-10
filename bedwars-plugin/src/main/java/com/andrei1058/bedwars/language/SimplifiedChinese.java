@@ -947,6 +947,8 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.SHOP_LORE_STATUS_ARMOR, "&a已装备！");
         yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bShift+点击 来添加快速购买");
         yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bShift+点击 来从快速购买中移除！");
+        yml.addDefault(Messages.SHOP_CATEGORY_PUMPKIN_NAME, "{color}Happy Halloween");
+        yml.addDefault(Messages.SHOP_CATEGORY_PUMPKIN_LORE, Arrays.asList("&7Cost: &f{cost} {currency}", "", "{quick_buy}", "{buy_status}"));
 
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8方块", "&a方块", Collections.singletonList("&e点击查看！"));

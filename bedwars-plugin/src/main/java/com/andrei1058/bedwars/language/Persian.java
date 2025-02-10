@@ -960,6 +960,8 @@ public class Persian extends Language {
         yml.addDefault(Messages.SHOP_LORE_STATUS_MAXED, "&aAKHARIN LEVEL!");
         yml.addDefault(Messages.SHOP_LORE_QUICK_ADD, "&bBaraye ezafe kardan be Kharid Sari SNEAK Click konid");
         yml.addDefault(Messages.SHOP_LORE_QUICK_REMOVE, "&bBaraye hazf az Kharid Sari SNEAK Click konid!");
+        yml.addDefault(Messages.SHOP_CATEGORY_PUMPKIN_NAME, "{color}Happy Halloween");
+        yml.addDefault(Messages.SHOP_CATEGORY_PUMPKIN_LORE, Arrays.asList("&7Cost: &f{cost} {currency}", "", "{quick_buy}", "{buy_status}"));
 
 
         addCategoryMessages(yml, ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, "&8Block Ha", "&aBlock Ha", Collections.singletonList("&eBaraye moshahede Click konid!"));
