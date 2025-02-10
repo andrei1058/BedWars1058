@@ -62,6 +62,10 @@
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -349,6 +353,13 @@
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-chat</artifactId>
             <version>1.18-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.sk8ingDuck</groupId>
+            <artifactId>FriendSystem-Spigot-API</artifactId>
+            <version>c2b5d9a0c0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
