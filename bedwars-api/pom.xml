@@ -24,6 +24,10 @@
             <id>andrei-prod</id>
             <url>https://repo.andrei1058.dev/releases</url>
         </repository>
+        <repository>
+            <id>andrei-releases</id>
+            <url>https://repo.andrei1058.dev/releases</url>
+        </repository>
     </repositories>
 
     <dependencies>

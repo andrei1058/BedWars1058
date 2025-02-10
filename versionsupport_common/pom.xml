@@ -14,8 +14,12 @@
 
     <repositories>
         <repository>
-            <id>codemc-nms</id>
+            <id>code-mc-nms</id>
             <url>https://repo.codemc.io/repository/nms/</url>
+        </repository>
+        <repository>
+            <id>andrei-releases</id>
+            <url>https://repo.andrei1058.dev/releases</url>
         </repository>
     </repositories>
 
