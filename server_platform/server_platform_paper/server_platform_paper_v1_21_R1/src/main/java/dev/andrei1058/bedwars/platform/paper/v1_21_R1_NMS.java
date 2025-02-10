@@ -4,12 +4,15 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.arena.team.TeamColor;
 import com.andrei1058.bedwars.api.server.VersionSupport;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
-import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
@@ -36,17 +39,23 @@ public class v1_21_R1_NMS extends VersionSupport
 
     @Override
     public void registerCommand(String name, Command cmd) {
-        ((CraftServer) getPlugin().getServer()).getCommandMap().register(name, cmd);
+//        ((CraftServer) getPlugin().getServer()).getCommandMap().register(name, cmd);
+        // todo paper command register
     }
 
     @Override
     public void sendTitle(Player p, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
-
+        // todo test if this has to be json
+        p.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
     }
 
     @Override
     public void playAction(Player p, String text) {
-
+        // todo test
+        p.spigot().sendMessage(
+                ChatMessageType.ACTION_BAR,
+                TextComponent.fromLegacyText(text)
+        );
     }
 
     @Override

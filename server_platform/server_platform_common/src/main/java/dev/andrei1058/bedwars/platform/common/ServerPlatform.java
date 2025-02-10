@@ -10,4 +10,6 @@ public interface ServerPlatform {
     void onDisable();
 
     VersionSupport getOldWrapper(JavaPlugin plugin);
+
+    String getName();
 }

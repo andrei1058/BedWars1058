@@ -151,64 +151,13 @@ public class BedWars extends JavaPlugin {
 
         serverPlatform = loader.get();
         serverPlatform.onLoad();
+        // todo test null
         nms = serverPlatform.getOldWrapper(this);
-
-
-        //Spigot support
-        try {
-            Class.forName("org.spigotmc.SpigotConfig");
-        } catch (Exception ignored) {
-            this.getLogger().severe("I can't run on your server software. Please check:");
-            this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
-            serverSoftwareSupport = false;
-            return;
-        }
-
-        try {
-            Class.forName("com.destroystokyo.paper.PaperConfig");
-            isPaper = true;
-        } catch (ClassNotFoundException e) {
-            isPaper = false;
-        }
-
         plugin = this;
-
-        /* Load version support */
-        //noinspection rawtypes
-        Class supp;
-
-        try {
-            supp = Class.forName(
-                    "com.andrei1058.bedwars.support.version." + getServerVersion() + "." + getServerVersion());
-        } catch (ClassNotFoundException e) {
-            serverSoftwareSupport = false;
-            this.getLogger().severe("I can't run on your version: " + getServerVersion());
-            return;
-        }
-
         api = new API();
         Bukkit.getServicesManager().register(com.andrei1058.bedwars.api.BedWars.class, api, this, ServicePriority.Highest);
 
-        try {
-            Bukkit.getLogger().severe(Bukkit.getServer().getClass().getName());
-            Bukkit.getLogger().severe(Bukkit.getServer().getClass().getName());
-            Bukkit.getLogger().severe(Bukkit.getServer().getClass().getName());
-            Bukkit.getLogger().severe(Bukkit.getServer().getClass().getName());
-            Bukkit.getLogger().severe(Bukkit.getServer().getClass().getName());
-            Bukkit.getLogger().severe(Bukkit.getServer().getClass().getName());
-            //noinspection unchecked
-            nms = (VersionSupport) supp.getConstructor(
-                    Class.forName("org.bukkit.plugin.Plugin"), String.class
-            ).newInstance(this, getServerVersion());
-        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException |
-                 ClassNotFoundException e) {
-            e.printStackTrace();
-            serverSoftwareSupport = false;
-            this.getLogger().severe("Could not load support for server version: " + getServerVersion());
-            return;
-        }
-
-        this.getLogger().info("Loading support for paper/spigot: " + getServerVersion());
+        this.getLogger().info("Loading support for "+serverPlatform.getName());
 
         // Setup languages
         new English();

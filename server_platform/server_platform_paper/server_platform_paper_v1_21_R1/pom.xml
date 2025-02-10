@@ -20,13 +20,17 @@
 
     <repositories>
         <repository>
-            <id>codemc-nms</id>
+            <id>andrei-releases</id>
+            <url>https://repo.andrei1058.dev/releases/</url>
+        </repository>
+        <repository>
+            <id>code-mc-nms</id>
             <url>https://repo.codemc.io/repository/nms/</url>
         </repository>
-                <repository>
-                    <id>papermc</id>
-                    <url>https://repo.papermc.io/repository/maven-public/</url>
-                </repository>
+        <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -45,8 +49,14 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.4-R0.1-SNAPSHOT</version>
+            <version>1.21.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-v1_21_R1</artifactId>
+            <version>25.2.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

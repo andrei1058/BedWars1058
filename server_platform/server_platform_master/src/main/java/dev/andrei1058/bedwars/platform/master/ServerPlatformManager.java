@@ -61,8 +61,6 @@ public class ServerPlatformManager {
             if (version.equals("CraftServer")) {
                 // it is probably PAPER
                 String bukkitVersion = Bukkit.getServer().getBukkitVersion();
-                Bukkit.getLogger().warning("ver: "+bukkitVersion);
-                Bukkit.getLogger().warning("ver: "+Bukkit.getServer().getVersion());
                 if (bukkitVersion.startsWith("1.21")) {
                     // todo test me
                 }
