@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
+import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
@@ -34,7 +35,7 @@ public class v1_21_R1_NMS extends VersionSupport
     }
 
     @Override
-    public void registerCommand(String name, Command clasa) {
+    public void registerCommand(String name, Command cmd) {
         ((CraftServer) getPlugin().getServer()).getCommandMap().register(name, cmd);
     }
 
