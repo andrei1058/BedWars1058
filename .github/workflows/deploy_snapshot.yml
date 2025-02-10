@@ -15,8 +15,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '19.0.2+7'
-          distribution: 'adopt'
+          java-version: '21'
+          distribution: 'temurin'
       - name: Deploy snapshot with Maven
         env:
           MVN_REPO_USER: ${{ secrets.MVN_REPO_USER }}

@@ -570,7 +570,12 @@ public class DamageDeathMove implements Listener {
     public void onMove(PlayerMoveEvent e) {
         if (Arena.isInArena(e.getPlayer())) {
             IArena a = Arena.getArenaByPlayer(e.getPlayer());
-            if (e.getFrom().getChunk() != e.getTo().getChunk()) {
+
+            // todo check on x y z change... not head rotation because this is really spammy
+            if (e.getFrom().getChunk().getX() != e.getTo().getChunk().getX() ||
+                    e.getFrom().getChunk().getZ() != e.getTo().getChunk().getZ() ||
+                    !e.getFrom().getChunk().getWorld().equals(e.getTo().getChunk().getWorld())
+            ) {
 
                 /* update armor-stands hidden by nms */
                 String iso = Language.getPlayerLanguage(e.getPlayer()).getIso();
