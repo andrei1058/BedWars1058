@@ -157,7 +157,7 @@ public class OreGenerator implements IGenerator {
                     if (e.getType() == EntityType.DROPPED_ITEM) {
                         Item i = (Item) e;
                         if (i.getItemStack().getType() == ore.getType()) {
-                            oreCount++;
+                            oreCount += i.getItemStack().getAmount();
                         }
                         if (oreCount >= spawnLimit) return;
                     }
