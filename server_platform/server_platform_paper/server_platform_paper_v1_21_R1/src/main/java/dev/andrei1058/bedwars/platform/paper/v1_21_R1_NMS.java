@@ -1,370 +1,226 @@
 package dev.andrei1058.bedwars.platform.paper;
 
-import com.andrei1058.bedwars.api.arena.IArena;
-import com.andrei1058.bedwars.api.arena.team.ITeam;
-import com.andrei1058.bedwars.api.arena.team.TeamColor;
-import com.andrei1058.bedwars.api.server.VersionSupport;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
+import com.mojang.datafixers.util.Pair;
+import dev.andrei1058.mc.bedwars.AbstractVerImplCmn1;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
+import net.minecraft.network.protocol.game.PacketPlayOutEntityEquipment;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.server.network.PlayerConnection;
+import net.minecraft.world.entity.EntityLiving;
+import net.minecraft.world.entity.EnumItemSlot;
+import net.minecraft.world.entity.item.EntityTNTPrimed;
+import net.minecraft.world.entity.projectile.EntityFireball;
+import net.minecraft.world.entity.projectile.IProjectile;
+import net.minecraft.world.item.*;
+import net.minecraft.world.phys.Vec3D;
 import org.bukkit.command.Command;
-import org.bukkit.entity.Entity;
+import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R1.entity.CraftFireball;
+import org.bukkit.craftbukkit.v1_21_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_21_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_21_R1.entity.CraftTNTPrimed;
+import org.bukkit.craftbukkit.v1_21_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
-import org.bukkit.event.inventory.InventoryEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
-public class v1_21_R1_NMS extends VersionSupport
+public class v1_21_R1_NMS extends AbstractVerImplCmn1
 {
 
-    /**
-     * @param plugin      bed-wars instance.
-     * @param versionName version name.
-     */
-    public v1_21_R1_NMS(Plugin plugin, String versionName) {
-        super(plugin, versionName);
+    public v1_21_R1_NMS(Plugin plugin, String name) {
+        super(plugin, name);
     }
 
     @Override
     public void registerCommand(String name, Command cmd) {
-//        ((CraftServer) getPlugin().getServer()).getCommandMap().register(name, cmd);
-        // todo paper command register
+        ((CraftServer) getPlugin().getServer()).getCommandMap().register(name, cmd);
     }
 
     @Override
-    public void sendTitle(Player p, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
-        // todo test if this has to be json
-        p.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
-    }
-
-    @Override
-    public void playAction(Player p, String text) {
-        // todo test
-        p.spigot().sendMessage(
-                ChatMessageType.ACTION_BAR,
-                TextComponent.fromLegacyText(text)
-        );
-    }
-
-    @Override
-    public boolean isBukkitCommandRegistered(String command) {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItemInHand(Player p) {
-        return null;
-    }
-
-    @Override
-    public void hideEntity(Entity e, Player p) {
-
-    }
-
-    @Override
-    public boolean isArmor(ItemStack itemStack) {
-        return false;
-    }
-
-    @Override
-    public boolean isTool(ItemStack itemStack) {
-        return false;
-    }
-
-    @Override
-    public boolean isSword(ItemStack itemStack) {
-        return false;
-    }
-
-    @Override
-    public boolean isAxe(ItemStack itemStack) {
-        return false;
-    }
-
-    @Override
-    public boolean isBow(ItemStack itemStack) {
-        return false;
-    }
-
-    @Override
-    public boolean isProjectile(ItemStack itemStack) {
-        return false;
-    }
-
-    @Override
-    public boolean isInvisibilityPotion(ItemStack itemStack) {
-        return false;
-    }
-
-    @Override
-    public void registerEntities() {
-
-    }
-
-    @Override
-    public void spawnShop(Location loc, String name1, List<Player> players, IArena arena) {
-
-    }
-
-    @Override
-    public double getDamage(ItemStack i) {
-        return 0;
-    }
-
-    @Override
-    public void spawnSilverfish(Location loc, ITeam team, double speed, double health, int despawn, double damage) {
-
-    }
-
-    @Override
-    public void spawnIronGolem(Location loc, ITeam team, double speed, double health, int despawn) {
-
-    }
-
-    @Override
-    public void minusAmount(Player p, ItemStack i, int amount) {
-
+    public boolean isBukkitCommandRegistered(String name) {
+        return ((CraftServer) getPlugin().getServer()).getCommandMap().getCommand(name) != null;
     }
 
     @Override
     public void setSource(TNTPrimed tnt, Player owner) {
+        //todo tested does not work 05-09-2024 https://github.com/andrei1058/BedWars1058/issues/1040
+        EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
+        EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
+        try {
+            Field sourceField = EntityTNTPrimed.class.getDeclaredField("d");
+            sourceField.setAccessible(true);
+            sourceField.set(nmsTNT, nmsEntityLiving);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
+    @Override
+    public ClientboundPlayerInfoUpdatePacket getAddPlayer(EntityPlayer player) {
+        // todo cache this in production
+        ClientboundPlayerInfoUpdatePacket.a action = (ClientboundPlayerInfoUpdatePacket.a) getPlayerSpawnAction("a");
+        return new ClientboundPlayerInfoUpdatePacket(action, player);
+    }
+
+    @Override
+    public boolean isArmor(org.bukkit.inventory.ItemStack itemStack) {
+        var i = getItem(itemStack);
+        if (null == i) return false;
+        return i instanceof ItemArmor || i instanceof ItemElytra;
+    }
+
+    @Override
+    public boolean isTool(org.bukkit.inventory.ItemStack itemStack) {
+        var i = getItem(itemStack);
+        if (null == i) return false;
+        return i instanceof ItemTool;
+    }
+
+    @Override
+    public boolean isSword(org.bukkit.inventory.ItemStack itemStack) {
+        var i = getItem(itemStack);
+        if (null == i) return false;
+        return i instanceof ItemSword;
+    }
+
+    @Override
+    public boolean isAxe(org.bukkit.inventory.ItemStack itemStack) {
+        var i = getItem(itemStack);
+        if (null == i) return false;
+        return i instanceof ItemAxe;
+    }
+
+    @Override
+    public boolean isBow(org.bukkit.inventory.ItemStack itemStack) {
+        var i = getItem(itemStack);
+        if (null == i) return false;
+        return i instanceof ItemBow;
+    }
+
+    @Override
+    public boolean isProjectile(org.bukkit.inventory.ItemStack itemStack) {
+        var entity = getEntity(itemStack);
+        if (null == entity) return false;
+        return entity instanceof IProjectile;
     }
 
     @Override
     public void voidKill(Player p) {
-
+        //todo
+//        EntityPlayer player = getPlayer(p);
+//        player.a(player.dM().m(), 1000);
     }
-
     @Override
-    public void hideArmor(Player victim, Player receiver) {
-
-    }
-
-    @Override
-    public void showArmor(Player victim, Player receiver) {
-
-    }
-
-    @Override
-    public void spawnDragon(Location l, ITeam team) {
-
-    }
-
-    @Override
-    public void colorBed(ITeam team) {
-
-    }
-
-    @Override
-    public void registerTntWhitelist(float endStoneBlast, float glassBlast) {
-
-    }
-
-    @Override
-    public void setBlockTeamColor(Block block, TeamColor teamColor) {
-
-    }
-
-    @Override
-    public void setCollide(Player p, IArena a, boolean value) {
-
-    }
-
-    @Override
-    public ItemStack addCustomData(ItemStack i, String data) {
-        return null;
-    }
-
-    @Override
-    public ItemStack setTag(ItemStack itemStack, String key, String value) {
-        return null;
-    }
-
-    @Override
-    public String getTag(ItemStack itemStack, String key) {
-        return "";
-    }
-
-    @Override
-    public boolean isCustomBedWarsItem(ItemStack i) {
-        return false;
-    }
-
-    @Override
-    public String getCustomData(ItemStack i) {
-        return "";
-    }
-
-    @Override
-    public ItemStack colourItem(ItemStack itemStack, ITeam bedWarsTeam) {
-        return null;
-    }
-
-    @Override
-    public ItemStack createItemStack(String material, int amount, short data) {
-        return null;
-    }
-
-    @Override
-    public Material materialFireball() {
-        return null;
-    }
-
-    @Override
-    public Material materialPlayerHead() {
-        return null;
-    }
-
-    @Override
-    public Material materialSnowball() {
-        return null;
-    }
-
-    @Override
-    public Material materialGoldenHelmet() {
-        return null;
-    }
-
-    @Override
-    public Material materialGoldenChestPlate() {
-        return null;
-    }
-
-    @Override
-    public Material materialGoldenLeggings() {
-        return null;
-    }
-
-    @Override
-    public Material materialNetheriteHelmet() {
-        return null;
-    }
-
-    @Override
-    public Material materialNetheriteChestPlate() {
-        return null;
-    }
-
-    @Override
-    public Material materialNetheriteLeggings() {
-        return null;
-    }
-
-    @Override
-    public Material materialElytra() {
-        return null;
-    }
-
-    @Override
-    public Material materialCake() {
-        return null;
-    }
-
-    @Override
-    public Material materialCraftingTable() {
-        return null;
-    }
-
-    @Override
-    public Material materialEnchantingTable() {
-        return null;
-    }
-
-    @Override
-    public void setJoinSignBackground(BlockState b, Material material) {
-
-    }
-
-    @Override
-    public Material woolMaterial() {
-        return null;
-    }
-
-    @Override
-    public String getShopUpgradeIdentifier(ItemStack itemStack) {
-        return "";
-    }
-
-    @Override
-    public ItemStack setShopUpgradeIdentifier(ItemStack itemStack, String identifier) {
-        return null;
-    }
-
-    @Override
-    public ItemStack getPlayerHead(Player player, @Nullable ItemStack copyTagFrom) {
-        return null;
-    }
-
-    @Override
-    public void sendPlayerSpawnPackets(Player player, IArena arena) {
-
-    }
-
-    @Override
-    public String getInventoryName(InventoryEvent e) {
-        return "";
-    }
-
-    @Override
-    public void setUnbreakable(ItemMeta itemMeta) {
-
-    }
-
-    @Override
-    public int getVersion() {
-        return 0;
-    }
-
-    @Override
-    public void registerVersionListeners() {
-
+    public void showArmor(@NotNull Player victim, Player receiver) {
+        List<Pair<EnumItemSlot, ItemStack>> items = new ArrayList<>();
+        items.add(new Pair<>(EnumItemSlot.f, CraftItemStack.asNMSCopy(victim.getInventory().getHelmet())));
+        items.add(new Pair<>(EnumItemSlot.e, CraftItemStack.asNMSCopy(victim.getInventory().getChestplate())));
+        items.add(new Pair<>(EnumItemSlot.d, CraftItemStack.asNMSCopy(victim.getInventory().getLeggings())));
+        items.add(new Pair<>(EnumItemSlot.c, CraftItemStack.asNMSCopy(victim.getInventory().getBoots())));
+        PacketPlayOutEntityEquipment packet1 = new PacketPlayOutEntityEquipment(victim.getEntityId(), items);
+        sendPacket(receiver, packet1);
     }
 
     @Override
     public String getMainLevel() {
-        return "";
+        //noinspection deprecation
+        return ((DedicatedServer) MinecraftServer.getServer()).a().n;
     }
 
     @Override
-    public Fireball setFireballDirection(Fireball fireball, Vector vector) {
-        return null;
+    public int getVersion() {
+        return 21;
     }
 
-    @Override
-    public void playRedStoneDot(Player player) {
 
+    @Override
+    public Fireball setFireballDirection(Fireball fireball, @NotNull Vector vector) {
+        EntityFireball fb = ((CraftFireball) fireball).getHandle();
+//        fb.b = vector.getX() * 0.1D;
+//        fb.c = vector.getY() * 0.1D;
+//        fb.d = vector.getZ() * 0.1D;
+        // todo experimental
+        fb.a(new Vec3D(vector.getX(), vector.getY(), vector.getZ()), 0.1D);
+        return (Fireball) fb.getBukkitEntity();
     }
 
-    @Override
-    public void clearArrowsFromPlayerBody(Player player) {
 
+    /**
+     * Gets the NMS Item from ItemStack
+     */
+    private @Nullable Item getItem(org.bukkit.inventory.ItemStack itemStack) {
+        var i = CraftItemStack.asNMSCopy(itemStack);
+        if (null == i) {
+            return null;
+        }
+        return i.g();
     }
 
-    @Override
-    public void placeTowerBlocks(Block b, IArena a, TeamColor color, int x, int y, int z) {
 
+    /**
+     * Gets the NMS Entity from ItemStack
+     */
+    private @Nullable net.minecraft.world.entity.Entity getEntity(org.bukkit.inventory.ItemStack itemStack) {
+        var i = CraftItemStack.asNMSCopy(itemStack);
+        if (null == i) {
+            return null;
+        }
+        // todo experimental
+        return i.E();
     }
 
-    @Override
-    public void placeLadder(Block b, int x, int y, int z, IArena a, int ladderdata) {
-
+    public ItemStack applyTag(@NotNull ItemStack itemStack, NBTTagCompound tag) {
+        // todo re-apply container?
+//        itemStack.(tag);
+        return itemStack;
     }
 
-    @Override
-    public void playVillagerEffect(Player player, Location location) {
+    public EntityPlayer getPlayer(Player player) {
+        return ((CraftPlayer) player).getHandle();
+    }
 
+    public void sendPacket(Player player, Packet<?> packet) {
+        ((CraftPlayer) player).getHandle().c.a(packet);
+    }
+
+    public void sendPackets(Player player, Packet<?> @NotNull ... packets) {
+        PlayerConnection connection = ((CraftPlayer) player).getHandle().c;
+        for (Packet<?> p : packets) {
+            connection.a(p);
+        }
+    }
+
+    private static Object getPlayerSpawnAction(String action) {
+        try {
+            Class<?> cls = Class.forName("net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket$a");
+            for (Object obj : cls.getEnumConstants()) {
+                try {
+                    Method m = cls.getMethod("name");
+                    String name = (String) m.invoke(obj);
+                    if (action.equals(name)) {
+                        return obj;
+                    }
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+                    System.out.println("could not find enum");
+                }
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        throw new RuntimeException("Something went wrong... please report this to BedWars1058 by andrei1058");
     }
 }
