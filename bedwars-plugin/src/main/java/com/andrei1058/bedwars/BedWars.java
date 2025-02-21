@@ -21,6 +21,7 @@
 package com.andrei1058.bedwars;
 
 import com.andrei1058.bedwars.z_myadditions.EPG_Main;
+import com.andrei1058.bedwars.z_myadditions.SaveLava_Main;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
@@ -140,6 +141,7 @@ public class BedWars extends JavaPlugin {
     private static com.andrei1058.bedwars.api.BedWars api;
 
     public final EPG_Main EPGlass = new EPG_Main(this);
+    public final SaveLava_Main SaveLava = new SaveLava_Main(this);
 
     @Override
     public void onLoad() {
@@ -221,6 +223,9 @@ public class BedWars extends JavaPlugin {
         // > My Additions <
             // >> EPG <<
                 EPGlass.onEnable();
+            //
+            // >> SaveLava <<
+                SaveLava.onEnable();
             //
         //
 
