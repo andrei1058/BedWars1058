@@ -33,6 +33,7 @@ import com.andrei1058.bedwars.arena.VoidChunkGenerator;
 import com.andrei1058.bedwars.maprestore.internal.files.WorldZipper;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -40,6 +41,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+//import java.io.IOException;
+import java.nio.file.*;
 
 import static com.andrei1058.bedwars.BedWars.config;
 import static com.andrei1058.bedwars.BedWars.plugin;
@@ -52,6 +56,8 @@ public class InternalAdapter extends RestoreAdapter {
         super(plugin);
     }
 
+
+
     @Override
     public void onEnable(IArena a) {
         Bukkit.getScheduler().runTask(getOwner(), () -> {
@@ -62,8 +68,24 @@ public class InternalAdapter extends RestoreAdapter {
                 });
                 return;
             }
+
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                File bf = new File(backupFolder, a.getArenaName() + ".zip"), af = new File(Bukkit.getWorldContainer(), a.getArenaName());
+                File bf = new File(backupFolder, a.getArenaName() + ".zip"),
+                        af = new File(Bukkit.getWorldContainer(), a.getArenaName());
+
+                // 🔹 Папки для хранения сущностей
+                File entitiesFolder = new File(af, "entities");
+                File tempEntitiesFolder = new File(backupFolder, a.getArenaName() + "_entities");
+
+                // 🔹 1. Если папка `entities` существует, копируем её во временное место
+                if (entitiesFolder.exists()) {
+                    try {
+                        copyFolder(entitiesFolder.toPath(), tempEntitiesFolder.toPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 if (bf.exists()) {
                     FileUtil.delete(af);
                 }
@@ -86,14 +108,40 @@ public class InternalAdapter extends RestoreAdapter {
                     wc.generator(new VoidChunkGenerator());
                     World w = Bukkit.createWorld(wc);
                     if (w == null){
-                        throw new IllegalStateException("World should be null");
+                        throw new IllegalStateException("World should not be null");
                     }
                     w.setKeepSpawnInMemory(true);
                     w.setAutoSave(false);
+
+                    // 🔹 2. Восстанавливаем `entities`, если он был сохранен
+                    if (tempEntitiesFolder.exists()) {
+                        try {
+                            copyFolder(tempEntitiesFolder.toPath(), entitiesFolder.toPath());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 });
             });
         });
     }
+
+    // 📂 Функция для копирования папок
+    private void copyFolder(Path source, Path target) throws IOException {
+        Files.walk(source).forEach(sourcePath -> {
+            try {
+                Path targetPath = target.resolve(source.relativize(sourcePath));
+                if (Files.isDirectory(sourcePath)) {
+                    Files.createDirectories(targetPath);
+                } else {
+                    Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
 
     @Override
     public void onRestart(IArena a) {
@@ -134,8 +182,22 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void onSetupSessionStart(ISetupSession s) {
+        System.getLogger("Setup").log(System.Logger.Level.INFO, "start");
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
-            File bf = new File(backupFolder, s.getWorldName() + ".zip"), af = new File(Bukkit.getWorldContainer(), s.getWorldName());
+            File bf = new File(backupFolder, s.getWorldName() + ".zip");
+            File af = new File(Bukkit.getWorldContainer(), s.getWorldName());
+
+            // 🔹 Восстанавливаем папку entities перед загрузкой мира
+            File backupEntities = new File("backups/" + s.getWorldName() + "/entities");
+            File worldEntities = new File(Bukkit.getWorldContainer(), s.getWorldName() + "/entities");
+            if (backupEntities.exists()) {
+                try {
+                    FileUtils.copyDirectory(backupEntities, worldEntities);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             if (bf.exists()) {
                 FileUtil.delete(af);
                 try {
@@ -161,7 +223,7 @@ public class InternalAdapter extends RestoreAdapter {
                             World w = Bukkit.createWorld(wc);
                             w.setKeepSpawnInMemory(true);
                             Bukkit.getScheduler().runTaskLater(plugin, s::teleportPlayer, 20L);
-                        } catch (Exception ex){
+                        } catch (Exception ex) {
                             ex.printStackTrace();
                             s.close();
                         }
@@ -180,11 +242,27 @@ public class InternalAdapter extends RestoreAdapter {
     @Override
     public void onSetupSessionClose(ISetupSession s) {
         Bukkit.getScheduler().runTask(getOwner(), () -> {
-            Bukkit.getWorld(s.getWorldName()).save();
+            World world = Bukkit.getWorld(s.getWorldName());
+            if (world != null) {
+                world.save(); // 🔹 Сохраняем мир перед выгрузкой
+            }
+
+            // 🔹 Сохраняем папку entities перед выгрузкой мира
+            File worldEntities = new File(Bukkit.getWorldContainer(), s.getWorldName() + "/entities");
+            File backupEntities = new File("backups/" + s.getWorldName() + "/entities");
+            try {
+                if (worldEntities.exists()) {
+                    FileUtils.copyDirectory(worldEntities, backupEntities);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             Bukkit.unloadWorld(s.getWorldName(), true);
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> new WorldZipper(s.getWorldName(), true));
         });
     }
+
 
     @Override
     public boolean isWorld(String name) {
@@ -213,6 +291,7 @@ public class InternalAdapter extends RestoreAdapter {
             }
         });
     }
+
 
     @Override
     public List<String> getWorldsList() {
