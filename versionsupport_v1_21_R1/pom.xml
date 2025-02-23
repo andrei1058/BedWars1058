@@ -59,7 +59,7 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_21_R1</artifactId>
-            <version>25.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

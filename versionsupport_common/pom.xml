@@ -27,7 +27,7 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-base</artifactId>
-            <version>25.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
