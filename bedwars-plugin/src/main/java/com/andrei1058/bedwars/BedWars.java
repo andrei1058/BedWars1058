@@ -142,17 +142,31 @@ public class BedWars extends JavaPlugin {
     @Override
     public void onLoad() {
 
-        Optional<ServerPlatform> loader = ServerPlatformManager.loadPlatformSupport();
+        // Self added or plugin-added version support
+        var providerRegistration = Bukkit.getServicesManager().getRegistration(ServerPlatform.class);
 
-        // todo platform not supported
-        if (loader.isEmpty()){
-            return;
+        // Built-in platform and version support
+        if (providerRegistration == null || providerRegistration.getProvider() == null) {
+            Optional<ServerPlatform> loader = ServerPlatformManager.loadPlatformSupport();
+
+            if (loader.isEmpty()){
+                return;
+            }
+            serverPlatform = loader.get();
+        } else {
+            serverPlatform = providerRegistration.getProvider();
+            plugin.getLogger().warning("Using external server platform loader: "+serverPlatform.getClass().getName());
         }
 
-        serverPlatform = loader.get();
         serverPlatform.onLoad();
         // todo test null
         nms = serverPlatform.getOldWrapper(this);
+
+        if (null == nms) {
+            plugin.getLogger().severe("Server platform loader generated null NMS implementation...");
+            return;
+        }
+
         plugin = this;
         api = new API();
         Bukkit.getServicesManager().register(com.andrei1058.bedwars.api.BedWars.class, api, this, ServicePriority.Highest);
