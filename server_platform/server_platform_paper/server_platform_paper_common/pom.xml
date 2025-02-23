@@ -6,7 +6,7 @@
     <parent>
         <groupId>dev.andrei1058.bedwars.platform.paper</groupId>
         <artifactId>server_platform_paper</artifactId>
-        <version>25.2.1</version>
+        <version>25.2.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>server_platform_paper_common</artifactId>

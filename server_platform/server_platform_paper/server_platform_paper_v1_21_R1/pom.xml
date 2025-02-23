@@ -6,7 +6,7 @@
     <parent>
         <groupId>dev.andrei1058.bedwars.platform.paper</groupId>
         <artifactId>server_platform_paper</artifactId>
-        <version>25.2.1</version>
+        <version>25.2.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>server_platform_paper_v1_21_R1</artifactId>
@@ -74,7 +74,7 @@
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>versionsupport_nms_cmn1</artifactId>
-            <version>25.2.1</version>
+            <version>25.2.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
