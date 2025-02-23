@@ -2,8 +2,11 @@ package dev.andrei1058.bedwars.platform.paper;
 
 import com.andrei1058.bedwars.api.server.VersionSupport;
 import com.andrei1058.spigot.sidebar.PAPIAdapter;
+import com.andrei1058.spigot.sidebar.PAPISupport;
 import com.andrei1058.spigot.sidebar.SidebarManager;
 import io.papermc.paper.ServerBuildInfo;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class v1_21_R1 extends PaperPlatform {
@@ -21,9 +24,22 @@ public class v1_21_R1 extends PaperPlatform {
             throw new IllegalStateException("Invalid server build info!");
         }
 
+        // PAPI hook
+        var hasPAPI = Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
+
         SidebarManager.setInstance(new SidebarManager(
                 new com.andrei1058.spigot.sidebar.v1_21_R1.ProviderImpl(),
-                new PAPIAdapter()
+                hasPAPI ? new PAPIAdapter() : new PAPISupport() {
+                    @Override
+                    public String replacePlaceholders(Player player, String s) {
+                        return "";
+                    }
+
+                    @Override
+                    public boolean hasPlaceholders(String s) {
+                        return false;
+                    }
+                }
                 ));
     }
 
