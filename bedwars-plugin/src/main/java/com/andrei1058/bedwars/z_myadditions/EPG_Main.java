@@ -1,5 +1,7 @@
 package com.andrei1058.bedwars.z_myadditions;
 
+import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.arena.Arena;
 import org.bukkit.block.Block;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -10,10 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Logger;
 
 public final class EPG_Main {
@@ -28,6 +27,22 @@ public final class EPG_Main {
         Logger.getLogger("BW Addition \"ExplosionProofGlass\" is Enable!").info("BW Addition \"ExplosionProofGlass\" is Enable!");
         plugin.getServer().getPluginManager().registerEvents(new EPG_Listener(plugin), plugin);
         Objects.requireNonNull(plugin.getCommand("wall")).setExecutor(new WallCommandExecutor());
+        Objects.requireNonNull(plugin.getCommand("debug")).setExecutor(new DebugCommandExecutor());
+    }
+
+    public static class DebugCommandExecutor implements CommandExecutor {
+        @Override
+        public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+            System.out.println(sender.getName() + ": DEBUG");
+
+            LinkedList<IArena> arenas = Arena.getArenas();
+
+            for (IArena arena : arenas) {
+                System.out.println(arena.getArenaName());
+            }
+
+            return true;
+        }
     }
 
     public static class WallCommandExecutor implements CommandExecutor {

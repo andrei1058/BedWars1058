@@ -11,3 +11,6 @@ commands:
   wall:
     description: Set diagonal wall
     usage: /wall <x1> <z1> <x2> <z2> <y>
+  debug:
+    description: Debug
+    usage: /debug
