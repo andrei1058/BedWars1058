@@ -1,16 +1,19 @@
 package com.andrei1058.bedwars.z_my_classes;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.material.MaterialData;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
 public class MyBlockState {
 
     private final Block block;
@@ -18,88 +21,48 @@ public class MyBlockState {
     private Material material;
     private final byte lightLevel;
     private final World world;
-    private final int X;
-    private final int Y;
-    private final int Z;
+    private final int x;
+    private final int z;
+    private final int y;
+    private final Location location;
     private final Chunk chunk;
 
     public MyBlockState(Block block) {
         this.block = block;
-        this.blockData = block.getBlockData();
+        this.blockData = block.getBlockData().clone();
         this.material = block.getType();
         this.lightLevel = block.getLightLevel();
         this.world = block.getWorld();
-        this.X = block.getX();
-        this.Y = block.getY();
-        this.Z = block.getZ();
+        this.x = block.getX();
+        this.z = block.getZ();
+        this.y = block.getY();
+        this.location = new Location(world, x, z, y);
         this.chunk = block.getChunk();
     }
 
-    @NotNull
-    public Block getBlock() {
-        return block;
-    };
+    public Material getType() { return material; }
 
-    @NotNull
-    public BlockData getBlockData() {
-        return blockData;
-    };
+    public void setBlockData(BlockData blockData) {
+        this.blockData = blockData.clone();
+    }
 
-    @NotNull
-    public Material getType() {
-        return material;
-    };
+    public static ArrayList<MyBlockState> getBlockStates(ArrayList<Block> blocks) {
+        ArrayList<MyBlockState> blockStates = new ArrayList<>();
 
-    public byte getLightLevel() {
-        return lightLevel;
-    };
+        for (Block block : blocks) {
+            blockStates.add(new MyBlockState(block));
+        }
 
-    @NotNull
-    public World getWorld() {
-        return world;
-    };
+        return blockStates;
+    }
 
-    public int getX() {
-        return X;
-    };
+    public static List<MyBlockState> getBlockStates(List<Block> blocks) {
+        List<MyBlockState> blockStates = new ArrayList<>();
 
-    public int getY() {
-        return Y;
-    };
+        for (Block block : blocks) {
+            blockStates.add(new MyBlockState(block));
+        }
 
-    public int getZ() {
-        return Z;
-    };
-
-    @NotNull
-    public Location getLocation() {
-        return new Location(world, X, Y, Z);
-    };
-
-    @Contract("null -> null; !null -> !null")
-    @Nullable
-    public Location getLocation(@Nullable Location var1) {
-        if (var1 == null) return null;
-
-        var1.setX(X);
-        var1.setY(Y);
-        var1.setZ(Z);
-        var1.setWorld(world);
-
-        return var1;
-    };
-
-    @NotNull
-    public Chunk getChunk() {
-        return chunk;
-    };
-
-    public void setBlockData(@NotNull BlockData var1) {
-        blockData = var1;
-    };
-
-    public void setType(@NotNull Material var1) {
-        material = var1;
-    };
-
+        return blockStates;
+    }
 }
