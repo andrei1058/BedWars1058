@@ -62,8 +62,8 @@ public class SaveLava_DeleteWater {
         }
 
         if (isWater) {
-            world.spawnParticle(Particle.CLOUD, block.getX() + 0.5, block.getY() + 0.3, block.getZ() + 0.5, 1);
-            world.playSound(block.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.7F, 1.0F);
+//            world.spawnParticle(Particle.CLOUD, block.getX() + 0.5, block.getY() + 0.3, block.getZ() + 0.5, 1);
+            world.playSound(block.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.2F, 1.0F);
         }
 
         return isWater;
