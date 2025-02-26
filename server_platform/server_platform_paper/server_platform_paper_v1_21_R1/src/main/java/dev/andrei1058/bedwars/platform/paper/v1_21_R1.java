@@ -32,7 +32,7 @@ public class v1_21_R1 extends PaperPlatform {
                 hasPAPI ? new PAPIAdapter() : new PAPISupport() {
                     @Override
                     public String replacePlaceholders(Player player, String s) {
-                        return "";
+                        return s;
                     }
 
                     @Override
