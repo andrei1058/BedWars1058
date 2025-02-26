@@ -43,17 +43,22 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Deprecated
 public abstract class VersionSupport {
 
     private static String name2;
-    public static String PLUGIN_TAG_GENERIC_KEY = "BedWars1058";
-    public static String PLUGIN_TAG_TIER_KEY = "tierIdentifier";
+    public static String PLUGIN_TAG_GENERIC_KEY = "bed_wars_1058:bed_wars_1058";
+    public static String PLUGIN_TAG_TIER_KEY = "bed_wars_1058:tier_identifier";
 
     private Effect eggBridge;
 
     private static final ConcurrentHashMap<UUID, Despawnable> despawnables = new ConcurrentHashMap<>();
     private final Plugin plugin;
 
+    /**
+     * @param plugin bed-wars instance.
+     * @param versionName version name.
+     */
     public VersionSupport(Plugin plugin, String versionName) {
         name2 = versionName;
         this.plugin = plugin;

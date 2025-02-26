@@ -227,7 +227,7 @@ public class AutoCreateTeams extends SubCommand {
      * Check if server version is 1.13 or higher
      */
     public static boolean is13Higher() {
-        return !(BedWars.getServerVersion().equals("v1_8_R3") || BedWars.getServerVersion().equals("v1_12_R1"));
+        return BedWars.nms.getVersion() > 5;
     }
 
     @Override

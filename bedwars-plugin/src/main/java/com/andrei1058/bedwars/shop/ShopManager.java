@@ -43,9 +43,13 @@ public class ShopManager extends ConfigManager {
 
     public ShopManager() {
         super(BedWars.plugin, "shop", BedWars.plugin.getDataFolder().getPath());
-        saveDefaults();
-        loadShop();
-        registerListeners();
+        try {
+            saveDefaults();
+            loadShop();
+            registerListeners();
+        } catch (Exception exception){
+            exception.printStackTrace();
+        }
     }
 
     private void saveDefaults() {
