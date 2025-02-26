@@ -5,7 +5,6 @@ import dev.andrei1058.bedwars.platform.common.ServerPlatform;
 import dev.andrei1058.bedwars.platform.master.platforms.IPlatformLoader;
 import dev.andrei1058.bedwars.platform.master.platforms.PaperLoader;
 import dev.andrei1058.bedwars.platform.master.platforms.SpigotLoader;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -49,23 +48,5 @@ public class ServerPlatformManager {
         }
 
         return Optional.empty();
-    }
-
-    @Deprecated
-    private static String version;
-
-    @Deprecated
-    public static String getServerVersion() {
-        if (null == version) {
-            version = Bukkit.getServer().getClass().getName().split("\\.")[3];
-            if (version.equals("CraftServer")) {
-                // it is probably PAPER
-                String bukkitVersion = Bukkit.getServer().getBukkitVersion();
-                if (bukkitVersion.startsWith("1.21")) {
-                    // todo test me
-                }
-            }
-        }
-        return version;
     }
 }

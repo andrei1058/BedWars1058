@@ -651,12 +651,10 @@ public class BedWars extends JavaPlugin {
     }
 
     public static String getForCurrentVersion(String v18, String v12, String v13) {
-//        switch (getServerVersion()) {
-        switch (ServerPlatformManager.getServerVersion()) {
-            case "v1_8_R3":
-                return v18;
-            case "v1_12_R1":
-                return v12;
+        if (getAPI().getVersionSupport().getVersion() == 0) {
+            return v18;
+        } else if (getAPI().getVersionSupport().getVersion() == 5) {
+            return v12;
         }
         return v13;
     }
