@@ -2,7 +2,6 @@ package dev.andrei1058.bedwars.platform.paper;
 
 import com.mojang.datafixers.util.Pair;
 import dev.andrei1058.mc.bedwars.AbstractVerImplCmn1;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.network.protocol.game.PacketPlayOutEntityEquipment;
@@ -181,12 +180,6 @@ public class v1_21_R1_NMS extends AbstractVerImplCmn1
         }
         // todo experimental
         return i.E();
-    }
-
-    public ItemStack applyTag(@NotNull ItemStack itemStack, NBTTagCompound tag) {
-        // todo re-apply container?
-//        itemStack.(tag);
-        return itemStack;
     }
 
     public EntityPlayer getPlayer(Player player) {

@@ -1,6 +1,5 @@
 package dev.andrei1058.mc.bedwars;
 
-import com.andrei1058.bedwars.api.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.ShopHolo;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
@@ -319,59 +318,44 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
 
     @Override
     public org.bukkit.inventory.ItemStack addCustomData(org.bukkit.inventory.ItemStack i, String data) {
-        var tag = getDataContainer(i);
-        if (null == tag) {
-            return i;
-        }
-        tag.set(
-                Objects.requireNonNull(NamespacedKey.fromString(VersionSupport.PLUGIN_TAG_GENERIC_KEY, getPlugin())),
-                PersistentDataType.STRING,
-                data
-        );
-        return i;
+        return setTag(i, VersionSupport.PLUGIN_TAG_GENERIC_KEY, data);
     }
 
     public org.bukkit.inventory.ItemStack addCustomData(org.bukkit.inventory.ItemStack i, String key, String data) {
-        var tag = getDataContainer(i);
-        if (null == tag) {
-            return i;
-        }
-        try {
-            tag.set(
-                    Objects.requireNonNull(NamespacedKey.fromString(key.toLowerCase(), getPlugin())),
-                    PersistentDataType.STRING,
-                    data
-            );
-        } catch (IllegalArgumentException e) {
-            if (!e.getMessage().contains("Invalid Key. Must be")) {
-                getPlugin().getLogger().severe("Cannot append item custom tag with key -> " + key);
-                getPlugin().getLogger().severe("Reason:" + e.getMessage());
-            }
-            e.printStackTrace();
-
-        }
-        return i;
+        return setTag(i, key, data);
     }
 
     @Override
     public org.bukkit.inventory.ItemStack setTag(org.bukkit.inventory.ItemStack itemStack, String key, String value) {
-        var tag = getDataContainer(itemStack);
+        var meta = itemStack.getItemMeta();
+        if (null == meta) {
+            return itemStack;
+        }
+
+        var tag = meta.getPersistentDataContainer();
+        //noinspection ConstantValue
         if (null == tag) {
             return itemStack;
         }
+
         try {
-//            key = key.replaceFirst("minecraft:", "");
+            var namespaced = NamespacedKey.fromString(key);
+            // try converting to minecraft key
+            if (null == namespaced) {
+                namespaced = NamespacedKey.minecraft(key);
+            }
             tag.set(
-                    Objects.requireNonNull(NamespacedKey.fromString(key)),
+                    namespaced,
                     PersistentDataType.STRING,
                     value
             );
+            // refresh item meta
+            itemStack.setItemMeta(meta);
         } catch (IllegalArgumentException e) {
             if (e.getMessage().contains("Invalid Key. Must be")) {
                 getPlugin().getLogger().severe("Cannot append item custom tag with key -> " + key);
                 getPlugin().getLogger().severe("Reason:" + e.getMessage());
             }
-            e.printStackTrace();
         }
         return itemStack;
     }
