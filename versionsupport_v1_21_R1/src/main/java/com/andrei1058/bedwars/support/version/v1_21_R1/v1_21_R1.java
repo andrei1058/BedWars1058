@@ -17,6 +17,7 @@ import net.minecraft.world.entity.projectile.EntityFireball;
 import net.minecraft.world.entity.projectile.IProjectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.phys.Vec3D;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_21_R1.entity.CraftFireball;
@@ -60,19 +61,13 @@ public class v1_21_R1 extends AbstractVerImplCmn1 {
         //todo tested does not work 05-09-2024 https://github.com/andrei1058/BedWars1058/issues/1040
         EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
         EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
-        try {
-            Field sourceField = EntityTNTPrimed.class.getDeclaredField("d");
-            sourceField.setAccessible(true);
-            sourceField.set(nmsTNT, nmsEntityLiving);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        nmsTNT.h = nmsEntityLiving;
     }
 
     @Override
     public ClientboundPlayerInfoUpdatePacket getAddPlayer(EntityPlayer player) {
         // todo cache this in production
-        ClientboundPlayerInfoUpdatePacket.a action = (ClientboundPlayerInfoUpdatePacket.a) getPlayerSpawnAction("a");
+        ClientboundPlayerInfoUpdatePacket.a action = (ClientboundPlayerInfoUpdatePacket.a) getPlayerSpawnAction("b");
         return new ClientboundPlayerInfoUpdatePacket(action, player);
     }
 
@@ -143,17 +138,13 @@ public class v1_21_R1 extends AbstractVerImplCmn1 {
 
     @Override
     public int getVersion() {
-        return 21;
+        return 25;
     }
 
 
     @Override
     public Fireball setFireballDirection(Fireball fireball, @NotNull Vector vector) {
         EntityFireball fb = ((CraftFireball) fireball).getHandle();
-//        fb.b = vector.getX() * 0.1D;
-//        fb.c = vector.getY() * 0.1D;
-//        fb.d = vector.getZ() * 0.1D;
-        // todo experimental
         fb.a(new Vec3D(vector.getX(), vector.getY(), vector.getZ()), 0.1D);
         return (Fireball) fb.getBukkitEntity();
     }
@@ -183,12 +174,6 @@ public class v1_21_R1 extends AbstractVerImplCmn1 {
         return i.E();
     }
 
-    public ItemStack applyTag(@NotNull ItemStack itemStack, NBTTagCompound tag) {
-        // todo re-apply container?
-//        itemStack.(tag);
-        return itemStack;
-    }
-
     public EntityPlayer getPlayer(Player player) {
         return ((CraftPlayer) player).getHandle();
     }
@@ -208,14 +193,17 @@ public class v1_21_R1 extends AbstractVerImplCmn1 {
         try {
             Class<?> cls = Class.forName("net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket$a");
             for (Object obj : cls.getEnumConstants()) {
+                Bukkit.getLogger().warning(obj.toString());
                 try {
                     Method m = cls.getMethod("name");
+                    Bukkit.getLogger().warning(m.toString());
                     String name = (String) m.invoke(obj);
+                    Bukkit.getLogger().warning(name.toString());
                     if (action.equals(name)) {
                         return obj;
                     }
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-                    System.out.println("could not find enum");
+                    Bukkit.getLogger().warning("could not find enum");
                 }
             }
         } catch (Exception exception) {

@@ -162,13 +162,7 @@ public class v1_20_R3 extends VersionSupport {
     public void setSource(TNTPrimed tnt, Player owner) {
         EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
         EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
-        try {
-            Field sourceField = EntityTNTPrimed.class.getDeclaredField("g");
-            sourceField.setAccessible(true);
-            sourceField.set(nmsTNT, nmsEntityLiving);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        nmsTNT.g = nmsEntityLiving;
     }
 
     @Override
@@ -627,9 +621,7 @@ public class v1_20_R3 extends VersionSupport {
 
     @Override
     public int getVersion() {
-        // impacts on sidebar
-        // experimental score placeholders
-        return 10;
+        return 22;
     }
 
     @Override

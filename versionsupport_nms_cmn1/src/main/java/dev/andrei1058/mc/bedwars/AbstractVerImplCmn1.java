@@ -76,8 +76,6 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
     public String getTag(org.bukkit.inventory.ItemStack itemStack, String key) {
         var tag = getDataContainer(itemStack);
         if (null == tag) {
-            // todo testing only
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Container is null for: "+itemStack.toString());
             return null;
         }
         return tag.get(
@@ -622,13 +620,8 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
 
     @Override
     public void playRedStoneDot(@NotNull Player player) {
-        Color color = Color.RED;
         PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(
-                new ParticleParamRedstone(
-                        new Vector3f((float) color.getRed(),
-                                (float) color.getGreen(),
-                                (float) color.getBlue()), (float) 1
-                ),
+                ParticleParamRedstone.b,
                 true,
                 player.getLocation().getX(),
                 player.getLocation().getY() + 2.6,

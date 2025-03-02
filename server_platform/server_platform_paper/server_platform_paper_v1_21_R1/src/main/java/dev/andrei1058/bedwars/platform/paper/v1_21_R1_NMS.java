@@ -18,6 +18,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.phys.Vec3D;
 import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_21_R1.entity.CraftFireball;
 import org.bukkit.craftbukkit.v1_21_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_21_R1.entity.CraftPlayer;
@@ -31,7 +32,6 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -39,6 +39,8 @@ import java.util.List;
 
 public class v1_21_R1_NMS extends AbstractVerImplCmn1
 {
+
+    private ClientboundPlayerInfoUpdatePacket.a ADD_PLAYER_ACTION = null;
 
     public v1_21_R1_NMS(Plugin plugin, String name) {
         super(plugin, name);
@@ -56,23 +58,17 @@ public class v1_21_R1_NMS extends AbstractVerImplCmn1
 
     @Override
     public void setSource(TNTPrimed tnt, Player owner) {
-        //todo tested does not work 05-09-2024 https://github.com/andrei1058/BedWars1058/issues/1040
         EntityLiving nmsEntityLiving = (((CraftLivingEntity) owner).getHandle());
         EntityTNTPrimed nmsTNT = (((CraftTNTPrimed) tnt).getHandle());
-        try {
-            Field sourceField = EntityTNTPrimed.class.getDeclaredField("d");
-            sourceField.setAccessible(true);
-            sourceField.set(nmsTNT, nmsEntityLiving);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        nmsTNT.h = nmsEntityLiving;
     }
 
     @Override
     public ClientboundPlayerInfoUpdatePacket getAddPlayer(EntityPlayer player) {
-        // todo cache this in production
-        ClientboundPlayerInfoUpdatePacket.a action = (ClientboundPlayerInfoUpdatePacket.a) getPlayerSpawnAction("a");
-        return new ClientboundPlayerInfoUpdatePacket(action, player);
+        if (null == ADD_PLAYER_ACTION) {
+            ADD_PLAYER_ACTION = (ClientboundPlayerInfoUpdatePacket.a) getPlayerSpawnAction("ADD_PLAYER");
+        }
+        return new ClientboundPlayerInfoUpdatePacket(ADD_PLAYER_ACTION, player);
     }
 
     @Override
@@ -119,9 +115,10 @@ public class v1_21_R1_NMS extends AbstractVerImplCmn1
 
     @Override
     public void voidKill(Player p) {
-        //todo
-//        EntityPlayer player = getPlayer(p);
-//        player.a(player.dM().m(), 1000);
+        EntityPlayer player = getPlayer(p);
+        // out of world
+        var damageSource = ((CraftWorld)p.getWorld()).getHandle().aj().m();
+        player.a(damageSource, 1000);
     }
     @Override
     public void showArmor(@NotNull Player victim, Player receiver) {
@@ -142,17 +139,13 @@ public class v1_21_R1_NMS extends AbstractVerImplCmn1
 
     @Override
     public int getVersion() {
-        return 21;
+        return 25;
     }
 
 
     @Override
     public Fireball setFireballDirection(Fireball fireball, @NotNull Vector vector) {
         EntityFireball fb = ((CraftFireball) fireball).getHandle();
-//        fb.b = vector.getX() * 0.1D;
-//        fb.c = vector.getY() * 0.1D;
-//        fb.d = vector.getZ() * 0.1D;
-        // todo experimental
         fb.a(new Vec3D(vector.getX(), vector.getY(), vector.getZ()), 0.1D);
         return (Fireball) fb.getBukkitEntity();
     }
@@ -187,17 +180,17 @@ public class v1_21_R1_NMS extends AbstractVerImplCmn1
     }
 
     public void sendPacket(Player player, Packet<?> packet) {
-        ((CraftPlayer) player).getHandle().c.a(packet);
+        ((CraftPlayer) player).getHandle().c.b(packet);
     }
 
     public void sendPackets(Player player, Packet<?> @NotNull ... packets) {
         PlayerConnection connection = ((CraftPlayer) player).getHandle().c;
         for (Packet<?> p : packets) {
-            connection.a(p);
+            connection.b(p);
         }
     }
 
-    private static Object getPlayerSpawnAction(String action) {
+    private Object getPlayerSpawnAction(@SuppressWarnings("SameParameterValue") String action) {
         try {
             Class<?> cls = Class.forName("net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket$a");
             for (Object obj : cls.getEnumConstants()) {
@@ -208,11 +201,11 @@ public class v1_21_R1_NMS extends AbstractVerImplCmn1
                         return obj;
                     }
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-                    System.out.println("could not find enum");
+                    getPlugin().getLogger().warning("Could not get player spawn action: " + action);
                 }
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
+            getPlugin().getLogger().warning("Could not get player spawn action: " + action);
         }
         throw new RuntimeException("Something went wrong... please report this to BedWars1058 by andrei1058");
     }
