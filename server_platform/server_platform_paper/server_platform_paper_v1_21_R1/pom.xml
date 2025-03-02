@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>dev.andrei1058.bedwars.platform.paper</groupId>
+        <groupId>com.andrei1058.bedwars.platform.paper</groupId>
         <artifactId>server_platform_paper</artifactId>
-        <version>25.2.1-SNAPSHOT</version>
+        <version>25.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>server_platform_paper_v1_21_R1</artifactId>
@@ -41,7 +41,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>dev.andrei1058.bedwars.platform.paper</groupId>
+            <groupId>com.andrei1058.bedwars.platform.paper</groupId>
             <artifactId>server_platform_paper_common</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
@@ -74,7 +74,7 @@
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>versionsupport_nms_cmn1</artifactId>
-            <version>25.2.1-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

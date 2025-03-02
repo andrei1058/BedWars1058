@@ -5,7 +5,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>25.2.1-SNAPSHOT</version>
+        <version>25.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-plugin</artifactId>
@@ -196,11 +196,6 @@
         </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
-            <artifactId>versionsupport_v1_21_R1</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>versionsupport-common</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -345,36 +340,53 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>dev.andrei1058.bedwars.platform.master</groupId>
+            <groupId>com.andrei1058.bedwars.platform.master</groupId>
             <artifactId>server_platform_master</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>dev.andrei1058.bedwars.platform.common</groupId>
+            <groupId>com.andrei1058.bedwars.platform.common</groupId>
             <artifactId>server_platform_common</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>dev.andrei1058.bedwars.platform.paper</groupId>
+            <groupId>com.andrei1058.bedwars.platform.paper</groupId>
             <artifactId>server_platform_paper_common</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>dev.andrei1058.bedwars.platform.paper</groupId>
+            <groupId>com.andrei1058.bedwars.platform.paper</groupId>
             <artifactId>server_platform_paper_v1_21_R1</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
-
-        <!--        <dependency>-->
-<!--            <groupId>dev.andrei1058.bedwars.platform.master</groupId>-->
-<!--            <artifactId>server_platform_master</artifactId>-->
-<!--            <version>24.8-SNAPSHOT</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.andrei1058.bedwars.platform.paper</groupId>
+            <artifactId>server_platform_paper_v1_21_R2</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars.platform.paper</groupId>
+            <artifactId>server_platform_paper_v1_21_R3</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars.platform.spigot</groupId>
+            <artifactId>server_platform_spigot_common</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars.platform.spigot</groupId>
+            <artifactId>server_platform_spigot_v1_21_R1</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
