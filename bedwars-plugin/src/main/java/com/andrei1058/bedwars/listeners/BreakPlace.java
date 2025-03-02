@@ -33,15 +33,17 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.api.server.ServerType;
-import com.andrei1058.bedwars.api.util.BlastProtectionUtil;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.slow_mode.SlowMode;
 import com.andrei1058.bedwars.support.paper.TeleportManager;
 import com.andrei1058.bedwars.popuptower.TowerEast;
 import com.andrei1058.bedwars.popuptower.TowerNorth;
 import com.andrei1058.bedwars.popuptower.TowerSouth;
 import com.andrei1058.bedwars.popuptower.TowerWest;
-import com.andrei1058.bedwars.z_myadditions.EPG_Listener;
+import com.andrei1058.bedwars.util.BlastProtectionUtil;
+import com.andrei1058.bedwars.z_my_classes.BlockUtils;
+import com.andrei1058.bedwars.slow_mode.SlowMode;
 import com.andrei1058.bedwars.z_myadditions.EPG_glassActions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -111,6 +113,11 @@ public class BreakPlace implements Listener {
     public void onBurn(@NotNull BlockBurnEvent event) {
         IArena arena = Arena.getArenaByIdentifier(event.getBlock().getWorld().getName());
         if (arena == null) return;
+
+        if (SlowMode.isSlowMode() && BlockUtils.checkBlockPlacedByPlayer(event.getBlock())) {
+            SlowMode.spreadFire(event.getBlock());
+            return;
+        }
         if (!arena.isAllowMapBreak()) {
             event.setCancelled(true);
             return;
@@ -292,7 +299,7 @@ public class BreakPlace implements Listener {
                     }
                     return;
                 case "FIRE":
-                    if (allowFireBreak) {
+                    if (allowFireBreak || SlowMode.isSlowMode()) {
                         e.setCancelled(false);
                         return;
                     }
@@ -535,6 +542,16 @@ public class BreakPlace implements Listener {
                 System.out.println(e.blockList());
                 e.blockList().removeIf((b) -> EPG_glassActions.glassExplode(plugin, b));
                 System.out.println(e.blockList());
+
+                for (Block block : e.blockList()) {
+                    block.setType(Material.AIR);
+                }
+                for (Block block : e.blockList()) {
+                    SlowMode.setFire(block.getLocation());
+                }
+
+                e.blockList().clear();
+
                 return;
             }
             e.blockList().clear();

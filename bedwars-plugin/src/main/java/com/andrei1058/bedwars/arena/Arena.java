@@ -69,6 +69,7 @@ import com.andrei1058.bedwars.money.internal.MoneyPerMinuteTask;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.sidebar.BwSidebar;
 import com.andrei1058.bedwars.sidebar.SidebarService;
+import com.andrei1058.bedwars.slow_mode.SlowMode;
 import com.andrei1058.bedwars.support.citizens.JoinNPC;
 import com.andrei1058.bedwars.support.paper.TeleportManager;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
@@ -339,6 +340,11 @@ public class Arena implements IArena {
             String[] rule = s.split(":");
             if (rule.length == 2) world.setGameRuleValue(rule[0], rule[1]);
         }
+
+        if (SlowMode.isSlowMode()) {
+            world.setGameRuleValue("doFireTick", "true");
+        }
+
         world.setAutoSave(false);
 
         /* Clear setup armor-stands */

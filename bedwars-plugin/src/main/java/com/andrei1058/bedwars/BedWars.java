@@ -20,6 +20,8 @@
 
 package com.andrei1058.bedwars;
 
+import com.andrei1058.bedwars.slow_mode.SlowMode_Listener;
+import com.andrei1058.bedwars.z_my_classes.EventHandlersArenaMatrix;
 import com.andrei1058.bedwars.z_myadditions.EPG_Main;
 import com.andrei1058.bedwars.z_myadditions.SaveLava_Main;
 
@@ -226,6 +228,11 @@ public class BedWars extends JavaPlugin {
             //
             // >> SaveLava <<
                 SaveLava.onEnable();
+            // >> Matrix <<
+                EventHandlersArenaMatrix.OnEnable(plugin);
+            //
+            // >> Slow Mode <<
+                SlowMode_Listener.onEnable(plugin);
             //
         //
 
