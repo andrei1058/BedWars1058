@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -108,9 +109,9 @@ public class FireballListener implements Listener {
     @EventHandler
     public void fireballDirectHit(EntityDamageByEntityEvent e) {
         if(!(e.getDamager() instanceof Fireball)) return;
-        if(!(e.getEntity() instanceof Player)) return;
+        if(!(e.getEntity() instanceof Player || e.getEntity() instanceof Villager)) return;
 
-        if(Arena.getArenaByPlayer((Player) e.getEntity()) == null) return;
+        if (e.getEntity() instanceof Player && Arena.getArenaByPlayer((Player) e.getEntity()) == null) return;
 
         e.setCancelled(true);
     }
