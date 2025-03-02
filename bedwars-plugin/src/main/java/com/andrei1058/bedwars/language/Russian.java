@@ -943,7 +943,7 @@ public class Russian extends Language{
         yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n{prefix}&eВладелец группы: &7{owner}");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"{prefix}&eУчастники группы:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7{player}");
-        yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&cУничтожение кроватей");
+        yml.addDefault(Messages.NEXT_EVENT_BEDS_DESTROY, "&cУн. кроватей");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_II, "&fАлмазы II");
         yml.addDefault(Messages.NEXT_EVENT_DIAMOND_UPGRADE_III, "&fАлмазы III");
         yml.addDefault(Messages.NEXT_EVENT_DRAGON_SPAWN, "&fВнезапная смерть");
