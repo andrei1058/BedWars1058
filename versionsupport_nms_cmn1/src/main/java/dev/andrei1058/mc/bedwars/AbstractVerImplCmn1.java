@@ -39,10 +39,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -706,4 +706,8 @@ public abstract class AbstractVerImplCmn1 extends VersionSupport {
     public abstract void sendPacket(Player player, Packet<?> packet);
 
     public abstract void sendPackets(Player player, Packet<?> @NotNull ... packets);
+
+    public boolean hasInvisibility(@NotNull PotionEffect pe) {
+        return pe.getType() == PotionEffectType.INVISIBILITY;
+    }
 }
