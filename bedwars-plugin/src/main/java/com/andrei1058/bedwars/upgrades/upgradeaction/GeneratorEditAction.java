@@ -20,6 +20,7 @@
 
 package com.andrei1058.bedwars.upgrades.upgradeaction;
 
+import com.andrei1058.bedwars.api.arena.generator.GeneratorSpeed;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
@@ -58,7 +59,7 @@ public class GeneratorEditAction implements UpgradeAction {
         } else if (type == ApplyType.EMERALD) {
             if (!bwt.getArena().getConfig().getArenaLocations("Team." + bwt.getName() + ".Emerald").isEmpty()) {
                 for (Location l : bwt.getArena().getConfig().getArenaLocations("Team." + bwt.getName() + ".Emerald")) {
-                    IGenerator gen = new OreGenerator(l, bwt.getArena(), GeneratorType.CUSTOM, bwt);
+                    IGenerator gen = new OreGenerator(l, bwt.getArena(), GeneratorType.CUSTOM, bwt, GeneratorSpeed.valueOf(bwt.getArena().getConfig().getYml().getString("generatorSpeed").toUpperCase()));
                     gen.setOre(new ItemStack(Material.EMERALD));
                     gen.setType(GeneratorType.EMERALD);
                     bwt.getGenerators().add(gen);
@@ -66,7 +67,7 @@ public class GeneratorEditAction implements UpgradeAction {
                     generator.add(gen);
                 }
             } else {
-                IGenerator gen = new OreGenerator(bwt.getGenerators().get(0).getLocation().clone(), bwt.getArena(), GeneratorType.CUSTOM, bwt);
+                IGenerator gen = new OreGenerator(bwt.getGenerators().get(0).getLocation().clone(), bwt.getArena(), GeneratorType.CUSTOM, bwt, GeneratorSpeed.valueOf(bwt.getArena().getConfig().getYml().getString("generatorSpeed").toUpperCase()));
                 gen.setOre(new ItemStack(Material.EMERALD));
                 gen.setType(GeneratorType.EMERALD);
                 bwt.getGenerators().add(gen);

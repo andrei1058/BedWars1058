@@ -21,6 +21,7 @@
 package com.andrei1058.bedwars.arena.team;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.generator.GeneratorSpeed;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
@@ -326,7 +327,8 @@ public class BedWarsTeam implements ITeam {
                 locs = getArena().getConfig().getArenaLocations("Team." + getName() + "." + type);
             }
             for (Location loc : locs) {
-                IGenerator gen = new OreGenerator(loc, getArena(), gt, this);
+                IGenerator gen = new OreGenerator(loc, getArena(), gt, this,
+                        GeneratorSpeed.valueOf(getArena().getConfig().getYml().get("generatorSpeed").toString().toUpperCase()));
                 //getArena().getOreGenerators().add(gen);
                 generators.add(gen);
             }

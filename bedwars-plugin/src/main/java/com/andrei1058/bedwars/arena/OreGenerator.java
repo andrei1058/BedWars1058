@@ -23,6 +23,7 @@ package com.andrei1058.bedwars.arena;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.api.arena.generator.GeneratorSpeed;
 import com.andrei1058.bedwars.api.arena.generator.GeneratorType;
 import com.andrei1058.bedwars.api.arena.generator.IGenHolo;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
@@ -32,6 +33,7 @@ import com.andrei1058.bedwars.api.events.gameplay.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -53,9 +55,15 @@ public class OreGenerator implements IGenerator {
 
     private Location location;
     private int delay = 1, upgradeStage = 1, lastSpawn, spawnLimit = 0, amount = 1;
+    /**
+     * -- GETTER --
+     *  Get the arena assigned to this generator.
+     */
+    @Getter
     private IArena arena;
     private ItemStack ore;
     private GeneratorType type;
+    private GeneratorSpeed speed;
     private int rotate = 0, dropID = 0;
     private ITeam bwt;
     boolean up = true;
@@ -68,9 +76,10 @@ public class OreGenerator implements IGenerator {
     private ArmorStand item;
     public boolean stack = getGeneratorsCfg().getBoolean(ConfigPath.GENERATOR_STACK_ITEMS);
 
+    @Getter
     private static final ConcurrentLinkedDeque<OreGenerator> rotation = new ConcurrentLinkedDeque<>();
 
-    public OreGenerator(Location location, IArena arena, GeneratorType type, ITeam bwt) {
+    public OreGenerator(Location location, IArena arena, GeneratorType type, ITeam bwt, GeneratorSpeed speed) {
         if (type == GeneratorType.EMERALD || type == GeneratorType.DIAMOND) {
             this.location = new Location(location.getWorld(), location.getBlockX() + 0.5, location.getBlockY() + 1.3, location.getBlockZ() + 0.5);
         } else {
@@ -79,8 +88,9 @@ public class OreGenerator implements IGenerator {
         this.arena = arena;
         this.bwt = bwt;
         this.type = type;
+        this.speed = speed;
         loadDefaults();
-        BedWars.debug("Initializing new generator at: " + location + " - " + type + " - " + (bwt == null ? "NOTEAM" : bwt.getName()));
+        BedWars.debug("Initializing new generator at: " + location + " - " + type + " - " + (bwt == null ? "NOTEAM" : bwt.getName()) + " - " + speed);
 
         Cuboid c = new Cuboid(location, getArena().getConfig().getInt(ConfigPath.ARENA_GENERATOR_PROTECTION), true);
         c.setMaxY(c.getMaxY() + 5);
@@ -226,17 +236,6 @@ public class OreGenerator implements IGenerator {
     public void setOre(ItemStack ore) {
         BedWars.debug("Changing ore for generator at " + location.toString() + " from " + this.ore + " to " + ore);
         this.ore = ore;
-    }
-
-    /**
-     * Get the arena assigned to this generator.
-     */
-    public IArena getArena() {
-        return arena;
-    }
-
-    public static ConcurrentLinkedDeque<OreGenerator> getRotation() {
-        return rotation;
     }
 
     @Override
@@ -419,23 +418,68 @@ public class OreGenerator implements IGenerator {
     private void loadDefaults() {
         switch (type) {
             case GOLD:
-                delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_DELAY) == null ?
-                        "Default." + ConfigPath.GENERATOR_GOLD_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_DELAY);
-                ore = new ItemStack(Material.GOLD_INGOT);
-                amount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_AMOUNT) == null ?
-                        "Default." + ConfigPath.GENERATOR_GOLD_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_AMOUNT);
-                spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT) == null ?
-                        "Default." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT);
-                break;
+                switch (speed){
+                    case SLOW:
+                        delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SLOW + ".delay") == null ?
+                                "Default." + ConfigPath.GENERATOR_GOLD_SLOW + ".delay" : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SLOW + ".delay");
+                        ore = new ItemStack(Material.GOLD_INGOT);
+                        amount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SLOW + ".amount") == null ?
+                                "Default." + ConfigPath.GENERATOR_GOLD_SLOW + ".amount" : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SLOW + ".amount");
+                        spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT) == null ?
+                                "Default." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT);
+                        break;
+                    case FAST:
+                        delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_FAST + ".delay") == null ?
+                                "Default." + ConfigPath.GENERATOR_GOLD_FAST + ".delay" : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_FAST + ".delay");
+                        ore = new ItemStack(Material.GOLD_INGOT);
+                        amount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_FAST + ".amount") == null ?
+                                "Default." + ConfigPath.GENERATOR_GOLD_FAST + ".amount" : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_FAST + ".amount");
+                        spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT) == null ?
+                                "Default." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT);
+                        break;
+
+                    case NORMAL:
+                        delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_MEDIUM + ".delay") == null ?
+                                "Default." + ConfigPath.GENERATOR_GOLD_MEDIUM + ".delay" : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_MEDIUM + ".delay");
+                        ore = new ItemStack(Material.GOLD_INGOT);
+                        amount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_MEDIUM + ".amount") == null ?
+                                "Default." + ConfigPath.GENERATOR_GOLD_MEDIUM + ".amount" : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_MEDIUM + ".amount");
+                        spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT) == null ?
+                                "Default." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT);
+                        break;
+                }
+
             case IRON:
-                delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_DELAY) == null ?
-                        "Default." + ConfigPath.GENERATOR_IRON_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_DELAY);
-                amount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_AMOUNT) == null ?
-                        "Default." + ConfigPath.GENERATOR_IRON_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_AMOUNT);
-                ore = new ItemStack(Material.IRON_INGOT);
-                spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT) == null ?
-                        "Default." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT);
-                break;
+                switch (speed){
+                    case SLOW:
+                        delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_SLOW + ".delay") == null ?
+                                "Default." + ConfigPath.GENERATOR_IRON_SLOW + ".delay" : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_SLOW + ".delay");
+                        ore = new ItemStack(Material.IRON_INGOT);
+                        amount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_SLOW + ".amount") == null ?
+                                "Default." + ConfigPath.GENERATOR_IRON_SLOW + ".amount" : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_SLOW + ".amount");
+                        spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT) == null ?
+                                "Default." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT);
+                        break;
+                    case FAST:
+                        delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_FAST + ".delay") == null ?
+                                "Default." + ConfigPath.GENERATOR_IRON_FAST + ".delay" : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_FAST + ".delay");
+                        ore = new ItemStack(Material.IRON_INGOT);
+                        amount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_FAST + ".amount") == null ?
+                                "Default." + ConfigPath.GENERATOR_IRON_FAST + ".amount" : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_FAST + ".amount");
+                        spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT) == null ?
+                                "Default." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT);
+                        break;
+
+                    case NORMAL:
+                        delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_MEDIUM + ".delay") == null ?
+                                "Default." + ConfigPath.GENERATOR_IRON_MEDIUM + ".delay" : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_MEDIUM + ".delay");
+                        ore = new ItemStack(Material.IRON_INGOT);
+                        amount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_MEDIUM + ".amount") == null ?
+                                "Default." + ConfigPath.GENERATOR_IRON_MEDIUM + ".amount" : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_MEDIUM + ".amount");
+                        spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT) == null ?
+                                "Default." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT);
+                        break;
+                }
             case DIAMOND:
                 delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY) == null ?
                         "Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY);
@@ -521,5 +565,15 @@ public class OreGenerator implements IGenerator {
         bwt = null;
         armorStands = null;
         item = null;
+    }
+
+    @Override
+    public GeneratorSpeed getSpeed() {
+        return speed;
+    }
+
+    @Override
+    public void setSpeed(GeneratorSpeed speed) {
+        this.speed = speed;
     }
 }

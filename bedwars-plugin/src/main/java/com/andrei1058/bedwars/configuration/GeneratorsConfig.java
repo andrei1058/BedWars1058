@@ -33,13 +33,27 @@ public class GeneratorsConfig extends ConfigManager {
         YamlConfiguration yml = getYml();
         yml.options().header(plugin.getDescription().getName() + " by andrei1058." +
                 "\ngenerators.yml Documentation: https://gitlab.com/andrei1058/BedWars1058/wikis/generators-configuration\n");
-        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_DELAY, 2);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_AMOUNT, 2);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_DELAY, 6);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_AMOUNT, 2);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT, 32);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT, 7);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_SPAWN_LIMIT, 48);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT, 16);
         yml.addDefault(ConfigPath.GENERATOR_STACK_ITEMS, false);
+
+        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_SLOW + ".amount", 2);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_SLOW + ".delay", 2.0);
+
+        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_MEDIUM + ".amount", 2);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_MEDIUM + ".delay", 1.0);
+
+        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_FAST + ".amount", 3);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_FAST + ".delay", 1.0);
+
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_SLOW + ".amount", 1);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_SLOW + ".delay", 3.0);
+
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_MEDIUM + ".amount", 1);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_MEDIUM + ".delay", 3.0);
+
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_FAST + ".amount", 1);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_FAST + ".delay", 3.0);
 
         yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY, 30);
         yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_AMOUNT, 1);
