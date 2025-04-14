@@ -155,8 +155,28 @@ public class OreGenerator implements IGenerator {
             return;
         }
 
+
+
         if (lastSpawn == 0) {
             lastSpawn = delay;
+
+            double multiplier = 1.0;
+            if(bwt != null){
+
+                Integer forgeLevel = bwt.getTeamUpgradeTiers().get("upgrade-forge");
+                if(forgeLevel != null){
+                    switch (forgeLevel){
+                        case 1:
+                            multiplier = 1.5;
+                            break;
+                        case 2:
+                            multiplier = 2;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
 
             if (spawnLimit != 0) {
                 int oreCount = 0;
@@ -172,25 +192,26 @@ public class OreGenerator implements IGenerator {
                 }
                 lastSpawn = delay;
             }
-            if (bwt == null) {
+
+            if (bwt == null || bwt.getMembers().size() == 1) {
                 dropItem(location);
                 return;
             }
-            if (bwt.getMembers().size() == 1) {
-                dropItem(location);
-                return;
-            }
+
             if (plugin.getConfig().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT)) {
-                Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
-                        .filter(entity -> arena.isPlayer((Player) entity)).toArray();
+                Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream()
+                        .filter(entity -> entity.getType() == EntityType.PLAYER)
+                        .filter(entity -> arena.isPlayer((Player) entity))
+                        .toArray();
+
                 if (players.length <= 1) {
-                    dropItem(location);
+                    dropItem(location, multiplier);
                     return;
                 }
                 for (Object o : players) {
                     Player player = (Player) o;
                     ItemStack item = ore.clone();
-                    item.setAmount(amount);
+                    item.setAmount((int) (amount * multiplier));
                     player.playSound(player.getLocation(), Sound.valueOf(BedWars.getForCurrentVersion("ITEM_PICKUP", "ENTITY_ITEM_PICKUP", "ENTITY_ITEM_PICKUP")), 0.6f, 1.3f);
                     Collection<ItemStack> excess = player.getInventory().addItem(item).values();
                     for (ItemStack value : excess) {
@@ -199,7 +220,7 @@ public class OreGenerator implements IGenerator {
                 }
                 return;
             } else {
-                dropItem(location);
+                dropItem(location, multiplier);
                 return;
             }
         }
@@ -209,14 +230,15 @@ public class OreGenerator implements IGenerator {
         }
     }
 
-    private void dropItem(Location location, int amount) {
-        for (int temp = amount; temp > 0; temp--) {
+    private void dropItem(Location location, double multiplier) {
+        for (int temp = (int) (amount*multiplier); temp > 0; temp--) {
             ItemStack itemStack = new ItemStack(ore);
             if (!stack) {
                 ItemMeta itemMeta = itemStack.getItemMeta();
                 itemMeta.setDisplayName("custom" + dropID++);
                 itemStack.setItemMeta(itemMeta);
             }
+
             Item item = location.getWorld().dropItem(location, itemStack);
             item.setVelocity(new Vector(0, 0, 0));
         }
@@ -227,7 +249,7 @@ public class OreGenerator implements IGenerator {
      */
     @Override
     public void dropItem(Location location) {
-        dropItem(location, amount);
+        dropItem(location, 1.0);
     }
 
     @Override
