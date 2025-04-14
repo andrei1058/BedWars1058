@@ -1122,6 +1122,8 @@ public class Polish extends Language{
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lAlarm trap set off by &7&l{player} &c&lfrom {color}&l{team} &c&lteam!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lALARM!!!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fAlarm trap set off by {color}{team} &fteam!");
+        yml.addDefault(Messages.CHEST_INSERT_ITEM_ALLOWED, "&eW dodatku x{quantity} {item} do {chest}");
+        yml.addDefault(Messages.CHEST_INSERT_ITEM_DENIED, "&cTwój {chest} jest pełne! Nie możemy więcej przedmiotu.");
         save();
         setPrefix(m(Messages.PREFIX));
         setPrefixStatic(m(Messages.PREFIX));

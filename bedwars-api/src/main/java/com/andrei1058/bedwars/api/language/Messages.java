@@ -463,6 +463,12 @@ public class Messages {
     public static final String SHOP_CAN_BUY_COLOR = SHOP_PATH + ".can-buy-color";
     public static final String SHOP_CANT_BUY_COLOR = SHOP_PATH + ".cant-buy-color";
 
+    /**
+     * Chest Related
+     */
+    public static final String CHEST_INSERT_ITEM_ALLOWED = "chest.allowed";
+    public static final String CHEST_INSERT_ITEM_DENIED = "chest.denied";
+
     /* MultiArena Lobby Item Messages */
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + "-%path%-name";
     public static final String GENERAL_CONFIGURATION_LOBBY_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_LOBBY_ITEMS_PATH + "-%path%-lore";

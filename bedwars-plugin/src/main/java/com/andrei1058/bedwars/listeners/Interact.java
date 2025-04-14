@@ -24,6 +24,7 @@ import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
@@ -34,6 +35,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
@@ -48,9 +50,13 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.EnderChest;
 import org.bukkit.material.Openable;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
+
+import java.util.Map;
+import java.util.Set;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
@@ -215,6 +221,65 @@ public class Interact implements Listener {
                         }
 
                     }
+                }
+            }
+        } else if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
+            Block b = e.getClickedBlock();
+            if (b == null) return;
+
+            if (inHand == null || inHand.getType() == Material.AIR) return;
+
+            IArena a = Arena.getArenaByPlayer(p);
+            if (a == null || !a.isPlayer(p)) return;
+
+            // Exclure les outils
+            Set<Material> blacklist = Set.of(
+                    Material.WOOD_SWORD, Material.DIAMOND_PICKAXE, Material.WOOD_PICKAXE,
+                    Material.WOOD_AXE, Material.STONE_PICKAXE, Material.STONE_AXE,
+                    Material.IRON_PICKAXE, Material.IRON_AXE, Material.DIAMOND_AXE,
+                    Material.SHEARS, Material.GOLD_AXE, Material.GOLD_PICKAXE
+            );
+            if (blacklist.contains(inHand.getType())) return;
+
+            if (b.getType() == Material.CHEST) {
+                Chest c = (Chest) b.getState();
+                ITeam owner = null;
+                int radius = a.getConfig().getInt(ConfigPath.ARENA_ISLAND_RADIUS);
+
+                for (ITeam t : a.getTeams()) {
+                    if (t.getSpawn().distance(b.getLocation()) <= radius) {
+                        owner = t;
+                        break;
+                    }
+                }
+
+                if (owner != null && owner.isMember(p)) {
+                    Map<Integer, ItemStack> notStored = c.getInventory().addItem(inHand.clone());
+                    if (notStored.isEmpty()) {
+                        p.sendMessage(Language.getMsg(p, Messages.CHEST_INSERT_ITEM_ALLOWED)
+                                .replace("{chest}", b.getType().name())
+                                .replace("{quantity}", String.valueOf(inHand.getAmount()))
+                                .replace("{item}", inHand.getType().name()));
+                        p.getInventory().removeItem(inHand);
+                        Sounds.playSound("chest-allowed", p);
+                    } else {
+                        p.sendMessage(Language.getMsg(p, Messages.CHEST_INSERT_ITEM_DENIED).replace("{chest}", ((Chest) b).getBlock().getType().name()));
+                        Sounds.playSound("chest-denied", p);
+                    }
+                }
+
+            } else if (b.getType() == Material.ENDER_CHEST) {
+                Map<Integer, ItemStack> notStored = p.getEnderChest().addItem(inHand.clone());
+                if (notStored.isEmpty()) {
+                    p.sendMessage(Language.getMsg(p, Messages.CHEST_INSERT_ITEM_ALLOWED)
+                            .replace("{chest}",  b.getType().name())
+                            .replace("{quantity}", String.valueOf(inHand.getAmount()))
+                            .replace("{item}", inHand.getType().name()));
+                    p.getInventory().removeItem(inHand);
+                    Sounds.playSound("chest-allowed", p);
+                } else {
+                    p.sendMessage(Language.getMsg(p, Messages.CHEST_INSERT_ITEM_DENIED).replace("{chest}", ((Chest) b).getBlock().getType().name()));
+                    Sounds.playSound("chest-denied", p);
                 }
             }
         }

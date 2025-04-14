@@ -1084,6 +1084,8 @@ public class Italian extends Language {
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lAllarme attivata da &7&l{player} &c&ldel team {color}&l{team} &c&l!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lALLARME!!!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fAllarme attivata dal team {color}{team}&f!");
+        yml.addDefault(Messages.CHEST_INSERT_ITEM_ALLOWED, "&eAggiunto x{quantity} {item} a {chest}");
+        yml.addDefault(Messages.CHEST_INSERT_ITEM_DENIED, "&cTuo {chest} è pieno! Non possiamo più oggetto.");
         save();
         setPrefix(m(Messages.PREFIX));
         setPrefixStatic(m(Messages.PREFIX));
