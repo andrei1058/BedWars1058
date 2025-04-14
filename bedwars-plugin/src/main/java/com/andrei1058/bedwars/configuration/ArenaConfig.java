@@ -21,6 +21,7 @@
 package com.andrei1058.bedwars.configuration;
 
 import com.andrei1058.bedwars.BedWars;
+import com.andrei1058.bedwars.api.arena.generator.GeneratorSpeed;
 import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.configuration.GameMainOverridable;
@@ -70,6 +71,7 @@ public class ArenaConfig extends ConfigManager {
         rules.add("doWeatherCycle:false");
         rules.add("doFireTick:false");
         yml.addDefault(ConfigPath.ARENA_GAME_RULES, rules);
+        yml.addDefault("generatorSpeed", GeneratorSpeed.NORMAL.toString());
         yml.options().copyDefaults(true);
         save();
 
@@ -140,4 +142,5 @@ public class ArenaConfig extends ConfigManager {
         Object value = getGameOverridableValue(path);
         return value instanceof String ? (String) value : "invalid";
     }
+
 }

@@ -183,4 +183,15 @@ public interface IGenerator {
      * Manage your data destroy.
      */
     void destroyData();
+
+    /**
+     * Get generator speed.
+     */
+    GeneratorSpeed getSpeed();
+
+    /**
+     * Set generator speed.
+     * This may break things.
+     */
+    void setSpeed(GeneratorSpeed speed);
 }

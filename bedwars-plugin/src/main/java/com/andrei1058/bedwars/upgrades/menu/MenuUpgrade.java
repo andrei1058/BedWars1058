@@ -56,6 +56,7 @@ public class MenuUpgrade implements MenuContent, TeamUpgrade {
      * @param name identifier.
      */
     public MenuUpgrade(String name) {
+
         this.name = name;
     }
 

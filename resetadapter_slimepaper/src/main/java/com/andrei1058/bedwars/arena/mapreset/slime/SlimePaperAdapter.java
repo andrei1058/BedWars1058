@@ -206,7 +206,7 @@ public class SlimePaperAdapter extends RestoreAdapter {
                         slime.importWorld(new File(Bukkit.getWorldContainer(), s.getWorldName()), s.getWorldName().toLowerCase(), sLoader);
                         world = slime.loadWorld(sLoader, s.getWorldName(), false, spm);
                     } else {
-                        Bukkit.getScheduler().runTask(getOwner(), () -> s.getPlayer().sendMessage(ChatColor.GREEN + "Creating anew void map."));
+                        Bukkit.getScheduler().runTask(getOwner(), () -> s.getPlayer().sendMessage(ChatColor.GREEN + "Creating a new void map."));
                         world = slime.createEmptyWorld(sLoader, s.getWorldName(), false, spm);
                     }
                 }

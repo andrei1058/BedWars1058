@@ -39,12 +39,16 @@ public class ConfigPath {
 
     public static final String GENERATOR_STACK_ITEMS = "stack-items";
 
-    public static final String GENERATOR_IRON_DELAY = "iron.delay";
-    public static final String GENERATOR_IRON_AMOUNT = "iron.amount";
     public static final String GENERATOR_IRON_SPAWN_LIMIT = "iron.spawn-limit";
 
-    public static final String GENERATOR_GOLD_DELAY = "gold.delay";
-    public static final String GENERATOR_GOLD_AMOUNT = "gold.amount";
+    public static final String GENERATOR_IRON_SLOW = "iron.slow";
+    public static final String GENERATOR_IRON_MEDIUM = "iron.medium";
+    public static final String GENERATOR_IRON_FAST = "iron.fast";
+
+    public static final String GENERATOR_GOLD_SLOW = "gold.slow";
+    public static final String GENERATOR_GOLD_MEDIUM = "gold.medium";
+    public static final String GENERATOR_GOLD_FAST = "gold.fast";
+
     public static final String GENERATOR_GOLD_SPAWN_LIMIT = "gold.spawn-limit";
 
     public static final String GENERATOR_DIAMOND_TIER_I_DELAY = "diamond.tierI.delay";

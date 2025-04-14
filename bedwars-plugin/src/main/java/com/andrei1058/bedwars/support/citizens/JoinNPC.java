@@ -26,6 +26,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
+import lombok.Getter;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
@@ -46,6 +47,11 @@ import java.util.Map;
 import static com.andrei1058.bedwars.commands.bedwars.subcmds.sensitive.NPC.createArmorStand;
 
 public class JoinNPC {
+    /**
+     * -- GETTER --
+     *  Check if Citizens is loaded correctly
+     */
+    @Getter
     private static boolean citizensSupport = false;
 
     /* Here are stored NPC holograms without colors and placeholders translated used for refresh*/
@@ -53,13 +59,6 @@ public class JoinNPC {
     /* Here are stored all the NPCs*/
     public static HashMap<Integer, String> npcs = new HashMap<>();
 
-
-    /**
-     * Check if Citizens is loaded correctly
-     */
-    public static boolean isCitizensSupport() {
-        return citizensSupport;
-    }
 
     /**
      * Set Citizens support
