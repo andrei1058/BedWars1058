@@ -20,6 +20,8 @@
 
 package com.andrei1058.bedwars.arena;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -27,12 +29,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Getter
 public class LastHit {
 
-    private UUID victim;
+    private final UUID victim;
+    @Setter
     private Entity damager;
+    @Setter
     private long time;
-    private static ConcurrentHashMap<UUID, LastHit> lastHit = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<UUID, LastHit> lastHit = new ConcurrentHashMap<>();
 
     public LastHit(@NotNull Player victim, Entity damager, long time) {
         this.victim = victim.getUniqueId();
@@ -41,28 +46,8 @@ public class LastHit {
         lastHit.put(victim.getUniqueId(), this);
     }
 
-    public void setTime(long time) {
-        this.time = time;
-    }
-
-    public void setDamager(Entity damager) {
-        this.damager = damager;
-    }
-
-    public Entity getDamager() {
-        return damager;
-    }
-
-    public UUID getVictim() {
-        return victim;
-    }
-
     public void remove() {
         lastHit.remove(victim);
-    }
-
-    public long getTime() {
-        return time;
     }
 
     public static LastHit getLastHit(@NotNull Player player) {

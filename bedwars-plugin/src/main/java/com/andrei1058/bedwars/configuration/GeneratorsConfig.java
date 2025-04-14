@@ -25,6 +25,8 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Locale;
+
 public class GeneratorsConfig extends ConfigManager {
 
     public GeneratorsConfig(Plugin plugin, String name, String dir) {
@@ -47,13 +49,13 @@ public class GeneratorsConfig extends ConfigManager {
         yml.addDefault("Default." + ConfigPath.GENERATOR_IRON_FAST + ".delay", 1.0);
 
         yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_SLOW + ".amount", 1);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_SLOW + ".delay", 3.0);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_SLOW + ".delay", 6.0);
 
         yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_MEDIUM + ".amount", 1);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_MEDIUM + ".delay", 3.0);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_MEDIUM + ".delay", 6.0);
 
         yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_FAST + ".amount", 1);
-        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_FAST + ".delay", 3.0);
+        yml.addDefault("Default." + ConfigPath.GENERATOR_GOLD_FAST + ".delay", 6.0);
 
         yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_DELAY, 30);
         yml.addDefault("Default." + ConfigPath.GENERATOR_DIAMOND_TIER_I_AMOUNT, 1);
@@ -80,4 +82,5 @@ public class GeneratorsConfig extends ConfigManager {
         yml.options().copyDefaults(true);
         save();
     }
+
 }
