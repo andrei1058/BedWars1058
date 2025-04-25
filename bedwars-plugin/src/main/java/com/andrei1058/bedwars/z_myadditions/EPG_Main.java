@@ -2,6 +2,8 @@ package com.andrei1058.bedwars.z_myadditions;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.z_listeners.WaterSource;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -10,6 +12,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -35,11 +39,37 @@ public final class EPG_Main {
         public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
             System.out.println(sender.getName() + ": DEBUG");
 
-            LinkedList<IArena> arenas = Arena.getArenas();
+            int x = Integer.parseInt(args[0]);
+            int y = Integer.parseInt(args[1]);
+            int z = Integer.parseInt(args[2]);
 
-            for (IArena arena : arenas) {
-                System.out.println(arena.getArenaName());
-            }
+            World world = ((Player) sender).getWorld();
+
+            Block block = world.getBlockAt(x, y, z);
+
+//            WaterSource.checkWaterSource(block);
+
+//            LinkedList<IArena> arenas = Arena.getArenas();
+//
+//            System.out.println(arenas.toString());
+//
+//            for (IArena arena : arenas) {
+//                System.out.println(arena.getArenaName() + " - " + arena.getWorld().getName());
+//            }
+
+//            Bukkit.getWorlds().forEach(world -> {System.out.println(world.getName());});
+
+//            if (sender instanceof Player) {
+//                Player player = (Player) sender;
+//
+////                player.spigot().setCollidesWithEntities(false);
+////                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 128, false, false)); // Полностью блокирует прыжки
+////                player.setWalkSpeed(0f);
+//
+//                player.spigot().setCollidesWithEntities(true);
+//                player.removePotionEffect(PotionEffectType.JUMP);
+//                player.setWalkSpeed(0.2f);
+//            }
 
             return true;
         }

@@ -40,6 +40,8 @@ import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
+import com.andrei1058.bedwars.slow_mode.SlowBySandstone;
+import com.andrei1058.bedwars.slow_mode.SlowMode;
 import com.andrei1058.bedwars.support.paper.TeleportManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -504,6 +506,9 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onRespawn(PlayerRespawnEvent e) {
+        if (SlowMode.isSlowMode()) {
+            SlowBySandstone.updateStatus(e.getPlayer());
+        }
         IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) {
             SetupSession ss = SetupSession.getSession(e.getPlayer().getUniqueId());

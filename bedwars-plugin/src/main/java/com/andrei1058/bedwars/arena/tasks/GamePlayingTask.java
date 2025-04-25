@@ -156,6 +156,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                 break;
             case BEDS_DESTROY:
                 beds_destroy_countdown--;
+                System.out.println(beds_destroy_countdown);
                 if (getBedsDestroyCountdown() == 0) {
                     for (Player p : getArena().getPlayers()) {
                         nms.sendTitle(p, getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_BEDS_DESTROYED), getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_BEDS_DESTROYED), 0, 40, 10);
@@ -172,7 +173,7 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                 }
                 break;
             case ENDER_DRAGON:
-                dragon_spawn_countdown--;
+//                dragon_spawn_countdown--;
                 if (getDragonSpawnCountdown() == 0) {
                     for (Player p : getArena().getPlayers()) {
                         nms.sendTitle(p, getMsg(p, Messages.NEXT_EVENT_TITLE_ANNOUNCE_SUDDEN_DEATH), getMsg(p, Messages.NEXT_EVENT_SUBTITLE_ANNOUNCE_SUDDEN_DEATH), 0, 40, 10);

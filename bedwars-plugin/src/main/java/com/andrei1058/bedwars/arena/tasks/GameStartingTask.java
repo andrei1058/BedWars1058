@@ -38,6 +38,7 @@ import com.andrei1058.bedwars.arena.team.LegacyTeamAssigner;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.support.papi.SupportPAPI;
+import com.andrei1058.bedwars.z_listeners.WaterSource;
 import com.andrei1058.bedwars.z_myadditions.Bresenham;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -46,13 +47,11 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.BedWars.plugin;
@@ -187,6 +186,31 @@ public class GameStartingTask implements Runnable, StartingTask {
                 System.out.println(temporaryWallPos);
                 this.setWalls(temporaryWallPos);
             }
+
+            new BukkitRunnable() {
+                Map<Block, Integer> addWaterSource = null;
+                Set<Block> removeWaterSource = null;
+                Map<Block, Integer> updateWaterSource = null;
+                @Override
+                public void run() {
+                    addWaterSource = new HashMap<>();
+                    removeWaterSource = new HashSet<>();
+                    updateWaterSource = new HashMap<>();
+                    for (Map.Entry<Block, Integer> pair : arena.getWaterSources().entrySet()) {
+                        Integer newTimer = WaterSource.processWaterSource(pair, addWaterSource, removeWaterSource);
+                        updateWaterSource.put(pair.getKey(), newTimer);
+                    }
+                    for (Map.Entry<Block, Integer> pair : updateWaterSource.entrySet()) {
+                        arena.getWaterSources().put(pair.getKey(), pair.getValue());
+                    }
+                    for (Map.Entry<Block, Integer> pair : addWaterSource.entrySet()) {
+                        arena.getWaterSources().putIfAbsent(pair.getKey(), pair.getValue());
+                    }
+                    for (Block block : removeWaterSource) {
+                        arena.getWaterSources().remove(block);
+                    }
+                }
+            }.runTaskTimer(plugin, 0, 8);
 
             return;
         }

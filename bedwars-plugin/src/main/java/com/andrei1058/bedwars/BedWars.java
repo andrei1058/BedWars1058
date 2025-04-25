@@ -20,7 +20,10 @@
 
 package com.andrei1058.bedwars;
 
+import com.andrei1058.bedwars.slow_mode.MultyInstriment_Listener;
+import com.andrei1058.bedwars.slow_mode.SlowBySandstone_Listener;
 import com.andrei1058.bedwars.slow_mode.SlowMode_Listener;
+import com.andrei1058.bedwars.z_listeners.WaterSource;
 import com.andrei1058.bedwars.z_my_classes.EventHandlersArenaMatrix;
 import com.andrei1058.bedwars.z_myadditions.EPG_Main;
 import com.andrei1058.bedwars.z_myadditions.SaveLava_Main;
@@ -84,8 +87,6 @@ import com.andrei1058.bedwars.support.preloadedparty.PrePartyListener;
 import com.andrei1058.bedwars.support.vault.*;
 import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
 import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
-import com.andrei1058.bedwars.z_myadditions.EPG_Main;
-import com.andrei1058.bedwars.z_myadditions.EPG_glassActions;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
 import org.bukkit.Bukkit;
@@ -233,7 +234,10 @@ public class BedWars extends JavaPlugin {
             //
             // >> Slow Mode <<
                 SlowMode_Listener.onEnable(plugin);
+                SlowBySandstone_Listener.onEnable(plugin);
+                MultyInstriment_Listener.onEnable(plugin);
             //
+                WaterSource.onEnable(plugin);
         //
 
         if (!serverSoftwareSupport) {

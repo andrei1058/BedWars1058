@@ -58,7 +58,8 @@ public class MainConfig extends ConfigManager {
         yml.addDefault("debug", false);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON, false);
 
-        yml.addDefault(ConfigPath.GENERAL_CONFIG_SLOW_MODE, false);
+        yml.addDefault(ConfigPath.GENERAL_SLOW_MODE, false);
+        yml.addDefault(ConfigPath.GENERAL_SLOW_MODE_SANDSTONE, 8);
 
         // parties category
         yml.addDefault(ConfigPath.GENERAL_ENABLE_PARTY_CMD, true);

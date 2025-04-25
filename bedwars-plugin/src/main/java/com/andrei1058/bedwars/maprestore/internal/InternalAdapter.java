@@ -56,26 +56,28 @@ public class InternalAdapter extends RestoreAdapter {
         super(plugin);
     }
 
-
+    public static final String WORLD_PREFIX = "bedwars_";
 
     @Override
     public void onEnable(IArena a) {
+        System.getLogger("IternalAdapter").log(System.Logger.Level.DEBUG, "onEnable");
         Bukkit.getScheduler().runTask(getOwner(), () -> {
-            if (Bukkit.getWorld(a.getWorldName()) != null) {
+            String worldName = a.getWorldName();
+            if (Bukkit.getWorld(worldName) != null) {
                 Bukkit.getScheduler().runTask(getOwner(), () -> {
-                    World w = Bukkit.getWorld(a.getWorldName());
+                    World w = Bukkit.getWorld(worldName);
                     a.init(w);
                 });
                 return;
             }
 
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                File bf = new File(backupFolder, a.getArenaName() + ".zip"),
-                        af = new File(Bukkit.getWorldContainer(), a.getArenaName());
+                File bf = new File(backupFolder, worldName + ".zip"),
+                        af = new File(Bukkit.getWorldContainer(), worldName);
 
                 // 🔹 Папки для хранения сущностей
                 File entitiesFolder = new File(af, "entities");
-                File tempEntitiesFolder = new File(backupFolder, a.getArenaName() + "_entities");
+                File tempEntitiesFolder = new File(backupFolder, worldName + "_entities");
 
                 // 🔹 1. Если папка `entities` существует, копируем её во временное место
                 if (entitiesFolder.exists()) {
@@ -91,7 +93,7 @@ public class InternalAdapter extends RestoreAdapter {
                 }
 
                 if (!bf.exists()) {
-                    new WorldZipper(a.getArenaName(), true);
+                    new WorldZipper(worldName, true);
                 } else {
                     try {
                         ZipFileUtil.unzipFileIntoDirectory(bf, new File(Bukkit.getWorldContainer(), a.getWorldName()));
@@ -100,10 +102,10 @@ public class InternalAdapter extends RestoreAdapter {
                     }
                 }
 
-                deleteWorldTrash(a.getWorldName());
+                deleteWorldTrash(worldName);
 
                 Bukkit.getScheduler().runTask(plugin, () -> {
-                    WorldCreator wc = new WorldCreator(a.getWorldName());
+                    WorldCreator wc = new WorldCreator(worldName);
                     wc.generateStructures(false);
                     wc.generator(new VoidChunkGenerator());
                     World w = Bukkit.createWorld(wc);
@@ -182,14 +184,16 @@ public class InternalAdapter extends RestoreAdapter {
 
     @Override
     public void onSetupSessionStart(ISetupSession s) {
+        System.getLogger("IternalAdapte").log(System.Logger.Level.DEBUG, "onSetupSessionStart");
         System.getLogger("Setup").log(System.Logger.Level.INFO, "start");
         Bukkit.getScheduler().runTaskAsynchronously(getOwner(), () -> {
-            File bf = new File(backupFolder, s.getWorldName() + ".zip");
-            File af = new File(Bukkit.getWorldContainer(), s.getWorldName());
+            String worldName = s.getWorldName();
+            File bf = new File(backupFolder, worldName + ".zip");
+            File af = new File(Bukkit.getWorldContainer(), worldName);
 
             // 🔹 Восстанавливаем папку entities перед загрузкой мира
-            File backupEntities = new File("backups/" + s.getWorldName() + "/entities");
-            File worldEntities = new File(Bukkit.getWorldContainer(), s.getWorldName() + "/entities");
+            File backupEntities = new File("backups/" + worldName + "/entities");
+            File worldEntities = new File(Bukkit.getWorldContainer(), worldName + "/entities");
             if (backupEntities.exists()) {
                 try {
                     FileUtils.copyDirectory(backupEntities, worldEntities);
@@ -201,25 +205,25 @@ public class InternalAdapter extends RestoreAdapter {
             if (bf.exists()) {
                 FileUtil.delete(af);
                 try {
-                    ZipFileUtil.unzipFileIntoDirectory(bf, new File(Bukkit.getWorldContainer(), s.getWorldName()));
+                    ZipFileUtil.unzipFileIntoDirectory(bf, new File(Bukkit.getWorldContainer(), worldName));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            WorldCreator wc = new WorldCreator(s.getWorldName());
+            WorldCreator wc = new WorldCreator(worldName);
             wc.generator(new VoidChunkGenerator());
             wc.generateStructures(false);
             Bukkit.getScheduler().runTask(getOwner(), () -> {
                 try {
-                    File level = new File(Bukkit.getWorldContainer(), s.getWorldName() + "/region");
+                    File level = new File(Bukkit.getWorldContainer(), worldName + "/region");
                     if (level.exists()) {
-                        s.getPlayer().sendMessage(ChatColor.GREEN + "Loading " + s.getWorldName() + " from Bukkit worlds container.");
-                        deleteWorldTrash(s.getWorldName());
+                        s.getPlayer().sendMessage(ChatColor.GREEN + "Loading " + worldName + " from Bukkit worlds container.");
+                        deleteWorldTrash(worldName);
                         World w = Bukkit.createWorld(wc);
                         w.setKeepSpawnInMemory(true);
                     } else {
                         try {
-                            s.getPlayer().sendMessage(ChatColor.GREEN + "Creating a new void map: " + s.getWorldName());
+                            s.getPlayer().sendMessage(ChatColor.GREEN + "Creating a new void map: " + worldName);
                             World w = Bukkit.createWorld(wc);
                             w.setKeepSpawnInMemory(true);
                             Bukkit.getScheduler().runTaskLater(plugin, s::teleportPlayer, 20L);
@@ -244,7 +248,7 @@ public class InternalAdapter extends RestoreAdapter {
         Bukkit.getScheduler().runTask(getOwner(), () -> {
             World world = Bukkit.getWorld(s.getWorldName());
             if (world != null) {
-                world.save(); // 🔹 Сохраняем мир перед выгрузкой
+                world.save();
             }
 
             // 🔹 Сохраняем папку entities перед выгрузкой мира

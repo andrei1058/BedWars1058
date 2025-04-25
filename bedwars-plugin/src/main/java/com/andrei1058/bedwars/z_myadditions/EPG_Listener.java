@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -81,5 +82,15 @@ public class EPG_Listener implements Listener {
             event.setCancelled(true);
         }
     }
+
+//    @EventHandler
+//    public void onWaterChange(BlockPhysicsEvent event) {
+//        Block block = event.getBlock();
+//
+//        if (block.getType() == Material.WATER) {
+//            System.out.println("ФИЗИКА");
+//            event.setCancelled(true);
+//        }
+//    }
 
 }

@@ -176,7 +176,9 @@ public class ConfigPath {
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_POWERED_BY = "powered-by";
 
-    public static final String GENERAL_CONFIG_SLOW_MODE = "slow-game-mode";
+    public static final String GENERAL_SLOW_MODE = "slow-game-mode";
+    public static final String GENERAL_SLOW_MODE_SANDSTONE = "sm_sandstone";
+
 
     private static final String GENERAL_CHAT = "chat-settings.";
     public static final String GENERAL_CHAT_FORMATTING = GENERAL_CHAT+"format";

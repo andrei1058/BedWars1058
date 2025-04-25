@@ -299,7 +299,7 @@ public class BreakPlace implements Listener {
                         e.setCancelled(false);
                     }
                     return;
-                case "FIRE":
+                case "FIRE", "SOUL_FIRE":
                     if (allowFireBreak || SlowMode.isSlowMode()) {
                         e.setCancelled(false);
                         return;
@@ -377,6 +377,8 @@ public class BreakPlace implements Listener {
                     return;
                 }
             }
+
+
 
             if (!a.isAllowMapBreak()) {
                 if (!a.isBlockPlaced(e.getBlock())) {

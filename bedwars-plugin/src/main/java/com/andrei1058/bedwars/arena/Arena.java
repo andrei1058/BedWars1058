@@ -88,6 +88,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -131,6 +132,8 @@ public class Arena implements IArena {
     private List<String> nextEvents = new ArrayList<>();
     private List<Region> regionsList = new ArrayList<>();
     private int renderDistance;
+
+    public static Map<Block, Integer> waterSources = new HashMap<>();
 
     public boolean temporaryWallMod;
 
@@ -319,6 +322,8 @@ public class Arena implements IArena {
     public List<ArrayList<Integer>> getWallBlocksPos() {
         return this.wallBlocksPos;
     }
+
+    public Map<Block, Integer> getWaterSources() { return waterSources; };
 
     /**
      * Use this method when the world was loaded successfully.
@@ -1234,6 +1239,7 @@ public class Arena implements IArena {
         if (getRestartingTask() != null) getRestartingTask().cancel();
         if (getStartingTask() != null) getStartingTask().cancel();
         if (getPlayingTask() != null) getPlayingTask().cancel();
+        System.out.println("DISDISDIS");
         plugin.getLogger().log(Level.WARNING, "Disabling arena: " + getArenaName());
         for (Player inWorld : getWorld().getPlayers()) {
             inWorld.kickPlayer("You're not supposed to be here.");

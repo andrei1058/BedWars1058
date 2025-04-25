@@ -58,6 +58,8 @@ public interface IArena {
 
     List<ArrayList<Integer>> getWallBlocksPos();
 
+    Map<Block, Integer> getWaterSources();
+
     /**
      * Check if a player is spectating on this arena.
      */

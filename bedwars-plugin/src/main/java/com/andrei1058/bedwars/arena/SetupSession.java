@@ -30,6 +30,7 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.server.SetupType;
 import com.andrei1058.bedwars.commands.bedwars.MainCommand;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
+import com.andrei1058.bedwars.maprestore.internal.InternalAdapter;
 import com.andrei1058.bedwars.support.paper.TeleportManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import org.bukkit.*;
@@ -54,6 +55,8 @@ public class SetupSession implements ISetupSession {
 
     private static List<SetupSession> setupSessions = new ArrayList<>();
 
+    private static final String WORLD_PREFIX = InternalAdapter.WORLD_PREFIX;
+
     private Player player;
     private String worldName;
     private SetupType setupType;
@@ -65,9 +68,21 @@ public class SetupSession implements ISetupSession {
 
     public SetupSession(Player player, String worldName) {
         this.player = player;
-        this.worldName = worldName;
+
+        if (!worldName.startsWith(WORLD_PREFIX) && false) {
+            this.worldName = WORLD_PREFIX + worldName;
+
+        }
+        else {
+            this.worldName = worldName;
+        }
+
         getSetupSessions().add(this);
         openGUI(player);
+    }
+
+    private static void createWorldWithPrefix(String worldName) {
+        
     }
 
     public void setSetupType(SetupType setupType) {
@@ -210,7 +225,9 @@ public class SetupSession implements ISetupSession {
 
     @Override
     public void teleportPlayer() {
+        System.out.println("World Name: " + getWorldName());
         player.getInventory().clear();
+//        System.getLogger("SetupSission").log(System.Logger.Level.DEBUG, "World Name: ");
         TeleportManager.teleport(player, Bukkit.getWorld(getWorldName()).getSpawnLocation());
         player.setGameMode(GameMode.CREATIVE);
         Bukkit.getScheduler().runTaskLater(plugin, ()->{

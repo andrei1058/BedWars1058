@@ -34,6 +34,7 @@ import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.quickbuy.PlayerQuickBuyCache;
 import com.andrei1058.bedwars.shop.quickbuy.QuickBuyElement;
+import com.andrei1058.bedwars.slow_mode.SlowBySandstone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -204,6 +205,7 @@ public class CategoryContent implements ICategoryContent {
             player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("{item}", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("{color}", "").replace("{tier}", ""));
         }
 
+        SlowBySandstone.updateStatus(player);
 
         shopCache.setCategoryWeight(father, weight);
     }
