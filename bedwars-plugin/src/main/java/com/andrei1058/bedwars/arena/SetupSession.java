@@ -155,7 +155,7 @@ public class SetupSession implements ISetupSession {
 
         ItemStack advanced = new ItemStack(Material.REDSTONE);
         ItemMeta amm = advanced.getItemMeta();
-        amm.setDisplayName("§c§lADVANCED SETUP");
+        amm.setDisplayName("pupupupu");
         amm.setLore(Arrays.asList("", "§aDetailed setup!", "§7For experienced staff :D", "", "§3Advanced options."));
         advanced.setItemMeta(amm);
         inv.setItem(getAdvancedSlot(), advanced);
