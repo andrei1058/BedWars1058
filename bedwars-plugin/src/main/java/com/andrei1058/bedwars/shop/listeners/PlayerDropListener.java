@@ -36,7 +36,6 @@ public class PlayerDropListener implements Listener {
     @EventHandler
     //Prevent from dropping permanent items
     public void onDrop(PlayerDropItemEvent e) {
-        e.getPlayer().sendMessage(e.getItemDrop().getItemStack().toString());
         IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
         String identifier = BedWars.nms.getShopUpgradeIdentifier(e.getItemDrop().getItemStack());
