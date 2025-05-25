@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.andrei1058.bedwars.platform.spigot</groupId>
         <artifactId>server_platform_spigot</artifactId>
-        <version>25.3-SNAPSHOT</version>
+        <version>25.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>server_platform_spigot_v1_21_R1</artifactId>
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_21_R1</artifactId>
-            <version>25.2.2-SNAPSHOT</version>
+            <version>25.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

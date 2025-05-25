@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.andrei1058.bedwars.platform</groupId>
         <artifactId>server_platform</artifactId>
-        <version>25.3-SNAPSHOT</version>
+        <version>25.5-SNAPSHOT</version>
     </parent>
 
     <groupId>com.andrei1058.bedwars.platform.spigot</groupId>
@@ -16,6 +16,7 @@
     <modules>
         <module>server_platform_spigot_common</module>
         <module>server_platform_spigot_v1_21_R1</module>
+        <module>server_platform_spigot_v1_21_R2</module>
     </modules>
 
     <properties>

@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.andrei1058.bedwars.platform.paper</groupId>
-        <artifactId>server_platform_paper</artifactId>
+        <groupId>com.andrei1058.bedwars.platform.spigot</groupId>
+        <artifactId>server_platform_spigot</artifactId>
         <version>25.5-SNAPSHOT</version>
     </parent>
 
-    <artifactId>server_platform_paper_v1_21_R3</artifactId>
+    <artifactId>server_platform_spigot_v1_21_R2</artifactId>
     <packaging>jar</packaging>
 
     <properties>
@@ -41,40 +41,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.andrei1058.bedwars.platform.paper</groupId>
-            <artifactId>server_platform_paper_common</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.papermc.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.21.4-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
-            <artifactId>sidebar-v1_21_R3</artifactId>
+            <artifactId>sidebar-v1_21_R2</artifactId>
             <version>25.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.21.4-R0.1-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-codec</groupId>
-                    <artifactId>commons-codec</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>1.21.4-R0.1-SNAPSHOT</version>
+            <version>1.21.1-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>provided</scope>
             <exclusions>
@@ -89,6 +64,18 @@
             <artifactId>versionsupport_nms_cmn1</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars.platform.spigot</groupId>
+            <artifactId>server_platform_spigot_common</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.andrei1058.bedwars.platform.paper</groupId>
+            <artifactId>server_platform_paper_v1_21_R1</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
