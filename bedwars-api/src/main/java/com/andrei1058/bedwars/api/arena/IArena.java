@@ -500,6 +500,11 @@ public interface IArena {
      */
     int getYKillHeight();
 
+    /**
+     * y limit for players to be able to build.
+     */
+    int getYHeightLimit();
+
     Instant getStartTime();
 
     ITeamAssigner getTeamAssigner();
@@ -536,4 +541,16 @@ public interface IArena {
      * This is populated on restarting phase.
      */
     @Nullable ITeam getWinner();
+
+    /**
+     * Get the current diamond generator tier for this arena.
+     * @return the diamond generator tier (e.g., 1, 2, 3, 4, ...)
+     */
+    public int getDiamondTier();
+
+    /**
+     * Get the current emerald generator tier for this arena.
+     * @return the emerald generator tier (e.g., 1, 2, 3, 4, ...)
+     */
+    public int getEmeraldTier();
 }

@@ -2623,6 +2623,21 @@ public class Arena implements IArena {
     public ITeamAssigner getTeamAssigner() {
         return teamAssigner;
     }
+        
+    @Override
+    public int getDiamondTier() {
+        return diamondTier;
+    }
+
+
+    @Override
+    public int getEmeraldTier() {
+        return emeraldTier;
+    }
+
+    public int getYHeightLimit() {
+        return getConfig().getInt(ConfigPath.ARENA_CONFIGURATION_MAX_BUILD_Y);
+    }
 
     @Override
     public void setTeamAssigner(ITeamAssigner teamAssigner) {
