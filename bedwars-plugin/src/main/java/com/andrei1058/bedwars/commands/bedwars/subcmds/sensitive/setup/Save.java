@@ -69,7 +69,7 @@ public class Save extends SubCommand {
             TeleportManager.teleport(p, Bukkit.getWorlds().get(0).getSpawnLocation());
         }
         ss.done();
-        p.sendMessage(ss.getPrefix() + "Arena changes saved!");
+        p.sendMessage(ss.getPrefix() + "Arena changes saved! Finished setup session.");
         p.sendMessage(ss.getPrefix() + "You can now enable it using:");
         p.spigot().sendMessage(Misc.msgHoverClick(ChatColor.GOLD + "/" + getParent().getName() + " enableArena " + ss.getWorldName() + ChatColor.GRAY +" (click to enable)", ChatColor.GREEN + "Enable this arena.", "/" + getParent().getName() + " enableArena " + ss.getWorldName(), ClickEvent.Action.RUN_COMMAND));
         return true;
