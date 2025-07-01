@@ -5,7 +5,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>25.2</version>
+        <version>25.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,12 +14,22 @@
 
     <repositories>
         <repository>
-            <id>codemc-nms</id>
+            <id>code-mc-nms</id>
             <url>https://repo.codemc.io/repository/nms/</url>
+        </repository>
+        <repository>
+            <id>andrei-releases</id>
+            <url>https://repo.andrei1058.dev/releases</url>
         </repository>
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.andrei1058.spigot.sidebar</groupId>
+            <artifactId>sidebar-base</artifactId>
+            <version>25.3</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>bedwars-api</artifactId>

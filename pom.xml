@@ -7,7 +7,7 @@
     <groupId>com.andrei1058.bedwars</groupId>
     <artifactId>BedWars1058</artifactId>
     <packaging>pom</packaging>
-    <version>25.2</version>
+    <version>25.5-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -76,7 +76,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.13.0</version>
                 <configuration>
                     <source>11</source>
                     <target>11</target>
@@ -122,6 +122,8 @@
         <module>versionsupport_v1_20_R2</module>
         <module>versionsupport_v1_20_R3</module>
         <module>versionsupport_v1_20_R4</module>
+        <module>versionsupport_nms_cmn1</module>
+        <module>server_platform</module>
     </modules>
 
     <distributionManagement>

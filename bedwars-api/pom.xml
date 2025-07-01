@@ -5,11 +5,11 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>25.2</version>
+        <version>25.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-api</artifactId>
-    <version>${project.parent.version}</version>
+    <version>25.5-SNAPSHOT</version>
 
     <repositories>
         <repository>
@@ -22,6 +22,10 @@
         </repository>
         <repository>
             <id>andrei-prod</id>
+            <url>https://repo.andrei1058.dev/releases</url>
+        </repository>
+        <repository>
+            <id>andrei-releases</id>
             <url>https://repo.andrei1058.dev/releases</url>
         </repository>
     </repositories>
@@ -50,7 +54,7 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-base</artifactId>
-            <version>23.2</version>
+            <version>25.3</version>
         </dependency>
     </dependencies>
     <build>
