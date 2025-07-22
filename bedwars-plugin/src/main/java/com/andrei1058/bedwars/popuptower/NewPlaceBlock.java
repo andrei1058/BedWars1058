@@ -14,14 +14,16 @@ public class NewPlaceBlock {
         int y = Integer.parseInt(xyz.split(", ")[1]);
         int z = Integer.parseInt(xyz.split(", ")[2]);
         if (b.getRelative(x, y, z).getType().equals(Material.AIR)) {
-            for (Region r : Arena.getArenaByPlayer(p).getRegionsList())
-                if (r.isInRegion(b.getRelative(x, y, z).getLocation()))
+            for (Region r : Arena.getArenaByPlayer(p).getRegionsList()) {
+                if (r.isInRegion(b.getRelative(x, y, z).getLocation())) {
                     return;
-
-            if (!ladder)
+                }
+            }
+            if (!ladder) {
                 BedWars.nms.placeTowerBlocks(b, Arena.getArenaByPlayer(p), color, x, y, z);
-            else
+            } else {
                 BedWars.nms.placeLadder(b, x, y, z, Arena.getArenaByPlayer(p), ladderdata);
+            }
         }
 
     }
