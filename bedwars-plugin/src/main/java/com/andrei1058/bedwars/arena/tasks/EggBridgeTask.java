@@ -80,8 +80,8 @@ public class EggBridgeTask implements Runnable {
 
         if (getProjectile().isDead()
                 || !arena.isPlayer(getPlayer())
-                || getPlayer().getLocation().distance(getProjectile().getLocation()) > 27
-                || getPlayer().getLocation().getY() - getProjectile().getLocation().getY() > 9) {
+                || getPlayer().getLocation().distance(getProjectile().getLocation()) > 50
+                || getPlayer().getLocation().getY() - getProjectile().getLocation().getY() > 20) {
             EggBridge.removeEgg(projectile);
             return;
         }
