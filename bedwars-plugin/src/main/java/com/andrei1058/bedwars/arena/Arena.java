@@ -58,6 +58,7 @@ import com.andrei1058.bedwars.arena.tasks.GameRestartingTask;
 import com.andrei1058.bedwars.arena.tasks.GameStartingTask;
 import com.andrei1058.bedwars.arena.tasks.ReJoinTask;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
+import com.andrei1058.bedwars.arena.team.RoundRobinTeamAssigner;
 import com.andrei1058.bedwars.arena.team.TeamAssigner;
 import com.andrei1058.bedwars.configuration.ArenaConfig;
 import com.andrei1058.bedwars.configuration.Sounds;
@@ -175,7 +176,7 @@ public class Arena implements IArena {
     private Location respawnLocation, spectatorLocation, waitingLocation;
     private int yKillHeight;
     private Instant startTime;
-    private ITeamAssigner teamAssigner = new TeamAssigner();
+    private ITeamAssigner teamAssigner = new RoundRobinTeamAssigner();
 
     private boolean allowMapBreak = false;
     private @Nullable ITeam winner;
