@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  mc:
+    image: itzg/minecraft-server
+    container_name: bedwars-dev-server
+    ports:
+      - "25565:25565"
+      - "5005:5005"
+    environment:
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      VERSION: "1.21.1"
+      MEMORY: "2G"
+      # Enable remote debugging
+      JVM_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+      # Watch for plugin changes and reload if possible (needs a plugin like PlugMan or a script)
+      # For now, we'll use a simple volume mount.
+    volumes:
+      - ./docker/data:/data
+      - ./docker/plugins:/plugins
+    restart: unless-stopped
