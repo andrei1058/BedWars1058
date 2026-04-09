@@ -29,7 +29,9 @@ import com.andrei1058.bedwars.api.events.player.PlayerLeaveArenaEvent;
 import com.andrei1058.bedwars.api.events.player.PlayerXpGainEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.LevelsConfig;
+import com.andrei1058.bedwars.sidebar.SidebarService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -70,11 +72,24 @@ public class LevelListeners implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
             Object[] levelData = BedWars.getRemoteDatabase().getLevelData(u);
             PlayerLevel pl = PlayerLevel.getLevelByPlayer(u);
+            if (pl == null) {
+                return;
+            }
             pl.lazyLoad((Integer) levelData[0], (Integer) levelData[1]);
-            // MOD [DEBUG] FASE 1 - Aggiorna barra XP vanilla sul main thread dopo il caricamento DB
+
+            // Ensure sidebar placeholders are rebuilt once DB level data becomes available.
             Bukkit.getScheduler().runTask(BedWars.plugin, () -> {
                 Player p = Bukkit.getPlayer(u);
-                if (p != null) pl.updateXpBar(p);
+                if (p == null || !p.isOnline()) {
+                    return;
+                }
+
+                pl.updateXpBar(p);
+
+                SidebarService sidebarService = SidebarService.getInstance();
+                if (sidebarService != null) {
+                    sidebarService.giveSidebar(p, Arena.getArenaByPlayer(p), false);
+                }
             });
         });
     }

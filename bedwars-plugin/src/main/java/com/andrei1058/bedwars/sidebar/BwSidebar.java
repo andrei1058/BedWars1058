@@ -92,6 +92,13 @@ public class BwSidebar implements ISidebar {
         if (null == handle) {
             handle = SidebarService.getInstance().getSidebarHandler().createSidebar(title, lines, placeholders);
             handle.add(player);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (this.handle != null) {
+                    new ArrayList<>(this.handle.getPlaceholders()).forEach(p -> this.handle.removePlaceholder(p.getPlaceholder()));
+                    placeholders.forEach(this.handle::addPlaceholder);
+                    this.handle.refreshPlaceholders();
+                }
+            }, 2L);
         } else {
             handle.clearLines();
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -99,6 +106,7 @@ public class BwSidebar implements ISidebar {
                 placeholders.forEach(p -> handle.addPlaceholder(p));
                 handle.setTitle(title);
                 lines.forEach(l -> handle.addLine(l));
+                handle.refreshPlaceholders();
             }, 2L);
         }
         tabList.handlePlayerList();
@@ -111,13 +119,14 @@ public class BwSidebar implements ISidebar {
 
     @SuppressWarnings("ConstantConditions")
     public SidebarLine normalizeTitle(@Nullable List<String> titleArray) {
+        if (null == titleArray || titleArray.isEmpty()) {
+            return EMPTY_TITLE;
+        }
         String[] data = new String[titleArray.size()];
         for (int x = 0; x < titleArray.size(); x++) {
-            data[x] = titleArray.get(x);
+            data[x] = resolveLevelPlaceholders(titleArray.get(x));
         }
-        return null == titleArray || titleArray.isEmpty() ?
-                EMPTY_TITLE :
-                new SidebarLineAnimated(data);
+        return new SidebarLineAnimated(data);
     }
 
     /**
@@ -219,6 +228,9 @@ public class BwSidebar implements ISidebar {
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID))
             ;
 
+            // Resolve level-related placeholders directly to avoid first-join timing issues.
+            line = resolveLevelPlaceholders(line);
+
             // Add the line to the sidebar
             String finalTemp = line;
 
@@ -235,6 +247,16 @@ public class BwSidebar implements ISidebar {
             lines.add(sidebarLine);
         }
         return lines;
+    }
+
+    private @NotNull String resolveLevelPlaceholders(@NotNull String text) {
+        PlayerLevel playerLevel = PlayerLevel.getOrNull(player.getUniqueId());
+        return text
+                .replace("{level}", null == playerLevel ? "1" : String.valueOf(playerLevel.getLevelName()))
+                .replace("{levelUnformatted}", null == playerLevel ? "1" : String.valueOf(playerLevel.getLevel()))
+                .replace("{currentXp}", null == playerLevel ? "0" : playerLevel.getFormattedCurrentXp())
+                .replace("{requiredXp}", null == playerLevel ? "0" : playerLevel.getFormattedRequiredXp())
+                .replace("{progress}", null == playerLevel ? "" : playerLevel.getProgress());
     }
 
     @Override

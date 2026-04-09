@@ -118,6 +118,11 @@ public class SidebarService implements ISidebarService {
     }
 
     public void giveSidebar(@NotNull Player player, @Nullable IArena arena, boolean delay) {
+        if (delay) {
+            waitForStatsAndGiveSidebar(player, arena, 0);
+            return;
+        }
+
         BwSidebar sidebar = sidebars.getOrDefault(player.getUniqueId(), null);
 
         // check if we might need to remove the existing sidebar
@@ -228,6 +233,28 @@ public class SidebarService implements ISidebarService {
 
         if (newlyAdded) {
             sidebars.put(player.getUniqueId(), sidebar);
+        }
+    }
+
+    /**
+     * Wait for player stats to be loaded before giving the sidebar.
+     * Retries every 2 ticks, up to 100 ticks (5 seconds), to avoid rendering
+     * the sidebar before the async database fetch completes on first login.
+     */
+    private void waitForStatsAndGiveSidebar(@NotNull Player player, @Nullable IArena arena, int attempt) {
+        if (!player.isOnline()) return;
+        if (attempt >= 50) {
+            // Give up waiting after 5 seconds and render whatever we have
+            giveSidebar(player, arena, false);
+            return;
+        }
+        // Stats are loaded in StatsListener#onAsyncPreLoginEvent and stored in StatsManager.
+        // Once present, it's safe to render the sidebar.
+        if (BedWars.getStatsManager().get(player.getUniqueId()) != null) {
+            giveSidebar(player, arena, false);
+        } else {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () ->
+                waitForStatsAndGiveSidebar(player, arena, attempt + 1), 2L);
         }
     }
 

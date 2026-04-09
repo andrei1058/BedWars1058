@@ -28,6 +28,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import com.andrei1058.spigot.sidebar.PlayerTab;
 import com.andrei1058.spigot.sidebar.Sidebar;
 import com.andrei1058.spigot.sidebar.SidebarLine;
@@ -377,6 +378,14 @@ public class BwTabList {
                     parsed = parsed.replace(entry.getKey(), entry.getValue());
                 }
             }
+
+            PlayerLevel level = PlayerLevel.getOrNull(targetPlayer.getUniqueId());
+            parsed = parsed
+                    .replace("{level}", null == level ? "1" : String.valueOf(level.getLevelName()))
+                    .replace("{levelUnformatted}", null == level ? "1" : String.valueOf(level.getLevel()))
+                    .replace("{currentXp}", null == level ? "0" : level.getFormattedCurrentXp())
+                    .replace("{requiredXp}", null == level ? "0" : level.getFormattedRequiredXp())
+                    .replace("{progress}", null == level ? "" : level.getProgress());
 
             strings.add(parsed);
         }
