@@ -264,14 +264,26 @@ public class BwSidebar implements ISidebar {
         // fixme 29/08/2023: disabled for now because this is not a dynamic placeholder. Let's see what's the impact.
 //        providers.add(new PlaceholderProvider("{serverIp}", () -> BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP)));
         providers.add(new PlaceholderProvider("{version}", () -> plugin.getDescription().getVersion()));
-        PlayerLevel level = PlayerLevel.getLevelByPlayer(player.getUniqueId());
-        if (null != level) {
-            providers.add(new PlaceholderProvider("{progress}", level::getProgress));
-            providers.add(new PlaceholderProvider("{level}", () -> String.valueOf(level.getLevelName())));
-            providers.add(new PlaceholderProvider("{levelUnformatted}", () -> String.valueOf(level.getLevel())));
-            providers.add(new PlaceholderProvider("{currentXp}", level::getFormattedCurrentXp));
-            providers.add(new PlaceholderProvider("{requiredXp}", level::getFormattedRequiredXp));
-        }
+        providers.add(new PlaceholderProvider("{progress}", () -> {
+            PlayerLevel level = PlayerLevel.getOrNull(player.getUniqueId());
+            return null == level ? "" : level.getProgress();
+        }));
+        providers.add(new PlaceholderProvider("{level}", () -> {
+            PlayerLevel level = PlayerLevel.getOrNull(player.getUniqueId());
+            return null == level ? "1" : String.valueOf(level.getLevelName());
+        }));
+        providers.add(new PlaceholderProvider("{levelUnformatted}", () -> {
+            PlayerLevel level = PlayerLevel.getOrNull(player.getUniqueId());
+            return null == level ? "1" : String.valueOf(level.getLevel());
+        }));
+        providers.add(new PlaceholderProvider("{currentXp}", () -> {
+            PlayerLevel level = PlayerLevel.getOrNull(player.getUniqueId());
+            return null == level ? "0" : level.getFormattedCurrentXp();
+        }));
+        providers.add(new PlaceholderProvider("{requiredXp}", () -> {
+            PlayerLevel level = PlayerLevel.getOrNull(player.getUniqueId());
+            return null == level ? "0" : level.getFormattedRequiredXp();
+        }));
 
         if (hasNoArena()) {
             providers.add(new PlaceholderProvider("{on}", () ->
