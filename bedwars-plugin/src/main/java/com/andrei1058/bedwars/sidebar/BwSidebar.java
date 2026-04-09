@@ -65,6 +65,14 @@ public class BwSidebar implements ISidebar {
         this.registerPersistentPlaceholder(new PlaceholderProvider("{server}", () -> serverId));
         String serverIp = BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP);
         this.registerPersistentPlaceholder(new PlaceholderProvider("{serverIp}", () -> serverIp));
+        // Always available: total players on server and players in lobby world
+        this.registerPersistentPlaceholder(new PlaceholderProvider("{on}", () ->
+                String.valueOf(Bukkit.getOnlinePlayers().size())));
+        String lobbyWorldName = config.getLobbyWorldName();
+        this.registerPersistentPlaceholder(new PlaceholderProvider("{lobbyOn}", () -> {
+            org.bukkit.World lobbyWorld = Bukkit.getWorld(lobbyWorldName);
+            return null == lobbyWorld ? "0" : String.valueOf(lobbyWorld.getPlayers().size());
+        }));
     }
 
     public void remove() {
@@ -308,14 +316,6 @@ public class BwSidebar implements ISidebar {
         }));
 
         if (hasNoArena()) {
-            providers.add(new PlaceholderProvider("{on}", () ->
-                    String.valueOf(Bukkit.getOnlinePlayers().size()))
-            );
-            String lobbyWorldName = config.getLobbyWorldName();
-            providers.add(new PlaceholderProvider("{lobbyOn}", () -> {
-                org.bukkit.World lobbyWorld = Bukkit.getWorld(lobbyWorldName);
-                return null == lobbyWorld ? "0" : String.valueOf(lobbyWorld.getPlayers().size());
-            }));
             PlayerStats persistentStats = BedWars.getStatsManager().get(player.getUniqueId());
             //noinspection ConstantConditions
             if (null != persistentStats) {
@@ -345,7 +345,7 @@ public class BwSidebar implements ISidebar {
                 );
             }
         } else {
-            providers.add(new PlaceholderProvider("{on}", () -> String.valueOf(arena.getPlayers().size())));
+            providers.add(new PlaceholderProvider("{arenaOn}", () -> String.valueOf(arena.getPlayers().size())));
             providers.add(new PlaceholderProvider("{max}", () -> String.valueOf(arena.getMaxPlayers())));
             providers.add(new PlaceholderProvider("{nextEvent}", this::getNextEventName));
 
@@ -596,10 +596,12 @@ public class BwSidebar implements ISidebar {
 
         }
 
+        ConcurrentLinkedQueue<PlaceholderProvider> tabPlaceholders = getPlaceholders(this.getPlayer());
+        tabPlaceholders.addAll(this.persistentProviders);
         this.headerFooter = new TabHeaderFooter(
                 this.normalizeLines(lang.l(headerPath)),
                 this.normalizeLines(lang.l(footerPath)),
-                getPlaceholders(this.getPlayer())
+                tabPlaceholders
         );
 
         SidebarManager.getInstance().sendHeaderFooter(player, headerFooter);
