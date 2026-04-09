@@ -311,6 +311,11 @@ public class BwSidebar implements ISidebar {
             providers.add(new PlaceholderProvider("{on}", () ->
                     String.valueOf(Bukkit.getOnlinePlayers().size()))
             );
+            String lobbyWorldName = config.getLobbyWorldName();
+            providers.add(new PlaceholderProvider("{lobbyOn}", () -> {
+                org.bukkit.World lobbyWorld = Bukkit.getWorld(lobbyWorldName);
+                return null == lobbyWorld ? "0" : String.valueOf(lobbyWorld.getPlayers().size());
+            }));
             PlayerStats persistentStats = BedWars.getStatsManager().get(player.getUniqueId());
             //noinspection ConstantConditions
             if (null != persistentStats) {
