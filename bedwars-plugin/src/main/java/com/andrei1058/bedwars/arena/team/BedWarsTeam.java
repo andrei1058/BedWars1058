@@ -146,7 +146,7 @@ public class BedWarsTeam implements ITeam {
     public void firstSpawn(Player p) {
         if (p == null) return;
         TeleportManager.teleportC(p, spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
-        p.setGameMode(GameMode.SURVIVAL);
+        p.setGameMode(Arena.getConfiguredGameMode(ConfigPath.GENERAL_CONFIGURATION_PLAYER_GAMEMODE_IN_GAME, GameMode.SURVIVAL));
         p.setCanPickupItems(true);
         nms.setCollide(p, getArena(), true);
         sendDefaultInventory(p, true);

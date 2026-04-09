@@ -29,6 +29,14 @@ public class ConfigPath {
     @GameMainOverridable
     public static final String GENERAL_GAME_END_TELEPORT_ELIMINATED = GAME_END_PATH+".teleport-eliminated";
     @GameMainOverridable
+    public static final String GENERAL_GAME_END_FORCE_SPECTATOR_BEFORE_LOBBY = GAME_END_PATH + ".force-spectator-before-lobby";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_FORCE_SPECTATOR_GAMEMODE = GAME_END_PATH + ".force-spectator-gamemode";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_CLEAR_CHAT_BEFORE_ANNOUNCEMENT = GAME_END_PATH + ".clear-chat-before-announcement";
+    @GameMainOverridable
+    public static final String GENERAL_GAME_END_CLEAR_CHAT_LINES = GAME_END_PATH + ".clear-chat-lines";
+    @GameMainOverridable
     public static final String GENERAL_GAME_END_CHAT_TOP_STATISTIC = GAME_END_PATH+".chat-top.order-by";
     @GameMainOverridable
     public static final String GENERAL_GAME_END_CHAT_TOP_HIDE_MISSING = GAME_END_PATH+".chat-top.hide-missing";
@@ -117,6 +125,18 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_PRE_GAME_ITEMS_SLOT = GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + ".%path%.slot";
     public static final String GENERAL_CONFIGURATION_PRE_GAME_ITEMS_ENCHANTED = GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + ".%path%.enchanted";
     public static final String GENERAL_CONFIGURATION_PRE_GAME_ITEMS_COMMAND = GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + ".%path%.command";
+
+    private static final String GENERAL_CONFIGURATION_PLAYER_GAMEMODE_PATH = "player-gamemode";
+    public static final String GENERAL_CONFIGURATION_PLAYER_GAMEMODE_IN_GAME = GENERAL_CONFIGURATION_PLAYER_GAMEMODE_PATH + ".in-game";
+    public static final String GENERAL_CONFIGURATION_PLAYER_GAMEMODE_LOBBY = GENERAL_CONFIGURATION_PLAYER_GAMEMODE_PATH + ".lobby";
+
+    private static final String GENERAL_CONFIGURATION_SPECTATOR_SETTINGS_PATH = "spectator-settings";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_GAMEMODE = GENERAL_CONFIGURATION_SPECTATOR_SETTINGS_PATH + ".gamemode";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_TRANSPARENCY = GENERAL_CONFIGURATION_SPECTATOR_SETTINGS_PATH + ".transparency";
+    private static final String GENERAL_CONFIGURATION_SPECTATOR_TAB_PATH = GENERAL_CONFIGURATION_SPECTATOR_SETTINGS_PATH + ".tab";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_TAB_SPECTATORS_SEE_PLAYERS = GENERAL_CONFIGURATION_SPECTATOR_TAB_PATH + ".spectators-see-players";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_TAB_SPECTATORS_SEE_SPECTATORS = GENERAL_CONFIGURATION_SPECTATOR_TAB_PATH + ".spectators-see-spectators";
+    public static final String GENERAL_CONFIGURATION_SPECTATOR_TAB_PLAYERS_SEE_SPECTATORS = GENERAL_CONFIGURATION_SPECTATOR_TAB_PATH + ".players-see-spectators";
 
     public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR = "countdowns.game-start-regular";
     public static final String GENERAL_CONFIGURATION_START_COUNTDOWN_SHORTENED = "countdowns.game-start-shortened";
