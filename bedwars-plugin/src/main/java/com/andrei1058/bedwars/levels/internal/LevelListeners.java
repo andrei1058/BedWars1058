@@ -46,6 +46,19 @@ public class LevelListeners implements Listener {
 
     public LevelListeners() {
         instance = this;
+        // Refresh periodico della barra XP vanilla ogni 3 secondi per tutti i player online.
+        // applyXpBar salta automaticamente durante la fase 'starting' (usata per il countdown).
+        // Usiamo getOrNull per evitare di creare un PlayerLevel vuoto (livello 1) se non ancora
+        // caricato dal DB.
+        // BUGFIX: Aggiorna solo dopo che i dati sono stati caricati dal DB (lazyLoad completato)
+        Bukkit.getScheduler().runTaskTimer(BedWars.plugin, () -> {
+            if (!LevelsConfig.isXpBarShowLevelEnabled()) return;
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                PlayerLevel pl = PlayerLevel.getOrNull(p.getUniqueId());
+                // Aggiorna solo se i dati sono stati caricati dal DB
+                if (pl != null && pl.isDataLoaded()) pl.updateXpBar(p);
+            }
+        }, 60L, 60L);
     }
 
     //create new level data on player join
@@ -55,11 +68,14 @@ public class LevelListeners implements Listener {
         // create empty level first
         new PlayerLevel(u, 1, 0);
         Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
-            //if (PlayerLevel.getLevelByPlayer(e.getPlayer().getUniqueId()) != null) return;
             Object[] levelData = BedWars.getRemoteDatabase().getLevelData(u);
-            PlayerLevel.getLevelByPlayer(u).lazyLoad((Integer) levelData[0], (Integer) levelData[1]);
-            //new PlayerLevel(e.getPlayer().getUniqueId(), (Integer)levelData[0], (Integer)levelData[1]);
-            //Bukkit.broadcastMessage("LAZY LOAD");
+            PlayerLevel pl = PlayerLevel.getLevelByPlayer(u);
+            pl.lazyLoad((Integer) levelData[0], (Integer) levelData[1]);
+            // MOD [DEBUG] FASE 1 - Aggiorna barra XP vanilla sul main thread dopo il caricamento DB
+            Bukkit.getScheduler().runTask(BedWars.plugin, () -> {
+                Player p = Bukkit.getPlayer(u);
+                if (p != null) pl.updateXpBar(p);
+            });
         });
     }
 
@@ -122,6 +138,12 @@ public class LevelListeners implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onArenaLeave(PlayerLeaveArenaEvent e) {
         final UUID u = e.getPlayer().getUniqueId();
+        // MOD [DEBUG] FASE 2 - Aggiorna barra XP vanilla al rientro dalla partita
+        Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+            Player p = Bukkit.getPlayer(u);
+            PlayerLevel pl = PlayerLevel.getLevelByPlayer(u);
+            if (p != null && pl != null) pl.updateXpBar(p);
+        }, 5L);
         Bukkit.getScheduler().runTaskAsynchronously(BedWars.plugin, () -> {
             PlayerLevel pl = PlayerLevel.getLevelByPlayer(u);
             if (pl != null) pl.updateDatabase();

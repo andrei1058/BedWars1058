@@ -288,7 +288,18 @@ public class SidebarService implements ISidebarService {
             if (null != v.getArena()) {
                 v.getHandle().playerHealthRefreshAnimation();
                 for (Player player : v.getArena().getPlayers()) {
-                    v.getHandle().setPlayerHealth(player, (int) Math.ceil(player.getHealth()));
+                    int health = (int) Math.ceil(player.getHealth());
+                    v.getHandle().setPlayerHealth(player, health);
+                    
+                    // FIX [DEBUG] FASE 1 - Aggiornamento periodico vita 
+                    // Forza il pacchetto nativo di Bukkit per la 1.20 perché la libreria sidebar non invia il player.getName()
+                    org.bukkit.scoreboard.Scoreboard sb = v.getPlayer().getScoreboard();
+                    if (sb != null) {
+                        org.bukkit.scoreboard.Objective obj = sb.getObjective(org.bukkit.scoreboard.DisplaySlot.BELOW_NAME);
+                        if (obj != null) {
+                            obj.getScore(player.getName()).setScore(health);
+                        }
+                    }
                 }
             }
         });
@@ -303,6 +314,16 @@ public class SidebarService implements ISidebarService {
         this.sidebars.forEach((k, v) -> {
             if (null != v.getArena() && v.getArena().equals(arena)) {
                 v.getHandle().setPlayerHealth(player, health);
+                
+                // FIX [DEBUG] FASE 2 - Aggiornamento in tempo reale (danni) 
+                // Assicura che la vita sotto al nome venga aggiornata in real-time usando Bukkit API per 1.20+
+                org.bukkit.scoreboard.Scoreboard sb = v.getPlayer().getScoreboard();
+                if (sb != null) {
+                    org.bukkit.scoreboard.Objective obj = sb.getObjective(org.bukkit.scoreboard.DisplaySlot.BELOW_NAME);
+                    if (obj != null) {
+                        obj.getScore(player.getName()).setScore(health);
+                    }
+                }
             }
         });
     }

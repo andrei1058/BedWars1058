@@ -147,6 +147,17 @@ public class GameStartingTask implements Runnable, StartingTask {
             return;
         }
 
+        // Aggiornamento Barra XP ad ogni secondo
+        int total = BedWars.config.getInt(ConfigPath.GENERAL_CONFIGURATION_START_COUNTDOWN_REGULAR);
+        float progress = (float) getCountdown() / Math.max(1, total);
+        if (progress < 0f) progress = 0f;
+        if (progress > 1f) progress = 1f;
+        float finalProgress = progress;
+        for (Player player : getArena().getPlayers()) {
+            player.setLevel(getCountdown());
+            player.setExp(finalProgress);
+        }
+
         //Send countdown
         if (getCountdown() % 10 == 0 || getCountdown() <= 5) {
             if (getCountdown() < 5) {
@@ -168,6 +179,20 @@ public class GameStartingTask implements Runnable, StartingTask {
     private void spawnPlayers() {
         for (ITeam bwt : getArena().getTeams()) {
             for (Player p : new ArrayList<>(bwt.getMembers())) {
+                // MOD [DEBUG] FASE 1 - Ripristina il livello BedWars reale sulla barra XP
+                // invece di azzerare, mostriamo il livello e il progresso corretti del player
+                com.andrei1058.bedwars.levels.internal.PlayerLevel pl =
+                        com.andrei1058.bedwars.levels.internal.PlayerLevel.getLevelByPlayer(p.getUniqueId());
+                if (pl != null) {
+                    p.setLevel(pl.getLevel());
+                    float xpProgress = (float) pl.getCurrentXp() / Math.max(1, pl.getNextLevelCost());
+                    if (xpProgress < 0f) xpProgress = 0f;
+                    if (xpProgress > 1f) xpProgress = 1f;
+                    p.setExp(xpProgress);
+                } else {
+                    p.setLevel(0);
+                    p.setExp(0f);
+                }
                 BedWarsTeam.reSpawnInvulnerability.put(p.getUniqueId(), System.currentTimeMillis() + 2000L);
                 bwt.firstSpawn(p);
                 Sounds.playSound(ConfigPath.SOUND_GAME_START, p);

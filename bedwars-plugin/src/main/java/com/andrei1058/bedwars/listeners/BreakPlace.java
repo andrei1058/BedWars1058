@@ -41,6 +41,7 @@ import com.andrei1058.bedwars.popuptower.TowerEast;
 import com.andrei1058.bedwars.popuptower.TowerNorth;
 import com.andrei1058.bedwars.popuptower.TowerSouth;
 import com.andrei1058.bedwars.popuptower.TowerWest;
+import org.bukkit.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -61,6 +62,7 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -173,6 +175,7 @@ public class BreakPlace implements Listener {
                     TNTPrimed tnt = Objects.requireNonNull(e.getBlock().getLocation().getWorld()).spawn(e.getBlock().getLocation().add(0.5, 0, 0.5), TNTPrimed.class);
                     tnt.setFuseTicks(config.getInt(ConfigPath.GENERAL_TNT_FUSE_TICKS));
                     nms.setSource(tnt, p);
+                    showTntCountdown(tnt);
                     return;
                 }
             } else if (BedWars.shop.getBoolean(ConfigPath.SHOP_SPECIAL_TOWER_ENABLE)) {
@@ -208,6 +211,37 @@ public class BreakPlace implements Listener {
                 }
             }
         }
+    }
+
+    private void showTntCountdown(@NotNull TNTPrimed tnt) {
+        if (!config.getBoolean(ConfigPath.GENERAL_TNT_COUNTDOWN_ENABLED)) {
+            return;
+        }
+
+        final String displayFormat = Objects.requireNonNullElse(
+                config.getString(ConfigPath.GENERAL_TNT_COUNTDOWN_FORMAT),
+                "&c{seconds}s"
+        );
+        final int decimals = Math.max(0, config.getInt(ConfigPath.GENERAL_TNT_COUNTDOWN_DECIMALS));
+        final long updateInterval = Math.max(1, config.getInt(ConfigPath.GENERAL_TNT_COUNTDOWN_UPDATE_INTERVAL));
+        tnt.setCustomNameVisible(config.getBoolean(ConfigPath.GENERAL_TNT_COUNTDOWN_NAME_VISIBLE));
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!tnt.isValid() || tnt.isDead()) {
+                    cancel();
+                    return;
+                }
+                int fuseTicks = Math.max(0, tnt.getFuseTicks());
+                double secondsLeft = fuseTicks / 20.0D;
+                String seconds = String.format(Locale.US, "%." + decimals + "f", secondsLeft);
+                String countdownName = displayFormat
+                        .replace("{seconds}", seconds)
+                        .replace("{ticks}", String.valueOf(fuseTicks));
+                tnt.setCustomName(ChatColor.translateAlternateColorCodes('&', countdownName));
+            }
+        }.runTaskTimer(BedWars.plugin, 0L, updateInterval);
     }
 
     @EventHandler(ignoreCancelled = true)

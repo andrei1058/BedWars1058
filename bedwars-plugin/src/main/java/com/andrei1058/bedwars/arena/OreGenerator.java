@@ -44,7 +44,9 @@ import org.bukkit.util.Vector;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.stream.Collectors;
 
 import static com.andrei1058.bedwars.BedWars.*;
 
@@ -173,20 +175,48 @@ public class OreGenerator implements IGenerator {
                 return;
             }
             if (plugin.getConfig().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT)) {
-                Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
-                        .filter(entity -> arena.isPlayer((Player) entity)).toArray();
-                if (players.length <= 1) {
+                // MOD [DEBUG] FASE 1 - Gen Split: distribuisce a tutti i player VICINI al generatore
+                // Raggio configurabile con gen-split-radius in config.yml
+                double radius = plugin.getConfig().getDouble(ConfigPath.GENERAL_CONFIGURATION_GEN_SPLIT_RADIUS, 1.5);
+
+                // Trova tutti i player del team nel raggio (anche 1 solo basta)
+                List<Player> nearbyMembers = bwt.getMembers().stream()
+                        .filter(p -> p.getLocation().distanceSquared(location) <= radius * radius)
+                        .collect(Collectors.toList());
+
+                if (nearbyMembers.isEmpty()) {
+                    // Nessuno vicino: drop normale a terra
                     dropItem(location);
                     return;
                 }
-                for (Object o : players) {
-                    Player player = (Player) o;
-                    ItemStack item = ore.clone();
-                    item.setAmount(amount);
-                    player.playSound(player.getLocation(), Sound.valueOf(BedWars.getForCurrentVersion("ITEM_PICKUP", "ENTITY_ITEM_PICKUP", "ENTITY_ITEM_PICKUP")), 0.6f, 1.3f);
-                    Collection<ItemStack> excess = player.getInventory().addItem(item).values();
+
+                // Ogni player vicino riceve il proprio item direttamente nell'inventario
+                // con un'entità visiva che vola dal generatore verso il player.
+                for (Player member : nearbyMembers) {
+                    ItemStack teamItem = ore.clone();
+                    teamItem.setAmount(amount);
+
+                    // Animazione: spawna un'entità item al generatore con velocità verso il player.
+                    // setPickupDelay alto → nessuno può raccoglierla; rimossa dopo 15 tick.
+                    Location spawnLoc = location.clone().add(0, 0.3, 0);
+                    Item visual = location.getWorld().dropItem(spawnLoc, teamItem.clone());
+                    visual.setPickupDelay(32767);
+                    Vector dir = member.getLocation().add(0, 0.8, 0).toVector()
+                            .subtract(spawnLoc.toVector());
+                    double dist = dir.length();
+                    if (dist > 0.1) {
+                        dir.normalize().multiply(Math.min(dist * 0.14, 0.55));
+                        dir.setY(dir.getY() + 0.12);
+                    }
+                    visual.setVelocity(dir);
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        if (!visual.isDead()) visual.remove();
+                    }, 15L);
+
+                    member.playSound(member.getLocation(), Sound.valueOf(BedWars.getForCurrentVersion("ITEM_PICKUP", "ENTITY_ITEM_PICKUP", "ENTITY_ITEM_PICKUP")), 0.6f, 1.3f);
+                    Collection<ItemStack> excess = member.getInventory().addItem(teamItem).values();
                     for (ItemStack value : excess) {
-                        dropItem(player.getLocation(), value.getAmount());
+                        dropItem(member.getLocation(), value.getAmount());
                     }
                 }
                 return;

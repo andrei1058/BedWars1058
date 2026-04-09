@@ -31,6 +31,7 @@ import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.tasks.PlayingTask;
 import com.andrei1058.bedwars.arena.Arena;
+import com.andrei1058.bedwars.listeners.InvisibilityPotionListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -234,16 +235,31 @@ public class GamePlayingTask implements Runnable, PlayingTask {
         /* INVISIBILITY FOR ARMOR */
         if (!getArena().getShowTime().isEmpty()) {
             for (Map.Entry<Player, Integer> e : getArena().getShowTime().entrySet()) {
-                if (e.getValue() <= 0) {
+                // Scadenza: timer plugin a 0 OPPURE effetto già rimosso da vanilla in anticipo.
+                boolean effectGone = !e.getKey().hasPotionEffect(PotionEffectType.INVISIBILITY);
+                if (e.getValue() <= 0 || effectGone) {
+                    e.getKey().removePotionEffect(PotionEffectType.INVISIBILITY);
                     for (Player p : e.getKey().getWorld().getPlayers()) {
                         nms.showArmor(e.getKey(), p);
-                        //nms.showPlayer(e.getKey(), p);
                     }
-                    e.getKey().removePotionEffect(PotionEffectType.INVISIBILITY);
                     getArena().getShowTime().remove(e.getKey());
-                    Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.REMOVED, getArena().getTeam(e.getKey()), e.getKey(), getArena()));
+                    Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(
+                            PlayerInvisibilityPotionEvent.Type.REMOVED,
+                            getArena().getTeam(e.getKey()), e.getKey(), getArena()));
                 } else {
                     getArena().getShowTime().replace(e.getKey(), e.getValue() - 1);
+
+                    // Re-invio hideArmor ogni 2s come fallback: il server vanilla puo' re-inviare
+                    // l'armatura reale (es. dopo bere pozione, cambio item in mano, ecc.).
+                    // Il task gira ogni 20 tick (1s), il contatore scala di 1/s → % 2 = ogni 2s.
+                    if (e.getValue() % 2 == 0) {
+                        for (Player p : e.getKey().getWorld().getPlayers()) {
+                            if (p.equals(e.getKey())) continue;
+                            if (InvisibilityPotionListener.shouldHideArmorForViewer(getArena(), e.getKey(), p)) {
+                                nms.hideArmor(e.getKey(), p);
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -45,6 +45,7 @@ import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaRestartEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.listeners.InvisibilityPotionListener;
 import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.sidebar.ISidebar;
@@ -1313,7 +1314,7 @@ public class Arena implements IArena {
      */
     @Override
     public List<Player> getPlayers() {
-        return players;
+        return players == null ? Collections.emptyList() : players;
     }
 
     /**
@@ -1573,7 +1574,7 @@ public class Arena implements IArena {
      */
     @Override
     public boolean isPlayer(Player p) {
-        return players.contains(p);
+        return players != null && players.contains(p);
     }
 
     /**
@@ -1581,7 +1582,7 @@ public class Arena implements IArena {
      */
     @Override
     public boolean isSpectator(Player p) {
-        return spectators.contains(p);
+        return spectators != null && spectators.contains(p);
     }
 
     @Override
@@ -1657,7 +1658,7 @@ public class Arena implements IArena {
      */
     @Override
     public List<Player> getSpectators() {
-        return spectators;
+        return spectators == null ? Collections.emptyList() : spectators;
     }
 
     /**
@@ -2519,7 +2520,9 @@ public class Arena implements IArena {
                     nms.setCollide(player, this, false);
                     // #274
                     for (Player invisible : getShowTime().keySet()) {
-                        BedWars.nms.hideArmor(invisible, player);
+                        if (InvisibilityPotionListener.shouldHideArmorForViewer(this, invisible, player)) {
+                            BedWars.nms.hideArmor(invisible, player);
+                        }
                     }
 
                     updateSpectatorCollideRule(player, false);

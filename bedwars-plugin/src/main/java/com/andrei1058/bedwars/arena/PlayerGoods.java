@@ -113,6 +113,16 @@ class PlayerGoods {
             p.setGameMode(GameMode.SURVIVAL);
             p.setAllowFlight(false);
             p.setFlying(false);
+
+            // MOD G25.2 [DEBUG] FASE 1 - Ripristina la barra XP BedWars dopo il reset di PlayerGoods.
+            // PlayerGoods cancella exp/level vanilla per preparare l'arena, ma la barra BedWars
+            // deve rimanere visibile anche nella fase 'waiting' (prima dell'inizio partita).
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (!p.isOnline()) return;
+                com.andrei1058.bedwars.levels.internal.PlayerLevel pl =
+                        com.andrei1058.bedwars.levels.internal.PlayerLevel.getLevelByPlayer(p.getUniqueId());
+                if (pl != null) pl.updateXpBar(p);
+            }, 2L);
         }
     }
 

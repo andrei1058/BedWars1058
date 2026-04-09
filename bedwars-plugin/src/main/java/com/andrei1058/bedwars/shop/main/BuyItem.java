@@ -25,6 +25,7 @@ import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.shop.IBuyItem;
 import com.andrei1058.bedwars.api.arena.team.TeamEnchant;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
+import com.andrei1058.bedwars.listeners.InvisibilityPotionListener;
 import com.andrei1058.bedwars.configuration.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -215,8 +216,10 @@ public class BuyItem implements IBuyItem {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 // #274
                 if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                    for (Player p : arena.getPlayers()) {
-                        BedWars.nms.hideArmor(player, p);
+                    for (Player p : player.getWorld().getPlayers()) {
+                        if (InvisibilityPotionListener.shouldHideArmorForViewer(arena, player, p)) {
+                            BedWars.nms.hideArmor(player, p);
+                        }
                     }
                 }
                 //

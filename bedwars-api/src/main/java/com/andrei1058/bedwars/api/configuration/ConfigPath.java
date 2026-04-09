@@ -173,6 +173,15 @@ public class ConfigPath {
     public static final String GENERAL_CONFIGURATION_DISABLE_ANVIL = "inventories.disable-anvil";
     public static final String GENERAL_CONFIGURATION_MARK_LEAVE_AS_ABANDON = "mark-leave-as-abandon";
     public static final String GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT = "enable-gen-split";
+    public static final String GENERAL_CONFIGURATION_GEN_SPLIT_RADIUS = "gen-split-radius";
+    // MOD G25.2 - Quick Deposit: trasferisce le valute (ferro/oro/diamanti/smeraldi)
+    // dall'inventario del player alla cassa del suo team con Shift+Click destro
+    public static final String GENERAL_CONFIGURATION_ENABLE_QUICK_DEPOSIT = "enable-quick-deposit";
+
+    // MOD G25.2 - Invisibilita': flag per sopprimere suoni/particelle dei giocatori invisibili
+    public static final String INVISIBILITY_SUPPRESS_FOOTSTEPS = "invisibility.suppress-footstep-sounds";
+    public static final String INVISIBILITY_SUPPRESS_PARTICLES = "invisibility.suppress-particles";
+    public static final String INVISIBILITY_TEAM_CAN_SEE_ARMOR = "invisibility.team-can-see-armor";
 
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP = "server-ip";
     public static final String GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_POWERED_BY = "powered-by";
@@ -239,6 +248,12 @@ public class ConfigPath {
     public static final String GENERAL_TNT_PRIME = "tnt-prime-settings";
     public static final String GENERAL_TNT_AUTO_IGNITE = GENERAL_TNT_PRIME+".auto-ignite";
     public static final String GENERAL_TNT_FUSE_TICKS = GENERAL_TNT_PRIME+".fuse-ticks";
+    private static final String GENERAL_TNT_COUNTDOWN = GENERAL_TNT_PRIME + ".countdown";
+    public static final String GENERAL_TNT_COUNTDOWN_ENABLED = GENERAL_TNT_COUNTDOWN + ".enabled";
+    public static final String GENERAL_TNT_COUNTDOWN_NAME_VISIBLE = GENERAL_TNT_COUNTDOWN + ".name-visible";
+    public static final String GENERAL_TNT_COUNTDOWN_FORMAT = GENERAL_TNT_COUNTDOWN + ".format";
+    public static final String GENERAL_TNT_COUNTDOWN_DECIMALS = GENERAL_TNT_COUNTDOWN + ".seconds-decimals";
+    public static final String GENERAL_TNT_COUNTDOWN_UPDATE_INTERVAL = GENERAL_TNT_COUNTDOWN + ".update-interval-ticks";
 
     private static final String GENERAL_FIREBALL_PATH = "fireball";
     public static final String GENERAL_FIREBALL_EXPLOSION_SIZE = GENERAL_FIREBALL_PATH + ".explosion-size";

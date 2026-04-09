@@ -5,7 +5,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>25.2</version>
+        <version>G25</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-api</artifactId>
@@ -20,10 +20,7 @@
             <id>commons-repo</id>
             <url>https://repo.fusesource.com/nexus/content/repositories/releases-3rd-party/</url>
         </repository>
-        <repository>
-            <id>andrei-prod</id>
-            <url>https://repo.andrei1058.dev/releases</url>
-        </repository>
+        <!-- Rimossa la repo offline andrei-prod temporaneamente -->
     </repositories>
 
     <dependencies>
@@ -50,7 +47,7 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-base</artifactId>
-            <version>23.2</version>
+            <version>24</version>
         </dependency>
     </dependencies>
     <build>
