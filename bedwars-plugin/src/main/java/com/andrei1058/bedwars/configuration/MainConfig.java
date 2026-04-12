@@ -124,6 +124,11 @@ public class MainConfig extends ConfigManager {
         // tnt prime settings
         yml.addDefault(ConfigPath.GENERAL_TNT_AUTO_IGNITE, true);
         yml.addDefault(ConfigPath.GENERAL_TNT_FUSE_TICKS, 45);
+        yml.addDefault(ConfigPath.GENERAL_TNT_COUNTDOWN_ENABLED, true);
+        yml.addDefault(ConfigPath.GENERAL_TNT_COUNTDOWN_NAME_VISIBLE, true);
+        yml.addDefault(ConfigPath.GENERAL_TNT_COUNTDOWN_FORMAT, "&c{seconds}s");
+        yml.addDefault(ConfigPath.GENERAL_TNT_COUNTDOWN_DECIMALS, 1);
+        yml.addDefault(ConfigPath.GENERAL_TNT_COUNTDOWN_UPDATE_INTERVAL, 1);
 
         // fireball category
         yml.addDefault(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE, 3);
@@ -202,11 +207,30 @@ public class MainConfig extends ConfigManager {
         yml.addDefault(ConfigPath.CENERAL_CONFIGURATION_ALLOWED_COMMANDS, Arrays.asList("shout", "bw", "leave"));
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_EXPERIMENTAL_TEAM_ASSIGNER, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_GEN_SPLIT_RADIUS, 1.5);
+        // MOD G25.2 - Quick Deposit (default: false)
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ENABLE_QUICK_DEPOSIT, false);
+        // MOD G25.2 - Invisibilita': soppressione suoni/particelle (default: entrambi true)
+        yml.addDefault(ConfigPath.INVISIBILITY_SUPPRESS_FOOTSTEPS, true);
+        yml.addDefault(ConfigPath.INVISIBILITY_SUPPRESS_PARTICLES, true);
+        // MOD G25.2 - Invisibilita': i compagni di team vedono l'armatura? (default: false)
+        yml.addDefault(ConfigPath.INVISIBILITY_TEAM_CAN_SEE_ARMOR, false);
 
         yml.addDefault(ConfigPath.LOBBY_VOID_TELEPORT_ENABLED, true);
         yml.addDefault(ConfigPath.LOBBY_VOID_TELEPORT_HEIGHT, 0);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PLAYER_GAMEMODE_IN_GAME, "SURVIVAL");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_PLAYER_GAMEMODE_LOBBY, "SURVIVAL");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_GAMEMODE, "ADVENTURE");
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_TRANSPARENCY, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_TAB_SPECTATORS_SEE_PLAYERS, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_TAB_SPECTATORS_SEE_SPECTATORS, true);
+        yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_TAB_PLAYERS_SEE_SPECTATORS, false);
         yml.addDefault(ConfigPath.GENERAL_GAME_END_SHOW_ELIMINATED, true);
         yml.addDefault(ConfigPath.GENERAL_GAME_END_TELEPORT_ELIMINATED, true);
+        yml.addDefault(ConfigPath.GENERAL_GAME_END_FORCE_SPECTATOR_BEFORE_LOBBY, true);
+        yml.addDefault(ConfigPath.GENERAL_GAME_END_FORCE_SPECTATOR_GAMEMODE, "SPECTATOR");
+        yml.addDefault(ConfigPath.GENERAL_GAME_END_CLEAR_CHAT_BEFORE_ANNOUNCEMENT, true);
+        yml.addDefault(ConfigPath.GENERAL_GAME_END_CLEAR_CHAT_LINES, 120);
         yml.addDefault(ConfigPath.GENERAL_GAME_END_CHAT_TOP_STATISTIC, DefaultStatistics.KILLS.toString());
         yml.addDefault(ConfigPath.GENERAL_GAME_END_CHAT_TOP_HIDE_MISSING, true);
 

@@ -65,6 +65,14 @@ public class BwSidebar implements ISidebar {
         this.registerPersistentPlaceholder(new PlaceholderProvider("{server}", () -> serverId));
         String serverIp = BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP);
         this.registerPersistentPlaceholder(new PlaceholderProvider("{serverIp}", () -> serverIp));
+        // Always available: total players on server and players in lobby world
+        this.registerPersistentPlaceholder(new PlaceholderProvider("{on}", () ->
+                String.valueOf(Bukkit.getOnlinePlayers().size())));
+        String lobbyWorldName = config.getLobbyWorldName();
+        this.registerPersistentPlaceholder(new PlaceholderProvider("{lobbyOn}", () -> {
+            org.bukkit.World lobbyWorld = Bukkit.getWorld(lobbyWorldName);
+            return null == lobbyWorld ? "0" : String.valueOf(lobbyWorld.getPlayers().size());
+        }));
     }
 
     public void remove() {
@@ -92,6 +100,13 @@ public class BwSidebar implements ISidebar {
         if (null == handle) {
             handle = SidebarService.getInstance().getSidebarHandler().createSidebar(title, lines, placeholders);
             handle.add(player);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (this.handle != null) {
+                    new ArrayList<>(this.handle.getPlaceholders()).forEach(p -> this.handle.removePlaceholder(p.getPlaceholder()));
+                    placeholders.forEach(this.handle::addPlaceholder);
+                    this.handle.refreshPlaceholders();
+                }
+            }, 2L);
         } else {
             handle.clearLines();
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -99,6 +114,7 @@ public class BwSidebar implements ISidebar {
                 placeholders.forEach(p -> handle.addPlaceholder(p));
                 handle.setTitle(title);
                 lines.forEach(l -> handle.addLine(l));
+                handle.refreshPlaceholders();
             }, 2L);
         }
         tabList.handlePlayerList();
@@ -111,13 +127,14 @@ public class BwSidebar implements ISidebar {
 
     @SuppressWarnings("ConstantConditions")
     public SidebarLine normalizeTitle(@Nullable List<String> titleArray) {
+        if (null == titleArray || titleArray.isEmpty()) {
+            return EMPTY_TITLE;
+        }
         String[] data = new String[titleArray.size()];
         for (int x = 0; x < titleArray.size(); x++) {
-            data[x] = titleArray.get(x);
+            data[x] = resolveLevelPlaceholders(titleArray.get(x));
         }
-        return null == titleArray || titleArray.isEmpty() ?
-                EMPTY_TITLE :
-                new SidebarLineAnimated(data);
+        return new SidebarLineAnimated(data);
     }
 
     /**
@@ -218,6 +235,10 @@ public class BwSidebar implements ISidebar {
                     .replace("{version}", plugin.getDescription().getVersion())
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID))
             ;
+            // Level-related placeholders ({level}, {currentXp}, {requiredXp}, {progress}, etc.)
+            // are handled dynamically by PlaceholderProvider entries in getPlaceholders()
+            // and refreshed periodically. Do NOT pre-resolve them here or the PlaceholderProvider
+            // cannot find the placeholder keys and values will be stale.
 
             // Add the line to the sidebar
             String finalTemp = line;
@@ -235,6 +256,16 @@ public class BwSidebar implements ISidebar {
             lines.add(sidebarLine);
         }
         return lines;
+    }
+
+    private @NotNull String resolveLevelPlaceholders(@NotNull String text) {
+        PlayerLevel playerLevel = PlayerLevel.getOrNull(player.getUniqueId());
+        return text
+                .replace("{level}", null == playerLevel ? "1" : String.valueOf(playerLevel.getLevelName()))
+                .replace("{levelUnformatted}", null == playerLevel ? "1" : String.valueOf(playerLevel.getLevel()))
+                .replace("{currentXp}", null == playerLevel ? "0" : playerLevel.getFormattedCurrentXp())
+                .replace("{requiredXp}", null == playerLevel ? "0" : playerLevel.getFormattedRequiredXp())
+                .replace("{progress}", null == playerLevel ? "" : playerLevel.getProgress());
     }
 
     @Override
@@ -264,19 +295,28 @@ public class BwSidebar implements ISidebar {
         // fixme 29/08/2023: disabled for now because this is not a dynamic placeholder. Let's see what's the impact.
 //        providers.add(new PlaceholderProvider("{serverIp}", () -> BedWars.config.getString(ConfigPath.GENERAL_CONFIG_PLACEHOLDERS_REPLACEMENTS_SERVER_IP)));
         providers.add(new PlaceholderProvider("{version}", () -> plugin.getDescription().getVersion()));
-        PlayerLevel level = PlayerLevel.getLevelByPlayer(player.getUniqueId());
-        if (null != level) {
-            providers.add(new PlaceholderProvider("{progress}", level::getProgress));
-            providers.add(new PlaceholderProvider("{level}", () -> String.valueOf(level.getLevelName())));
-            providers.add(new PlaceholderProvider("{levelUnformatted}", () -> String.valueOf(level.getLevel())));
-            providers.add(new PlaceholderProvider("{currentXp}", level::getFormattedCurrentXp));
-            providers.add(new PlaceholderProvider("{requiredXp}", level::getFormattedRequiredXp));
-        }
+        providers.add(new PlaceholderProvider("{progress}", () -> {
+            PlayerLevel level = PlayerLevel.getOrNull(player.getUniqueId());
+            return null == level ? "" : level.getProgress();
+        }));
+        providers.add(new PlaceholderProvider("{level}", () -> {
+            PlayerLevel level = PlayerLevel.getOrNull(player.getUniqueId());
+            return null == level ? "1" : String.valueOf(level.getLevelName());
+        }));
+        providers.add(new PlaceholderProvider("{levelUnformatted}", () -> {
+            PlayerLevel level = PlayerLevel.getOrNull(player.getUniqueId());
+            return null == level ? "1" : String.valueOf(level.getLevel());
+        }));
+        providers.add(new PlaceholderProvider("{currentXp}", () -> {
+            PlayerLevel level = PlayerLevel.getOrNull(player.getUniqueId());
+            return null == level ? "0" : level.getFormattedCurrentXp();
+        }));
+        providers.add(new PlaceholderProvider("{requiredXp}", () -> {
+            PlayerLevel level = PlayerLevel.getOrNull(player.getUniqueId());
+            return null == level ? "0" : level.getFormattedRequiredXp();
+        }));
 
         if (hasNoArena()) {
-            providers.add(new PlaceholderProvider("{on}", () ->
-                    String.valueOf(Bukkit.getOnlinePlayers().size()))
-            );
             PlayerStats persistentStats = BedWars.getStatsManager().get(player.getUniqueId());
             //noinspection ConstantConditions
             if (null != persistentStats) {
@@ -306,7 +346,7 @@ public class BwSidebar implements ISidebar {
                 );
             }
         } else {
-            providers.add(new PlaceholderProvider("{on}", () -> String.valueOf(arena.getPlayers().size())));
+            providers.add(new PlaceholderProvider("{arenaOn}", () -> String.valueOf(arena.getPlayers().size())));
             providers.add(new PlaceholderProvider("{max}", () -> String.valueOf(arena.getMaxPlayers())));
             providers.add(new PlaceholderProvider("{nextEvent}", this::getNextEventName));
 
@@ -557,10 +597,12 @@ public class BwSidebar implements ISidebar {
 
         }
 
+        ConcurrentLinkedQueue<PlaceholderProvider> tabPlaceholders = getPlaceholders(this.getPlayer());
+        tabPlaceholders.addAll(this.persistentProviders);
         this.headerFooter = new TabHeaderFooter(
                 this.normalizeLines(lang.l(headerPath)),
                 this.normalizeLines(lang.l(footerPath)),
-                getPlaceholders(this.getPlayer())
+                tabPlaceholders
         );
 
         SidebarManager.getInstance().sendHeaderFooter(player, headerFooter);

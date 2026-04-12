@@ -28,6 +28,7 @@ import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
+import com.andrei1058.bedwars.levels.internal.PlayerLevel;
 import com.andrei1058.spigot.sidebar.PlayerTab;
 import com.andrei1058.spigot.sidebar.Sidebar;
 import com.andrei1058.spigot.sidebar.SidebarLine;
@@ -356,8 +357,8 @@ public class BwTabList {
 
     @NotNull
     private SidebarLine getTabText(String path, Player targetPlayer, @Nullable HashMap<String, String> replacements) {
-        List<String> strings = Language.getList(sidebar.getPlayer(), path);
-        if (strings.isEmpty()) {
+        List<String> rawStrings = Language.getList(sidebar.getPlayer(), path);
+        if (rawStrings.isEmpty()) {
             return new SidebarLine() {
                 @NotNull
                 @Override
@@ -367,8 +368,11 @@ public class BwTabList {
             };
         }
 
-        strings = new ArrayList<>();
-        for (String string : Language.getList(sidebar.getPlayer(), path)) {
+        // Resolve static placeholders (vPrefix, vSuffix, team) at creation time.
+        // Level placeholders are intentionally left unresolved here and handled below.
+        List<String> templates = new ArrayList<>();
+        List<String> staticResolved = new ArrayList<>();
+        for (String string : rawStrings) {
             String parsed = string.replace("{vPrefix}", BedWars.getChatSupport().getPrefix(targetPlayer))
                     .replace("{vSuffix}", BedWars.getChatSupport().getSuffix(targetPlayer));
 
@@ -378,24 +382,40 @@ public class BwTabList {
                 }
             }
 
-            strings.add(parsed);
+            templates.add(parsed);
+
+            // Pre-resolve level for animated frames (fallback for multi-frame entries)
+            PlayerLevel lvl = PlayerLevel.getOrNull(targetPlayer.getUniqueId());
+            staticResolved.add(parsed
+                    .replace("{level}", null == lvl ? "1" : String.valueOf(lvl.getLevelName()))
+                    .replace("{levelUnformatted}", null == lvl ? "1" : String.valueOf(lvl.getLevel()))
+                    .replace("{currentXp}", null == lvl ? "0" : lvl.getFormattedCurrentXp())
+                    .replace("{requiredXp}", null == lvl ? "0" : lvl.getFormattedRequiredXp())
+                    .replace("{progress}", null == lvl ? "" : lvl.getProgress()));
         }
 
-        if (strings.size() == 1) {
-            final String line = strings.get(0);
+        // Single-frame: resolve level dynamically on every getLine() call so TAB
+        // always shows the current level even after another player levels up.
+        if (templates.size() == 1) {
+            final String template = templates.get(0);
             return new SidebarLine() {
                 @NotNull
                 @Override
                 public String getLine() {
-                    return line;
+                    PlayerLevel level = PlayerLevel.getOrNull(targetPlayer.getUniqueId());
+                    return template
+                            .replace("{level}", null == level ? "1" : String.valueOf(level.getLevelName()))
+                            .replace("{levelUnformatted}", null == level ? "1" : String.valueOf(level.getLevel()))
+                            .replace("{currentXp}", null == level ? "0" : level.getFormattedCurrentXp())
+                            .replace("{requiredXp}", null == level ? "0" : level.getFormattedRequiredXp())
+                            .replace("{progress}", null == level ? "" : level.getProgress());
                 }
             };
         }
 
-        final String[] lines = new String[strings.size()];
-        for (int i = 0; i < lines.length; i++) {
-            lines[i] = strings.get(i);
-        }
+        // Animated (multi-frame): use pre-resolved strings.
+        // {level} in animated tab entries is not used in practice.
+        final String[] lines = staticResolved.toArray(new String[0]);
         return new SidebarLineAnimated(lines);
     }
 

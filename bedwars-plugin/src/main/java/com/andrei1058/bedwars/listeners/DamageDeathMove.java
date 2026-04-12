@@ -38,6 +38,7 @@ import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.LastHit;
 import com.andrei1058.bedwars.arena.SetupSession;
 import com.andrei1058.bedwars.arena.team.BedWarsTeam;
+import com.andrei1058.bedwars.listeners.InvisibilityPotionListener;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.listeners.dropshandler.PlayerDrops;
 import com.andrei1058.bedwars.support.paper.TeleportManager;
@@ -333,6 +334,10 @@ public class DamageDeathMove implements Listener {
             e.setDeathMessage(null);
         }
         if (a != null) {
+            // Impedisce a vanilla di azzerare il livello XP (usato per la barra BedWars).
+            e.setKeepLevel(true);
+            e.setDroppedExp(0);
+
             if (a.isSpectator(victim)) {
                 victim.spigot().respawn();
                 return;
@@ -598,18 +603,18 @@ public class DamageDeathMove implements Listener {
                     // generic hide packets
                     for (Map.Entry<Player, Integer> entry : a.getShowTime().entrySet()) {
                         if (entry.getValue() > 1) {
-                            BedWars.nms.hideArmor(entry.getKey(), e.getPlayer());
+                            if (InvisibilityPotionListener.shouldHideArmorForViewer(a, entry.getKey(), e.getPlayer())) {
+                                BedWars.nms.hideArmor(entry.getKey(), e.getPlayer());
+                            }
                         }
                     }
                     // if the moving player has invisible armor
                     if (a.getShowTime().containsKey(e.getPlayer())) {
-                        for (Player p : a.getPlayers()) {
-                            nms.hideArmor(e.getPlayer(), p);
-                        }
-                    }
-                    if (a.getShowTime().containsKey(e.getPlayer())) {
-                        for (Player p : a.getSpectators()) {
-                            nms.hideArmor(e.getPlayer(), p);
+                        for (Player p : e.getPlayer().getWorld().getPlayers()) {
+                            if (p.equals(e.getPlayer())) continue;
+                            if (InvisibilityPotionListener.shouldHideArmorForViewer(a, e.getPlayer(), p)) {
+                                nms.hideArmor(e.getPlayer(), p);
+                            }
                         }
                     }
                 }

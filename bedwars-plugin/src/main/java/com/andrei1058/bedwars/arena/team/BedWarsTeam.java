@@ -36,6 +36,7 @@ import com.andrei1058.bedwars.api.upgrades.EnemyBaseEnterTrap;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.arena.OreGenerator;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.listeners.InvisibilityPotionListener;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.support.paper.TeleportManager;
 import org.bukkit.*;
@@ -145,7 +146,7 @@ public class BedWarsTeam implements ITeam {
     public void firstSpawn(Player p) {
         if (p == null) return;
         TeleportManager.teleportC(p, spawn, PlayerTeleportEvent.TeleportCause.PLUGIN);
-        p.setGameMode(GameMode.SURVIVAL);
+        p.setGameMode(Arena.getConfiguredGameMode(ConfigPath.GENERAL_CONFIGURATION_PLAYER_GAMEMODE_IN_GAME, GameMode.SURVIVAL));
         p.setCanPickupItems(true);
         nms.setCollide(p, getArena(), true);
         sendDefaultInventory(p, true);
@@ -371,6 +372,11 @@ public class BedWarsTeam implements ITeam {
             sc.managePermanentsAndDowngradables(getArena());
         }
         p.setHealth(20);
+
+        // Ripristina la barra XP BedWars: il respawn vanilla può resettarla a 0.
+        com.andrei1058.bedwars.levels.internal.PlayerLevel bwLevel =
+                com.andrei1058.bedwars.levels.internal.PlayerLevel.getLevelByPlayer(p.getUniqueId());
+        if (bwLevel != null) bwLevel.updateXpBar(p);
         if (!getBaseEffects().isEmpty()) {
             for (PotionEffect ef : getBaseEffects()) {
                 p.addPotionEffect(ef, true);
@@ -429,7 +435,9 @@ public class BedWarsTeam implements ITeam {
 
                 // #274
                 for (Player on : getArena().getShowTime().keySet()) {
-                    BedWars.nms.hideArmor(on, p);
+                    if (InvisibilityPotionListener.shouldHideArmorForViewer(getArena(), on, p)) {
+                        BedWars.nms.hideArmor(on, p);
+                    }
                 }
             }
             //
@@ -639,11 +647,11 @@ public class BedWarsTeam implements ITeam {
         Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
             for (Player m : getMembers()) {
                 if (m.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                    for (Player p : getArena().getPlayers()) {
-                        BedWars.nms.hideArmor(m, p);
-                    }
-                    for (Player p : getArena().getSpectators()) {
-                        BedWars.nms.hideArmor(m, p);
+                    for (Player p : m.getWorld().getPlayers()) {
+                        if (p.equals(m)) continue;
+                        if (InvisibilityPotionListener.shouldHideArmorForViewer(getArena(), m, p)) {
+                            BedWars.nms.hideArmor(m, p);
+                        }
                     }
                 }
             }

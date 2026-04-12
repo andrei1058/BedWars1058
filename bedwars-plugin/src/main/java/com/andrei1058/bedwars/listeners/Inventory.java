@@ -23,6 +23,7 @@ package com.andrei1058.bedwars.listeners;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.GameState;
 import com.andrei1058.bedwars.api.arena.IArena;
+import com.andrei1058.bedwars.listeners.InvisibilityPotionListener;
 import com.andrei1058.bedwars.api.events.gameplay.GameStateChangeEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
@@ -129,11 +130,14 @@ public class Inventory implements Listener {
 
         //issue #225
         if (e.getSlotType() == InventoryType.SlotType.ARMOR) {
-            if (Arena.getArenaByPlayer((Player) e.getWhoClicked()) != null) {
+            IArena a = Arena.getArenaByPlayer((Player) e.getWhoClicked());
+            if (a != null) {
                 if (e.getWhoClicked().hasPotionEffect(PotionEffectType.INVISIBILITY)) {
                     e.getWhoClicked().closeInventory();
                     for (Player pl : e.getWhoClicked().getWorld().getPlayers()) {
-                        BedWars.nms.hideArmor((Player) e.getWhoClicked(), pl);
+                        if (InvisibilityPotionListener.shouldHideArmorForViewer(a, (Player) e.getWhoClicked(), pl)) {
+                            BedWars.nms.hideArmor((Player) e.getWhoClicked(), pl);
+                        }
                     }
                 }
             }

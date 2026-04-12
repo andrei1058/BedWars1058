@@ -149,7 +149,7 @@ public class ReJoin {
 
         if (player.getGameMode() != GameMode.SURVIVAL) {
             Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(Arena.getConfiguredGameMode(ConfigPath.GENERAL_CONFIGURATION_PLAYER_GAMEMODE_IN_GAME, GameMode.SURVIVAL));
                 player.setAllowFlight(true);
                 player.setFlying(true);
             }, 20L);

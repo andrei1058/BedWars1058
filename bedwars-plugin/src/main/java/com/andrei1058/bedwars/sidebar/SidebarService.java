@@ -118,6 +118,11 @@ public class SidebarService implements ISidebarService {
     }
 
     public void giveSidebar(@NotNull Player player, @Nullable IArena arena, boolean delay) {
+        if (delay) {
+            waitForStatsAndGiveSidebar(player, arena, 0);
+            return;
+        }
+
         BwSidebar sidebar = sidebars.getOrDefault(player.getUniqueId(), null);
 
         // check if we might need to remove the existing sidebar
@@ -232,6 +237,28 @@ public class SidebarService implements ISidebarService {
     }
 
     /**
+     * Wait for player stats to be loaded before giving the sidebar.
+     * Retries every 2 ticks, up to 100 ticks (5 seconds), to avoid rendering
+     * the sidebar before the async database fetch completes on first login.
+     */
+    private void waitForStatsAndGiveSidebar(@NotNull Player player, @Nullable IArena arena, int attempt) {
+        if (!player.isOnline()) return;
+        if (attempt >= 50) {
+            // Give up waiting after 5 seconds and render whatever we have
+            giveSidebar(player, arena, false);
+            return;
+        }
+        // Stats are loaded in StatsListener#onAsyncPreLoginEvent and stored in StatsManager.
+        // Once present, it's safe to render the sidebar.
+        if (BedWars.getStatsManager().get(player.getUniqueId()) != null) {
+            giveSidebar(player, arena, false);
+        } else {
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () ->
+                waitForStatsAndGiveSidebar(player, arena, attempt + 1), 2L);
+        }
+    }
+
+    /**
      * Kill a sidebar lifecycle.
      */
     public void remove(@NotNull BwSidebar sidebar) {
@@ -288,7 +315,18 @@ public class SidebarService implements ISidebarService {
             if (null != v.getArena()) {
                 v.getHandle().playerHealthRefreshAnimation();
                 for (Player player : v.getArena().getPlayers()) {
-                    v.getHandle().setPlayerHealth(player, (int) Math.ceil(player.getHealth()));
+                    int health = (int) Math.ceil(player.getHealth());
+                    v.getHandle().setPlayerHealth(player, health);
+                    
+                    // FIX [DEBUG] FASE 1 - Aggiornamento periodico vita 
+                    // Forza il pacchetto nativo di Bukkit per la 1.20 perché la libreria sidebar non invia il player.getName()
+                    org.bukkit.scoreboard.Scoreboard sb = v.getPlayer().getScoreboard();
+                    if (sb != null) {
+                        org.bukkit.scoreboard.Objective obj = sb.getObjective(org.bukkit.scoreboard.DisplaySlot.BELOW_NAME);
+                        if (obj != null) {
+                            obj.getScore(player.getName()).setScore(health);
+                        }
+                    }
                 }
             }
         });
@@ -303,6 +341,16 @@ public class SidebarService implements ISidebarService {
         this.sidebars.forEach((k, v) -> {
             if (null != v.getArena() && v.getArena().equals(arena)) {
                 v.getHandle().setPlayerHealth(player, health);
+                
+                // FIX [DEBUG] FASE 2 - Aggiornamento in tempo reale (danni) 
+                // Assicura che la vita sotto al nome venga aggiornata in real-time usando Bukkit API per 1.20+
+                org.bukkit.scoreboard.Scoreboard sb = v.getPlayer().getScoreboard();
+                if (sb != null) {
+                    org.bukkit.scoreboard.Objective obj = sb.getObjective(org.bukkit.scoreboard.DisplaySlot.BELOW_NAME);
+                    if (obj != null) {
+                        obj.getScore(player.getName()).setScore(health);
+                    }
+                }
             }
         });
     }

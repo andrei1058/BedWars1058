@@ -32,6 +32,7 @@ import com.andrei1058.bedwars.arena.Misc;
 import com.andrei1058.bedwars.configuration.Sounds;
 import com.andrei1058.bedwars.support.paper.TeleportManager;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -55,6 +56,17 @@ public class GameRestartingTask implements Runnable, RestartingTask {
         task = Bukkit.getScheduler().runTaskTimer(BedWars.plugin, this, 0, 20L);
         Sounds.playSound("game-end", arena.getPlayers());
         Sounds.playSound("game-end", arena.getSpectators());
+
+        if (arena.getConfig().getGameOverridableBoolean(ConfigPath.GENERAL_GAME_END_FORCE_SPECTATOR_BEFORE_LOBBY)) {
+            GameMode postGameSpectatorMode = parseGameMode(
+                    arena.getConfig().getGameOverridableString(ConfigPath.GENERAL_GAME_END_FORCE_SPECTATOR_GAMEMODE),
+                    GameMode.SPECTATOR
+            );
+            for (Player player : new ArrayList<>(arena.getPlayers())) {
+                arena.addSpectator(player, true, null);
+                player.setGameMode(postGameSpectatorMode);
+            }
+        }
 
         // teleport to alive players
         if (arena.getConfig().getGameOverridableBoolean(ConfigPath.GENERAL_GAME_END_TELEPORT_ELIMINATED)) {
@@ -148,6 +160,17 @@ public class GameRestartingTask implements Runnable, RestartingTask {
 
     public void cancel() {
         task.cancel();
+    }
+
+    private static GameMode parseGameMode(String value, GameMode fallback) {
+        if (value == null || value.trim().isEmpty()) {
+            return fallback;
+        }
+        try {
+            return GameMode.valueOf(value.trim().toUpperCase());
+        } catch (IllegalArgumentException ignored) {
+            return fallback;
+        }
     }
 
 }

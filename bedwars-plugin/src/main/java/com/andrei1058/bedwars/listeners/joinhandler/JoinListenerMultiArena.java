@@ -91,7 +91,18 @@ public class JoinListenerMultiArena implements Listener {
         SidebarService.getInstance().giveSidebar(p, null, true);
 
         p.setHealthScale(p.getMaxHealth());
-        p.setExp(0);
+        // BUGFIX: Se il flag xp-bar.show-level è disabilitato, resetta exp a 0 (vanilla behavior)
+        // Se abilitato, lasciarà che il task scheduler mostri il progresso BedWars
+        if (!com.andrei1058.bedwars.configuration.LevelsConfig.isXpBarShowLevelEnabled()) {
+            p.setExp(0);
+        } else {
+            // Schedula con delay per assicurare che PlayerLevel sia già stato creato da LevelListeners
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
+                com.andrei1058.bedwars.levels.internal.PlayerLevel pl = 
+                        com.andrei1058.bedwars.levels.internal.PlayerLevel.getOrNull(p.getUniqueId());
+                if (pl != null) pl.updateXpBar(p);
+            }, 1L);
+        }
         p.setHealthScale(20);
         p.setFoodLevel(20);
     }

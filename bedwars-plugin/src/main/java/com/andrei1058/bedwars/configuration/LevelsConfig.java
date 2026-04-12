@@ -70,6 +70,8 @@ public class LevelsConfig extends ConfigManager {
         levels.getYml().addDefault("progress-bar.locked-color", "&7");
         levels.getYml().addDefault("progress-bar.format", "&8 [{progress}&8]");
 
+        levels.getYml().addDefault("xp-bar.show-level", true);
+
         levels.save();
     }
 
@@ -115,5 +117,14 @@ public class LevelsConfig extends ConfigManager {
             }
         }
         return levels.getYml().getInt("levels.others.rankup-cost");
+    }
+
+    /**
+     * Get whether to show BedWars level/progress on XP bar.
+     * true = display BedWars level and progress on vanilla XP bar (custom behavior)
+     * false = keep vanilla XP bar (standard Minecraft behavior)
+     */
+    public static boolean isXpBarShowLevelEnabled() {
+        return levels.getYml().getBoolean("xp-bar.show-level", true);
     }
 }

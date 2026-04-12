@@ -312,7 +312,14 @@ public class BedWars extends JavaPlugin {
         // Register setup-holograms fix
         registerEvents(new ChunkLoad());
 
+        // MOD 08/04/2026: Aggiunto InvisibilityFootstepsFix listener
+        InvisibilityPacketListener.register(this);
         registerEvents(new InvisibilityPotionListener());
+
+        // MOD 08/04/2026: Quick Deposit (Shift+Click destro su cassa team -> deposita valute)
+        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_QUICK_DEPOSIT)) {
+            registerEvents(new QuickDepositListener());
+        }
 
         /* Load join signs. */
         loadArenasAndSigns();

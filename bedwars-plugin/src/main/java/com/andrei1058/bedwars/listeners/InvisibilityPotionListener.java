@@ -22,6 +22,7 @@ package com.andrei1058.bedwars.listeners;
 
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
+import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.events.player.PlayerInvisibilityPotionEvent;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.sidebar.SidebarService;
@@ -33,6 +34,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import static com.andrei1058.bedwars.BedWars.nms;
@@ -47,6 +49,7 @@ public class InvisibilityPotionListener implements Listener {
     @EventHandler
     public void onPotion(@NotNull PlayerInvisibilityPotionEvent e) {
         if (e.getTeam() == null) return;
+        syncVisibility(e.getArena(), e.getPlayer(), e.getType() == PlayerInvisibilityPotionEvent.Type.ADDED);
         SidebarService.getInstance().handleInvisibility(
                 e.getTeam(), e.getPlayer(), e.getType() == PlayerInvisibilityPotionEvent.Type.ADDED
         );
@@ -64,41 +67,86 @@ public class InvisibilityPotionListener implements Listener {
         //
 
         if (nms.isInvisibilityPotion(e.getItem())) {
+            // Non affidarsi solo a +5 tick: su alcuni server l'effetto arriva piu' tardi.
+            applyInvisibilityWhenPresent(a, e.getPlayer(), 0);
+
+            // Secondo hideArmor a tick+20: dopo che vanilla invia ENTITY_EQUIPMENT
+            // per la rimozione della bottiglia (minusAmount a tick+5), rinasce il packet
+            // con l'armatura reale. Lo sovrascriviamo 1 secondo dopo con un nuovo hide.
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                for (PotionEffect pe : e.getPlayer().getActivePotionEffects()) {
-                    if (pe.getType().toString().contains("INVISIBILITY")) {
-                        // if is already invisible
-                        if (a.getShowTime().containsKey(e.getPlayer())) {
-                            ITeam t = a.getTeam(e.getPlayer());
-                            // increase invisibility timer
-                            // keep trace of invisible players to send hide armor packet when required
-                            // because potions do not hide armors
-                            a.getShowTime().replace(e.getPlayer(), pe.getDuration() / 20);
-                            // call custom event
-                            Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, e.getPlayer(), t.getArena()));
-                        } else {
-                            // if not already invisible
-                            ITeam t = a.getTeam(e.getPlayer());
-                            // keep trace of invisible players to send hide armor packet when required
-                            // because potions do not hide armors
-                            a.getShowTime().put(e.getPlayer(), pe.getDuration() / 20);
-                            //
-                            for (Player p1 : e.getPlayer().getWorld().getPlayers()) {
-                                if (a.isSpectator(p1)) {
-                                    // hide player armor to spectators
-                                    nms.hideArmor(e.getPlayer(), p1);
-                                } else if (t != a.getTeam(p1)) {
-                                    // hide player armor to other teams
-                                    nms.hideArmor(e.getPlayer(), p1);
-                                }
-                            }
-                            // call custom event
-                            Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, e.getPlayer(), t.getArena()));
-                        }
-                        break;
-                    }
-                }
-            }, 5L);
+                if (!e.getPlayer().isOnline()) return;
+                if (!e.getPlayer().hasPotionEffect(PotionEffectType.INVISIBILITY)) return;
+                syncVisibility(a, e.getPlayer(), true);
+            }, 20L);
         }
     }
+
+    private void applyInvisibilityWhenPresent(IArena arena, Player player, int attempt) {
+        if (arena == null || player == null || !player.isOnline()) return;
+
+        PotionEffect invis = null;
+        for (PotionEffect pe : player.getActivePotionEffects()) {
+            if (pe.getType() == PotionEffectType.INVISIBILITY) {
+                invis = pe;
+                break;
+            }
+        }
+
+        // Riprova per ~2 secondi totali: copre lag/timing diversi nel consumo pozione.
+        if (invis == null) {
+            if (attempt >= 20) return;
+            Bukkit.getScheduler().runTaskLater(plugin, () -> applyInvisibilityWhenPresent(arena, player, attempt + 1), 2L);
+            return;
+        }
+
+        ITeam t = arena.getTeam(player);
+        int durationSeconds = Math.max(1, invis.getDuration() / 20);
+        if (arena.getShowTime().containsKey(player)) {
+            arena.getShowTime().replace(player, durationSeconds);
+        } else {
+            arena.getShowTime().put(player, durationSeconds);
+        }
+
+        syncVisibility(arena, player, true);
+        if (t != null) {
+            Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, player, t.getArena()));
+        }
+    }
+
+    public static void syncVisibility(IArena arena, Player victim, boolean hidden) {
+        if (arena == null || victim == null) return;
+        for (Player viewer : victim.getWorld().getPlayers()) {
+            if (viewer.equals(victim)) continue;
+            if (hidden) {
+                if (shouldHidePlayerForViewer(arena, victim, viewer)) {
+                    nms.spigotHidePlayer(victim, viewer);
+                    nms.hideArmor(victim, viewer);
+                } else {
+                    nms.spigotShowPlayer(victim, viewer);
+                    nms.showArmor(victim, viewer);
+                }
+            } else {
+                nms.spigotShowPlayer(victim, viewer);
+                nms.showArmor(victim, viewer);
+            }
+        }
+    }
+
+    public static boolean shouldHidePlayerForViewer(IArena arena, Player victim, Player viewer) {
+        if (arena == null || victim == null || viewer == null) return false;
+        if (viewer.equals(victim)) return false;
+        if (!plugin.getConfig().getBoolean(ConfigPath.INVISIBILITY_TEAM_CAN_SEE_ARMOR, false)) {
+            return true;
+        }
+        ITeam victimTeam = arena.getTeam(victim);
+        if (victimTeam == null) return true;
+        if (arena.isSpectator(viewer)) return true;
+        ITeam viewerTeam = arena.getTeam(viewer);
+        return viewerTeam == null || !victimTeam.equals(viewerTeam);
+    }
+
+    public static boolean shouldHideArmorForViewer(IArena arena, Player victim, Player viewer) {
+        return shouldHidePlayerForViewer(arena, victim, viewer);
+    }
+
 }

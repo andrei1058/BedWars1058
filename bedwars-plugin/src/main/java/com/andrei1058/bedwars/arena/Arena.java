@@ -45,6 +45,7 @@ import com.andrei1058.bedwars.api.events.server.ArenaEnableEvent;
 import com.andrei1058.bedwars.api.events.server.ArenaRestartEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
+import com.andrei1058.bedwars.listeners.InvisibilityPotionListener;
 import com.andrei1058.bedwars.api.region.Region;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.sidebar.ISidebar;
@@ -545,6 +546,7 @@ public class Arena implements IArena {
                 new PlayerGoods(p, true);
                 playerLocation.put(p, p.getLocation());
             }
+            p.setGameMode(getConfiguredGameMode(ConfigPath.GENERAL_CONFIGURATION_PLAYER_GAMEMODE_IN_GAME, GameMode.SURVIVAL));
             TeleportManager.teleportC(p, getWaitingLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 
             if (!isStatusChange) {
@@ -658,7 +660,7 @@ public class Arena implements IArena {
                 }
             }
 
-            p.setGameMode(GameMode.ADVENTURE);
+            p.setGameMode(getConfiguredGameMode(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_GAMEMODE, GameMode.ADVENTURE));
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 if (leaving.contains(p)) return;
@@ -671,14 +673,30 @@ public class Arena implements IArena {
 
             Bukkit.getScheduler().runTask(plugin, () -> {
                 if (leaving.contains(p)) return;
+                boolean spectatorsSeePlayers = config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_TAB_SPECTATORS_SEE_PLAYERS);
+                boolean spectatorsSeeSpectators = config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_TAB_SPECTATORS_SEE_SPECTATORS);
+                boolean playersSeeSpectators = config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_TAB_PLAYERS_SEE_SPECTATORS);
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on == p) continue;
                     if (getSpectators().contains(on)) {
-                        BedWars.nms.spigotShowPlayer(p, on);
-                        BedWars.nms.spigotShowPlayer(on, p);
+                        if (spectatorsSeeSpectators) {
+                            BedWars.nms.spigotShowPlayer(p, on);
+                            BedWars.nms.spigotShowPlayer(on, p);
+                        } else {
+                            BedWars.nms.spigotHidePlayer(p, on);
+                            BedWars.nms.spigotHidePlayer(on, p);
+                        }
                     } else if (getPlayers().contains(on)) {
-                        BedWars.nms.spigotHidePlayer(p, on);
-                        BedWars.nms.spigotShowPlayer(on, p);
+                        if (spectatorsSeePlayers) {
+                            BedWars.nms.spigotShowPlayer(p, on);
+                        } else {
+                            BedWars.nms.spigotHidePlayer(p, on);
+                        }
+                        if (playersSeeSpectators) {
+                            BedWars.nms.spigotShowPlayer(on, p);
+                        } else {
+                            BedWars.nms.spigotHidePlayer(on, p);
+                        }
                     } else {
                         BedWars.nms.spigotHidePlayer(p, on);
                         BedWars.nms.spigotHidePlayer(on, p);
@@ -701,8 +719,12 @@ public class Arena implements IArena {
 
                 /* Spectator items */
                 sendSpectatorCommandItems(p);
-                // make invisible because it is annoying whene there are many spectators around the map
-                p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
+                // apply transparency based on config
+                if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_TRANSPARENCY)) {
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
+                } else {
+                    p.removePotionEffect(PotionEffectType.INVISIBILITY);
+                }
 
                 p.getInventory().setArmorContents(null);
             });
@@ -1313,7 +1335,7 @@ public class Arena implements IArena {
      */
     @Override
     public List<Player> getPlayers() {
-        return players;
+        return players == null ? Collections.emptyList() : players;
     }
 
     /**
@@ -1573,7 +1595,7 @@ public class Arena implements IArena {
      */
     @Override
     public boolean isPlayer(Player p) {
-        return players.contains(p);
+        return players != null && players.contains(p);
     }
 
     /**
@@ -1581,7 +1603,7 @@ public class Arena implements IArena {
      */
     @Override
     public boolean isSpectator(Player p) {
-        return spectators.contains(p);
+        return spectators != null && spectators.contains(p);
     }
 
     @Override
@@ -1657,7 +1679,7 @@ public class Arena implements IArena {
      */
     @Override
     public List<Player> getSpectators() {
-        return spectators;
+        return spectators == null ? Collections.emptyList() : spectators;
     }
 
     /**
@@ -1910,6 +1932,12 @@ public class Arena implements IArena {
                     List<Player> receivers = new ArrayList<>(getPlayers().size() + getSpectators().size());
                     receivers.addAll(getPlayers());
                     receivers.addAll(getSpectators());
+                    
+                    if (getConfig().getGameOverridableBoolean(ConfigPath.GENERAL_GAME_END_CLEAR_CHAT_BEFORE_ANNOUNCEMENT)) {
+                        clearChat(receivers, getConfig().getGameOverridableValue(ConfigPath.GENERAL_GAME_END_CLEAR_CHAT_LINES) instanceof Number
+                                ? ((Number) getConfig().getGameOverridableValue(ConfigPath.GENERAL_GAME_END_CLEAR_CHAT_LINES)).intValue()
+                                : 120);
+                    }
 
                     if (null != topInChat) {
                         StatisticsOrdered.StringParser statParser = topInChat.newParser();
@@ -2519,7 +2547,9 @@ public class Arena implements IArena {
                     nms.setCollide(player, this, false);
                     // #274
                     for (Player invisible : getShowTime().keySet()) {
-                        BedWars.nms.hideArmor(invisible, player);
+                        if (InvisibilityPotionListener.shouldHideArmorForViewer(this, invisible, player)) {
+                            BedWars.nms.hideArmor(invisible, player);
+                        }
                     }
 
                     updateSpectatorCollideRule(player, false);
@@ -2660,6 +2690,7 @@ public class Arena implements IArena {
      * Contains fall-backs.
      */
     private void sendToMainLobby(Player player) {
+        player.setGameMode(getConfiguredGameMode(ConfigPath.GENERAL_CONFIGURATION_PLAYER_GAMEMODE_LOBBY, GameMode.SURVIVAL));
         if (BedWars.getServerType() == ServerType.SHARED) {
             Location loc = playerLocation.get(player);
             if (loc == null) {
@@ -2674,6 +2705,27 @@ public class Arena implements IArena {
                 plugin.getLogger().log(Level.SEVERE, player.getName() + " was teleported to the main world because lobby location is not set!");
             } else {
                 TeleportManager.teleportC(player, config.getConfigLoc("lobbyLoc"), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            }
+        }
+    }
+
+    public static GameMode getConfiguredGameMode(String path, GameMode fallback) {
+        String raw = config.getString(path);
+        if (raw == null || raw.trim().isEmpty()) {
+            return fallback;
+        }
+        try {
+            return GameMode.valueOf(raw.trim().toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException ignored) {
+            return fallback;
+        }
+    }
+
+    private void clearChat(@NotNull Collection<Player> players, int lines) {
+        int safeLines = Math.max(0, lines);
+        for (Player player : players) {
+            for (int i = 0; i < safeLines; i++) {
+                player.sendMessage("");
             }
         }
     }

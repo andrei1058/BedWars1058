@@ -26,53 +26,73 @@ import org.bukkit.entity.Player;
 
 public class InternalLevel implements Level {
 
+    private PlayerLevel getLevelOrNull(Player p) {
+        return PlayerLevel.getOrNull(p.getUniqueId());
+    }
+
     @Override
     public String getLevel(Player p) {
-        return PlayerLevel.getLevelByPlayer(p.getUniqueId()).getLevelName();
+        PlayerLevel level = getLevelOrNull(p);
+        return null == level ? "1" : level.getLevelName();
     }
 
     @Override
     public int getPlayerLevel(Player p) {
-        return PlayerLevel.getLevelByPlayer(p.getUniqueId()).getPlayerLevel();
+        PlayerLevel level = getLevelOrNull(p);
+        return null == level ? 1 : level.getPlayerLevel();
     }
 
     @Override
     public String getRequiredXpFormatted(Player p) {
-        return PlayerLevel.getLevelByPlayer(p.getUniqueId()).getFormattedRequiredXp();
+        PlayerLevel level = getLevelOrNull(p);
+        return null == level ? "0" : level.getFormattedRequiredXp();
     }
 
     @Override
     public String getProgressBar(Player p) {
-        return PlayerLevel.getLevelByPlayer(p.getUniqueId()).getProgress();
+        PlayerLevel level = getLevelOrNull(p);
+        return null == level ? "" : level.getProgress();
     }
 
     @Override
     public int getCurrentXp(Player p) {
-        return PlayerLevel.getLevelByPlayer(p.getUniqueId()).getCurrentXp();
+        PlayerLevel level = getLevelOrNull(p);
+        return null == level ? 0 : level.getCurrentXp();
     }
 
     @Override
     public String getCurrentXpFormatted(Player p) {
-        return PlayerLevel.getLevelByPlayer(p.getUniqueId()).getFormattedCurrentXp();
+        PlayerLevel level = getLevelOrNull(p);
+        return null == level ? "0" : level.getFormattedCurrentXp();
     }
 
     @Override
     public int getRequiredXp(Player p) {
-        return PlayerLevel.getLevelByPlayer(p.getUniqueId()).getNextLevelCost();
+        PlayerLevel level = getLevelOrNull(p);
+        return null == level ? 0 : level.getNextLevelCost();
     }
 
     @Override
     public void addXp(Player player, int xp, PlayerXpGainEvent.XpSource source) {
-        PlayerLevel.getLevelByPlayer(player.getUniqueId()).addXp(xp, source);
+        PlayerLevel level = getLevelOrNull(player);
+        if (null != level) {
+            level.addXp(xp, source);
+        }
     }
 
     @Override
     public void setXp(Player player, int currentXp) {
-        PlayerLevel.getLevelByPlayer(player.getUniqueId()).setXp(currentXp);
+        PlayerLevel level = getLevelOrNull(player);
+        if (null != level) {
+            level.setXp(currentXp);
+        }
     }
 
     @Override
     public void setLevel(Player player, int level) {
-        PlayerLevel.getLevelByPlayer(player.getUniqueId()).setLevel(level);
+        PlayerLevel playerLevel = getLevelOrNull(player);
+        if (null != playerLevel) {
+            playerLevel.setLevel(level);
+        }
     }
 }
