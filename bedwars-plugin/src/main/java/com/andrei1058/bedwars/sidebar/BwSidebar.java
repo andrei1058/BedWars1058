@@ -235,9 +235,10 @@ public class BwSidebar implements ISidebar {
                     .replace("{version}", plugin.getDescription().getVersion())
                     .replace("{server}", config.getString(ConfigPath.GENERAL_CONFIGURATION_BUNGEE_OPTION_SERVER_ID))
             ;
-
-            // Resolve level-related placeholders directly to avoid first-join timing issues.
-            line = resolveLevelPlaceholders(line);
+            // Level-related placeholders ({level}, {currentXp}, {requiredXp}, {progress}, etc.)
+            // are handled dynamically by PlaceholderProvider entries in getPlaceholders()
+            // and refreshed periodically. Do NOT pre-resolve them here or the PlaceholderProvider
+            // cannot find the placeholder keys and values will be stale.
 
             // Add the line to the sidebar
             String finalTemp = line;
