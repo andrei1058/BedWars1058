@@ -81,6 +81,8 @@ import com.andrei1058.bedwars.support.vipfeatures.VipFeatures;
 import com.andrei1058.bedwars.support.vipfeatures.VipListeners;
 import com.andrei1058.vipfeatures.api.IVipFeatures;
 import com.andrei1058.vipfeatures.api.MiniGameAlreadyRegistered;
+import com.andrei1058.bedwars.platform.common.ServerPlatform;
+import com.andrei1058.bedwars.platform.master.ServerPlatformManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -100,7 +102,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 @SuppressWarnings({"WeakerAccess", "CallToPrintStackTrace"})
@@ -122,7 +123,6 @@ public class BedWars extends JavaPlugin {
     private static Chat chat = new NoChat();
     protected static Level level;
     private static Economy economy;
-    private static final String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
     private static String lobbyWorld = "";
     private static boolean shuttingDown = false;
 
@@ -131,59 +131,44 @@ public class BedWars extends JavaPlugin {
     //remote database
     private static Database remoteDatabase;
 
-    private boolean serverSoftwareSupport = true;
-
     private static com.andrei1058.bedwars.api.BedWars api;
+
+    private static ServerPlatform serverPlatform;
 
     @Override
     public void onLoad() {
-
-        //Spigot support
-        try {
-            Class.forName("org.spigotmc.SpigotConfig");
-        } catch (Exception ignored) {
-            this.getLogger().severe("I can't run on your server software. Please check:");
-            this.getLogger().severe("https://gitlab.com/andrei1058/BedWars1058/wikis/compatibility");
-            serverSoftwareSupport = false;
-            return;
-        }
-
-        try {
-            Class.forName("com.destroystokyo.paper.PaperConfig");
-            isPaper = true;
-        } catch (ClassNotFoundException e) {
-            isPaper = false;
-        }
-
         plugin = this;
 
-        /* Load version support */
-        //noinspection rawtypes
-        Class supp;
+        // Self added or plugin-added version support
+        var providerRegistration = Bukkit.getServicesManager().getRegistration(ServerPlatform.class);
 
-        try {
-            supp = Class.forName("com.andrei1058.bedwars.support.version." + version + "." + version);
-        } catch (ClassNotFoundException e) {
-            serverSoftwareSupport = false;
-            this.getLogger().severe("I can't run on your version: " + version);
+        // Built-in platform and version support
+        if (providerRegistration == null || providerRegistration.getProvider() == null) {
+            Optional<ServerPlatform> loader = ServerPlatformManager.loadPlatformSupport();
+
+            if (loader.isEmpty()) {
+                return;
+            }
+            serverPlatform = loader.get();
+        } else {
+            serverPlatform = providerRegistration.getProvider();
+            plugin.getLogger().warning("Using external server platform loader: " + serverPlatform.getClass().getName());
+        }
+
+        serverPlatform.onLoad(this);
+
+        // Legacy NMS (deprecated, removal wip)
+        nms = serverPlatform.getOldWrapper(this);
+
+        if (null == nms) {
+            plugin.getLogger().severe("Server platform loader generated null NMS implementation...");
             return;
         }
 
         api = new API();
         Bukkit.getServicesManager().register(com.andrei1058.bedwars.api.BedWars.class, api, this, ServicePriority.Highest);
 
-        try {
-            //noinspection unchecked
-            nms = (VersionSupport) supp.getConstructor(Class.forName("org.bukkit.plugin.Plugin"), String.class).newInstance(this, version);
-        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException |
-                 ClassNotFoundException e) {
-            e.printStackTrace();
-            serverSoftwareSupport = false;
-            this.getLogger().severe("Could not load support for server version: " + version);
-            return;
-        }
-
-        this.getLogger().info("Loading support for paper/spigot: " + version);
+        this.getLogger().info("Loading support for " + serverPlatform.getName());
 
         // Setup languages
         new English();
@@ -211,10 +196,11 @@ public class BedWars extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (!serverSoftwareSupport) {
+        if (null == serverPlatform || null == nms) {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
+        serverPlatform.onEnable(this);
 
         nms.registerVersionListeners();
 
@@ -254,10 +240,13 @@ public class BedWars extends JavaPlugin {
                             Bukkit.getScheduler().runTaskLater(this, () -> {
                                 Bukkit.createWorld(new WorldCreator(config.getLobbyWorldName()));
 
-                                if (Bukkit.getWorld(config.getLobbyWorldName()) != null) {
-                                    Bukkit.getScheduler().runTaskLater(plugin, () -> Objects.requireNonNull(Bukkit.getWorld(config.getLobbyWorldName()))
-                                            .getEntities().stream().filter(e -> e instanceof Monster).forEach(Entity::remove), 20L);
-                                }
+                                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                                    var lobbyWorld = Bukkit.getWorld(config.getLobbyWorldName());
+                                    if (null != lobbyWorld) {
+                                        lobbyWorld.getEntities().stream()
+                                                .filter(e -> e instanceof Monster).forEach(Entity::remove);
+                                    }
+                                }, 20L);
                             }, 100L);
                         }
                     }
@@ -315,7 +304,11 @@ public class BedWars extends JavaPlugin {
         registerEvents(new InvisibilityPotionListener());
 
         /* Load join signs. */
-        loadArenasAndSigns();
+        try {
+            loadArenasAndSigns();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
 
         statsManager = new StatsManager();
 
@@ -516,9 +509,6 @@ public class BedWars extends JavaPlugin {
 
         // TNT Spoil Feature
         SpoilPlayerTNTFeature.init();
-
-        // Warn user if current server version support is deprecated
-        this.performDeprecationCheck();
     }
 
     /**
@@ -586,7 +576,11 @@ public class BedWars extends JavaPlugin {
 
     public void onDisable() {
         shuttingDown = true;
-        if (!serverSoftwareSupport) return;
+        if (null == serverPlatform) {
+            return;
+        }
+        serverPlatform.onDisable(this);
+
         if (getServerType() == ServerType.BUNGEE) {
             ArenaSocket.disable();
         }
@@ -657,11 +651,10 @@ public class BedWars extends JavaPlugin {
     }
 
     public static String getForCurrentVersion(String v18, String v12, String v13) {
-        switch (getServerVersion()) {
-            case "v1_8_R3":
-                return v18;
-            case "v1_12_R1":
-                return v12;
+        if (getAPI().getVersionSupport().getVersion() == 0) {
+            return v18;
+        } else if (getAPI().getVersionSupport().getVersion() == 5) {
+            return v12;
         }
         return v13;
     }
@@ -719,16 +712,6 @@ public class BedWars extends JavaPlugin {
         BedWars.lobbyWorld = lobbyWorld;
     }
 
-    /**
-     * Get the server version
-     * Ex: v1_8_R3
-     *
-     * @since v0.6.5beta
-     */
-    public static String getServerVersion() {
-        return version;
-    }
-
     public static String getLobbyWorld() {
         return lobbyWorld;
     }
@@ -754,15 +737,6 @@ public class BedWars extends JavaPlugin {
 
     public static void setParty(Party party) {
         BedWars.party = party;
-    }
-
-    public void performDeprecationCheck() {
-        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-            if (Arrays.stream(nms.getClass().getAnnotations()).anyMatch(annotation -> annotation instanceof Deprecated)) {
-                this.getLogger().warning("Support for "+getServerVersion()+" is scheduled for removal. " +
-                        "Please consider upgrading your server software to a newer Minecraft version.");
-            }
-        });
     }
 
     @Override

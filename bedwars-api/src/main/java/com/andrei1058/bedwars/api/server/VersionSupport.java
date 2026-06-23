@@ -37,23 +37,30 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Deprecated
 public abstract class VersionSupport {
 
     private static String name2;
-    public static String PLUGIN_TAG_GENERIC_KEY = "BedWars1058";
-    public static String PLUGIN_TAG_TIER_KEY = "tierIdentifier";
+    public static String PLUGIN_TAG_GENERIC_KEY = "bed_wars_1058:bed_wars_1058";
+    public static String PLUGIN_TAG_TIER_KEY = "bed_wars_1058:tier_identifier";
 
     private Effect eggBridge;
 
     private static final ConcurrentHashMap<UUID, Despawnable> despawnables = new ConcurrentHashMap<>();
     private final Plugin plugin;
 
+    /**
+     * @param plugin bed-wars instance.
+     * @param versionName version name.
+     */
     public VersionSupport(Plugin plugin, String versionName) {
         name2 = versionName;
         this.plugin = plugin;
@@ -466,4 +473,8 @@ public abstract class VersionSupport {
     public abstract void placeLadder(Block b, int x, int y, int z, IArena a, int ladderdata);
 
     public abstract void playVillagerEffect(Player player, Location location);
+
+    public boolean hasInvisibility(@NotNull PotionEffect pe) {
+        return pe.getType().toString().contains("INVISIBILITY");
+    }
 }
