@@ -48,7 +48,7 @@ public class PlayerDropListener implements Listener {
     @EventHandler
     //Prevent from moving items in chests
     public void onClose(InventoryCloseEvent e) {
-        if (!(e instanceof Player)) return;
+        if (!(e.getPlayer() instanceof Player)) return;
         IArena a = Arena.getArenaByPlayer((Player) e.getPlayer());
         if (a == null) return;
         String identifier;
@@ -56,6 +56,7 @@ public class PlayerDropListener implements Listener {
             if (i == null) continue;
             if (i.getType() == Material.AIR) continue;
             identifier = BedWars.nms.getShopUpgradeIdentifier(i);
+            if (identifier == null) return;
             if (identifier.isEmpty() || identifier.equals(" ")) return;
         }
     }

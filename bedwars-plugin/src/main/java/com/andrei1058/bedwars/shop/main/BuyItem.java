@@ -178,6 +178,9 @@ public class BuyItem implements IBuyItem {
 
         ItemStack i = itemStack.clone();
         BedWars.debug("Giving BuyItem: " + getUpgradeIdentifier() + " to: " + player.getName());
+        if (i.getType() == Material.AIR) {
+            return;
+        }
 
         if (autoEquip && nms.isArmor(itemStack)) {
             Material m = i.getType();

@@ -333,11 +333,17 @@ public class DamageDeathMove implements Listener {
             e.setDeathMessage(null);
         }
         if (a != null) {
+            e.setDroppedExp(0);
+            e.setNewExp(0);
+            e.setNewLevel(0);
+            e.setNewTotalExp(0);
             if (a.isSpectator(victim)) {
+                e.getDrops().clear();
                 victim.spigot().respawn();
                 return;
             }
             if (a.getStatus() != GameState.playing) {
+                e.getDrops().clear();
                 victim.spigot().respawn();
                 return;
             }
@@ -345,10 +351,12 @@ public class DamageDeathMove implements Listener {
 
             ITeam victimsTeam = a.getTeam(victim);
             if (a.getStatus() != GameState.playing) {
+                e.getDrops().clear();
                 victim.spigot().respawn();
                 return;
             }
             if (victimsTeam == null) {
+                e.getDrops().clear();
                 victim.spigot().respawn();
                 return;
             }

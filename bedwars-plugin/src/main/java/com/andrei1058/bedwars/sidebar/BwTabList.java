@@ -455,20 +455,26 @@ public class BwTabList {
     }
 
     @SuppressWarnings("unused")
-    private @NotNull String getPlayerTabIdentifierAliveInTeam(ITeam team, Player player) {
+    private @NotNull String getPlayerTabIdentifierAliveInTeam(@Nullable ITeam team, Player player) {
         return getPlayerTabIdentifierAliveInTeam(team, getCreatePlayerTabIdentifier(player));
     }
 
-    private @NotNull String getPlayerTabIdentifierAliveInTeam(ITeam team, String playerId) {
+    private @NotNull String getPlayerTabIdentifierAliveInTeam(@Nullable ITeam team, String playerId) {
+        if (team == null) {
+            return getPlayerTabIdentifierSpectator(null, playerId);
+        }
         return getCreateTeamTabOrderPrefix(team) + playerId;
     }
 
     @SuppressWarnings("unused")
-    private @NotNull String getPlayerTabIdentifierEliminatedInTeam(ITeam team, Player player) {
+    private @NotNull String getPlayerTabIdentifierEliminatedInTeam(@Nullable ITeam team, Player player) {
         return getPlayerTabIdentifierEliminatedInTeam(team, getCreatePlayerTabIdentifier(player));
     }
 
-    private @NotNull String getPlayerTabIdentifierEliminatedInTeam(ITeam team, String playerId) {
+    private @NotNull String getPlayerTabIdentifierEliminatedInTeam(@Nullable ITeam team, String playerId) {
+        if (team == null) {
+            return SPECTATOR_PREFIX + playerId;
+        }
         return ELIMINATED_FROM_TEAM_PREFIX + getCreateTeamTabOrderPrefix(team) + playerId;
     }
 
@@ -488,7 +494,7 @@ public class BwTabList {
         HashMap<String, String> replacements = new HashMap<>();
         String displayName = null == team ? "" : team.getDisplayName(Language.getPlayerLanguage(sidebar.getPlayer()));
         replacements.put("{teamName}", displayName);
-        replacements.put("{teamLetter}", null == team ? "" : team.getColor().chat() + (displayName.substring(0, 1)));
+        replacements.put("{teamLetter}", null == team || displayName.isEmpty() ? "" : team.getColor().chat() + (displayName.substring(0, 1)));
         replacements.put("{teamColor}", null == team ? "" : team.getColor().chat().toString());
 
         return replacements;

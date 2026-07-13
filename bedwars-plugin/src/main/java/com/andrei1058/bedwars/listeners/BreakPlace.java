@@ -213,9 +213,16 @@ public class BreakPlace implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        if (event.getClickedBlock() != null && isFire(event.getClickedBlock().getType())) {
+            IArena arena = Arena.getArenaByPlayer(player);
+            if (arena != null && !allowFireBreak) {
+                event.setCancelled(true);
+                return;
+            }
+        }
         if (BedWars.getServerType() == ServerType.MULTIARENA
                 && player.getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
-            if (event.getClickedBlock() != null && event.getClickedBlock().getRelative(BlockFace.UP).getType() == Material.FIRE) {
+            if (event.getClickedBlock() != null && isFire(event.getClickedBlock().getRelative(BlockFace.UP).getType())) {
                 if (!isBuildSession(player)) {
                     event.setCancelled(true);
                     //return;
@@ -286,6 +293,7 @@ public class BreakPlace implements Listener {
                     }
                     return;
                 case "FIRE":
+                case "SOUL_FIRE":
                     if (allowFireBreak) {
                         e.setCancelled(false);
                         return;
@@ -368,6 +376,7 @@ public class BreakPlace implements Listener {
                 if (!a.isBlockPlaced(e.getBlock())) {
                     p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
                     e.setCancelled(true);
+                    return;
                 }
             }
         }
@@ -621,5 +630,10 @@ public class BreakPlace implements Listener {
 
     public static void removeBuildSession(Player p) {
         buildSession.remove(p);
+    }
+
+    private static boolean isFire(Material material) {
+        String name = material.toString();
+        return name.equals("FIRE") || name.equals("SOUL_FIRE");
     }
 }
