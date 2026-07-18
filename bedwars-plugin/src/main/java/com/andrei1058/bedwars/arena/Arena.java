@@ -1395,7 +1395,7 @@ public class Arena implements IArena {
         }
 
         Optional<GameStatistic<?>> st = getStatsHolder().get(player).flatMap(stats ->
-                stats.getStatistic(finalKills ? DefaultStatistics.KILLS_FINAL : DefaultStatistics.BEDS_DESTROYED)
+                stats.getStatistic(finalKills ? DefaultStatistics.KILLS_FINAL : DefaultStatistics.KILLS)
         );
 
         if (st.isEmpty()) {
