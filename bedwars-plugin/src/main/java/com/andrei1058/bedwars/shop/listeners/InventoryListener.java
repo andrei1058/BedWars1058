@@ -170,7 +170,7 @@ public class InventoryListener implements Listener {
         if (e.getCurrentItem() != null) {
             if (e.getCurrentItem().getType() != Material.AIR) {
                 if (e.getClickedInventory() == null) {
-                    if (shouldCancelMovement(e.getCursor(), sc)) {
+                    if (shouldCancelMovement(e.getCurrentItem(), sc)) {
                         e.getWhoClicked().closeInventory();
                         e.setCancelled(true);
                     }
