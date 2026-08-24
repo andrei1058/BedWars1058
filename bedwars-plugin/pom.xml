@@ -249,85 +249,85 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-base</artifactId>
-            <version>24.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_8_R3</artifactId>
-            <version>24.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_12_R1</artifactId>
-            <version>24.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_16_R3</artifactId>
-            <version>24.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_17_R1</artifactId>
-            <version>24.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_18_R2</artifactId>
-            <version>24.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_19_R2</artifactId>
-            <version>24.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_19_R3</artifactId>
-            <version>24.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_20_R1</artifactId>
-            <version>24.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_20_R2</artifactId>
-            <version>24.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_20_R3</artifactId>
-            <version>24.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_20_R4</artifactId>
-            <version>24.2</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_20_R4</artifactId>
-            <version>23.12</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-v1_20_R4</artifactId>
-            <version>23.12</version>
+            <version>25.2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <!--        End of Sidebar LIB-->
@@ -344,6 +344,21 @@
             <version>${project.version}</version>
         </dependency>
         <!-- End of Slime Paper -->
+
+        <!-- Testing tools to run your test case -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.10.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.5.0</version>
+            <scope>test</scope>
+        </dependency>
+
 
         <dependency>
             <groupId>net.md-5</groupId>

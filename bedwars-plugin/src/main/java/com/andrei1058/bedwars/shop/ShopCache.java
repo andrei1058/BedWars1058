@@ -130,7 +130,9 @@ public class ShopCache {
             for (ItemStack i : p.getInventory().getContents()) {
                 if (i == null) continue;
                 if (i.getType() == Material.AIR) continue;
-                if (BedWars.nms.getShopUpgradeIdentifier(i).equals(cc.getIdentifier())) {
+                // Null check the upgrade identifier before using .equals()
+                String upgradeIdentifier = BedWars.nms.getShopUpgradeIdentifier(i);
+                if (upgradeIdentifier != null && upgradeIdentifier.equals(cc.getIdentifier())) {
                     p.getInventory().remove(i);
                 }
             }

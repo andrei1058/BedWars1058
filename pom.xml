@@ -120,7 +120,7 @@
     <distributionManagement>
         <repository>
             <id>andrei1058-repo</id>
-            <url>https://repo.andrei1058.com/releases</url>
+            <url>https://repo.andrei1058.dev/releases/</url>
         </repository>
         <snapshotRepository>
             <id>andrei1058-repo</id>

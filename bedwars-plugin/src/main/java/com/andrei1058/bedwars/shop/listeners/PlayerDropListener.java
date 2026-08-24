@@ -56,7 +56,8 @@ public class PlayerDropListener implements Listener {
             if (i == null) continue;
             if (i.getType() == Material.AIR) continue;
             identifier = BedWars.nms.getShopUpgradeIdentifier(i);
-            if (identifier.isEmpty() || identifier.equals(" ")) return;
+            // Added null check to prevent crashes on non-upgrade items
+            if (identifier != null && (identifier.isEmpty() || identifier.equals(" "))) return;
         }
     }
 }

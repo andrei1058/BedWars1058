@@ -94,7 +94,11 @@ public class PlayerDrops {
                     if (i == null) continue;
                     if (i.getType() == Material.AIR) continue;
                     if (nms.isArmor(i) || nms.isBow(i) || nms.isSword(i) || nms.isTool(i)) continue;
-                    if (!nms.getShopUpgradeIdentifier(i).trim().isEmpty()) continue;
+                    
+                    // Null check the upgrade identifier before trimming
+                    String upgradeIdentifier = nms.getShopUpgradeIdentifier(i);
+                    if (upgradeIdentifier != null && !upgradeIdentifier.trim().isEmpty()) continue;
+
                     if (arena.getTeam(killer) != null) {
                         Vector v = victimsTeam.getKillDropsLocation();
                         killer.getWorld().dropItemNaturally(new Location(arena.getWorld(), v.getX(), v.getY(), v.getZ()), i);
