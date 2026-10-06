@@ -5,7 +5,7 @@
     <parent>
         <artifactId>BedWars1058</artifactId>
         <groupId>com.andrei1058.bedwars</groupId>
-        <version>25.2</version>
+        <version>26.6-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bedwars-api</artifactId>
@@ -23,6 +23,10 @@
         <repository>
             <id>andrei-prod</id>
             <url>https://repo.andrei1058.com/releases</url>
+        </repository>
+        <repository>
+            <id>andrei-SNAPSHOTS</id>
+            <url>https://repo.andrei1058.com/snapshots</url>
         </repository>
     </repositories>
 
@@ -50,17 +54,17 @@
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-base</artifactId>
-            <version>23.2</version>
+            <version>26.6-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>false</skip>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <artifactId>maven-deploy-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <skip>false</skip>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
