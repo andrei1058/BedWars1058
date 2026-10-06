@@ -84,3 +84,6 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 .nb-gradle/
+
+# Dev environment
+/docker/data/

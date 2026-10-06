@@ -66,7 +66,7 @@ public class InvisibilityPotionListener implements Listener {
         if (nms.isInvisibilityPotion(e.getItem())) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 for (PotionEffect pe : e.getPlayer().getActivePotionEffects()) {
-                    if (pe.getType().toString().contains("INVISIBILITY")) {
+                    if (nms.hasInvisibility(pe)) {
                         // if is already invisible
                         if (a.getShowTime().containsKey(e.getPlayer())) {
                             ITeam t = a.getTeam(e.getPlayer());
